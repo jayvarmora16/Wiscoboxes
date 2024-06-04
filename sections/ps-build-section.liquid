@@ -1,0 +1,430 @@
+<style>
+.ps-custom-container {
+  background-color: #ffffff;
+  float:left;
+  width:100%;
+  box-sizing: border-box;
+}
+.step-container,.step1-container,.step2-container,.step3-container,.action-container
+{
+  margin: 0px 50px;
+  width: 92%;
+}
+.step1-container h2.title
+{
+  color:#ac002b !important;
+}
+  
+.step-container ul{
+  margin: 20px 0px;
+  padding: 0;
+  font-size: 80%;
+  text-transform: uppercase;
+  border-top: none;
+  list-style: circle outside;
+}
+.step-container li{
+  list-style: none;
+  text-align: center;
+  width: 32%;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  margin-left: -3px;
+  text-overflow: ellipsis;
+  color: #929292;
+  display: inline-block;
+  border-bottom: none;
+  font-weight:bold;
+}
+.step-container li span.bubble{
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  display: block;
+  margin: 0 auto;
+  border: 2px solid #929292;
+  position: relative;
+  z-index: 2;
+} 
+.step-container li:before {
+  display: block;
+  position: absolute;
+  top: 9px;
+  width: 100%;
+  height: 3px;
+  content: '';
+  background-color: #929292;
+  z-index: 1; 
+}
+.step-container li.active span.bubble{
+  background-color: #ffffff;
+  border: 2px solid #ac002b;
+}
+.step-container li.active:before{
+  background-color: #ac002b;
+}
+.step-container li .step-title,.step-container li .step-number{
+  text-align: center;
+  width: 100%;
+  display: block;
+}
+.step-container li.active .step-title,.step-container li.active .step-number{
+  color:#ac002b;
+}
+/* Hide all steps by default: */
+.tab {
+  display: none;
+}
+button.ps-next,button.ps-prev{
+  background-color: #dddddd;
+  color: #929292;
+  border: none;
+  padding: 10px 20px;
+  font-size: 17px;
+  cursor: pointer;
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+button.ps-next:hover,button.ps-prev:hover {
+  opacity: 1;
+}
+  
+/* this is use for create image grid */
+.step1-container .ps_inner_columns
+{
+  float: left;
+  width:100%;
+  display: inline;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+.step1-container .ps_inner_columns:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.step1-container .ps_inner_columns .imgcolumn {
+  padding: 8px;
+  float: left;
+  width: 18.33%;
+  display: block;
+}
+.step1-container .ps_inner_columns .imgcolumn h4
+{
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: #303030;
+    text-align: center;
+    text-transform: capitalize;
+    line-height: 18px;
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    justify-content: center;
+    line-height: 16px;
+    align-items: flex-end;
+    max-height: 32px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.step1-container .ps_inner_columns .imgcolumn p
+{
+  font-size: 18px;
+  margin:0;
+  padding:0;
+  border:0;
+  color: #ac002b;
+  text-align:center;
+  text-transform: capitalize;
+}  
+.step1-container .ps_inner_columns .imgcolumn .imgcontent {
+    background-color: #eee;
+    padding: 10px;
+  border:3px solid #fff;
+  position:relative;
+}
+  .step1-container .ps_inner_columns .imgcolumn .imgcontent:hover {
+    border:3px solid #ac002b;
+  }
+.step1-container .ps_inner_columns .imgcolumn .imgcontent img{
+  width:100%;height:200px;object-fit: cover;
+}
+.ps-text-center
+{
+  text-align:center;
+}
+  .imgcontent .add-to-box-btn{
+        position: absolute;
+    left: 20%;
+    top: 46%;
+    background: #444;
+    display: inline-block;
+    padding: 1% 2%;
+    color: #fff;
+    width: 60%;
+    text-align: center;
+    text-shadow: 0 0 black;
+    visibility: hidden;
+    box-shadow: 0px 0px 14px #afafaf;
+  }
+   .imgcontent:hover .add-to-box-btn{
+        position: absolute;
+    left: 20%;
+    top: 46%;
+    background: #444;
+    display: inline-block;
+    padding: 1% 2%;
+    color: #fff;
+    width: 60%;
+    text-align: center;
+    text-shadow: 0 0 black;
+    visibility: visible;
+    box-shadow: 0px 0px 14px #afafaf;
+  }
+</style>
+
+<div class="ps-custom-container">
+  <!--steps start-->
+  <div class="step-container">
+    <ul>
+      <li class="step active">
+        <span class="bubble"></span>
+        <span class="step-number">Step1</span>
+        <span class="step-title">Build Your Own Box</span>
+      </li>
+      <li class="step">
+        <span class="bubble"></span>
+        <span class="step-number">Step2</span>
+        <span class="step-title">Shipping Date/Gift Note</span>
+      </li>
+      <li class="step">
+        <span class="bubble"></span>
+        <span class="step-number">Step3</span>
+        <span class="step-title">Review & checkout</span>
+      </li>
+    </ul>
+  </div>
+  <!--steps end-->
+  
+  <div class="action-container">
+  	<button class="ps-prev"type="button" id="prevBtn" onclick="nextPrev(-1)">Prev</button>
+  	<button class="ps-next" type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+  </div>
+  
+  <!--step1 start-->
+  <div class="step1-container tab">
+    <!--this is used for default product display start-->
+    {% assign variant = product.selected_or_first_available_variant %}
+    <h1 class="product_name ps-text-center" itemprop="name">{{ product.title }}</h1>
+    <div class="description ps-text-center">
+      {{ product.description }}
+    </div>
+    
+      {% unless collection_handles contains 'coming-soon' %}
+        <p class="modal_price ps-text-center" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+          <meta itemprop="seller" content="{{ shop.name | escape }}" />
+          <meta itemprop="availability" content="{% if product.available %}in_stock{% else %}out_of_stock{% endif %}" />
+          <meta itemprop="itemCondition" content="New" />
+
+          <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+          <span itemprop="price" content="{{ variant.price | money_without_currency }}" class="{% if variant.compare_at_price > variant.price %}sale{% endif %}">
+            <span class="current_price {% if product.available == false %}hidden{% endif %}">
+              {% if variant.price > 0 %}
+                <span class="money">{{ variant.price | money }}</span>
+              {% else %}
+                {{ settings.free_price_text }}
+              {% endif %}
+            </span>
+          </span>
+          <span class="was_price">
+            {% if variant.price < variant.compare_at_price and variant.available %}
+              <span class="money">{{ variant.compare_at_price | money }}</span>
+            {% endif %}
+          </span>
+          (gift box, hand-written note, ribbon and wrapping)
+        </p>
+      {% endunless %}
+
+      {% unless collection_handles contains 'coming-soon' %}
+        {% include 'ps-product-form' with 'product' %}
+      {% endunless %}
+    
+    <!--this is used for default product display end-->
+    
+    <!--this is used for other product display start-->
+    {% if section.blocks.size > 0 %}
+    
+    {% for block in section.blocks %}
+       {%- assign block_product = all_products[block.settings.ps_featured_product] -%}
+    
+    	<div class="ps_inner_columns ps-text-center">
+          <h2 class="title">
+            {{block_product.title}}
+          </h2>
+        </div>
+    
+    	<!--products images grid start -->
+    	<div class="ps_inner_columns clearfix">
+          {% for psvr in block_product.variants %}
+            {%- assign psvr_image = psvr.image.src -%}
+            <div class="imgcolumn">
+              <div class="imgcontent">
+                <img src="{{ psvr_image | product_img_url: 'medium' }}" alt="{{psvr_image.alt | escape}}">                
+                <a href="#" class="add-to-box-btn">Add To Box</a>
+              </div>
+              <h4>{{ psvr.title }}</h4>
+              <p><span class="money">{{ psvr.price | money }}</span></p>
+            </div>
+          {% endfor %}
+        </div>
+    	<!--products images grid end -->
+       <hr>
+    {% endfor %}
+    
+      
+      
+    {% endif %}
+    <!--this is used for other product display end-->
+    
+  </div>
+  <!--step1 end-->
+  
+  <!--step2 start-->
+  <div class="step2-container tab">
+    Desired shipping date*
+    <input name="properties[Desired shipping date]" class="shipping_date" type="date" >
+    
+    Gift Note
+    <textarea name="properties[Gift Note]" class="gift_note"></textarea>
+    
+    Special Instructions
+    <textarea name="properties[Special Instructions]" class="special_instructions"></textarea>
+  </div>
+  <!--step2 end-->
+  
+  <!--step3 start-->
+  <div class="step3-container tab">
+    step3 here
+  </div>
+  <!--step3 end-->
+  
+</div>
+
+<script>
+var currentTab = 0; // Current tab is set to be the first tab (0)
+showTab(currentTab); // Display the crurrent tab
+
+function showTab(n) {
+  // This function will display the specified tab of the form...
+  var x = document.getElementsByClassName("tab");
+  x[n].style.display = "block";
+  //... and fix the Previous/Next buttons:
+  if (n == 0) {
+    document.getElementById("prevBtn").style.display = "none";
+  } else {
+    document.getElementById("prevBtn").style.display = "inline";
+  }
+  if (n == (x.length - 1)) {
+    document.getElementById("nextBtn").innerHTML = "Submit";
+  } else {
+    document.getElementById("nextBtn").innerHTML = "Next";
+  }
+  //... and run a function that will display the correct step indicator:
+  fixStepIndicator(n)
+}
+
+function nextPrev(n) {
+  // This function will figure out which tab to display
+  var x = document.getElementsByClassName("tab");
+  // Exit the function if any field in the current tab is invalid:
+  //if (n == 1 && !validateForm()) return false;
+  
+  // Hide the current tab:
+  x[currentTab].style.display = "none";
+  // Increase or decrease the current tab by 1:
+  currentTab = currentTab + n;
+  // if you have reached the end of the form...
+  if (currentTab >= x.length) {
+    // ... the form gets submitted:
+    document.getElementById("regForm").submit();
+    return false;
+  }
+  // Otherwise, display the correct tab:
+  showTab(currentTab);
+}
+
+function validateForm() {
+  // This function deals with validation of the form fields
+  var x, y, i, valid = true;
+  x = document.getElementsByClassName("tab");
+  y = x[currentTab].getElementsByTagName("input");
+  // A loop that checks every input field in the current tab:
+  for (i = 0; i < y.length; i++) {
+    // If a field is empty...
+    if (y[i].value == "") {
+      // add an "invalid" class to the field:
+      y[i].className += " invalid";
+      // and set the current valid status to false
+      valid = false;
+    }
+  }
+  // If the valid status is true, mark the step as finished and valid:
+  if (valid) {
+    document.getElementsByClassName("step")[currentTab].className += " finish";
+  }
+  return valid; // return the valid status
+}
+
+function fixStepIndicator(n) {
+  // This function removes the "active" class of all steps...
+  var i, x = document.getElementsByClassName("step");
+  for (i = 0; i < x.length; i++) {
+    x[i].className = x[i].className.replace(" active", "");
+  }
+  //... and adds the "active" class on the current step:
+  x[n].className += " active";
+}
+</script>
+
+{% schema %}
+{
+  "name": "PS Build Own Box",
+  "class": "ps-build-section",
+  "max_blocks": 12,
+  "settings": [
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "ps_featured_product",
+          "label": "PS Product"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "PS Build Products",
+    "category": "Product",
+    "settings": {
+    },
+    "blocks": [
+      {
+        "type": "product"
+      },
+      {
+        "type": "product"
+      }
+    ]
+  }]
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+<script src="https://use.fontawesome.com/0e431558c3.js"></script>
+
+<style>
+body {
+  background: white;
+}
+.flex-control-thumbs {
+    display: none !important;
+}
+.flex-control-nav {display: none !important;}
+</style>
+
+<div class="index-sections">
+  {{ content_for_index }}
+</div>
+
+<div data-is data-is-source="@wiscoboxes" data-is-limit="10" data-is-columns="5" data-is-rows="1" data-is-responsive="%7B%22767%22%3A%7B%22columns%22%3A%222%22%2C%22rows%22%3A%222%22%2C%22gutter%22%3A%220%22%7D%7D" data-is-free-mode="true" data-is-auto="2700" data-is-color-gallery-overlay="rgb(175, 31, 49)" data-is-color-gallery-arrows="rgb(173, 0, 43)" data-is-color-gallery-arrows-hover="rgb(163, 137, 113)" data-is-color-popup-overlay="rgba(163, 137, 113, 0.95)" data-is-color-popup-username="rgb(173, 0, 43)" data-is-color-popup-username-hover="rgb(163, 137, 113)" data-is-color-popup-instagram-link="rgb(173, 0, 43)" data-is-color-popup-instagram-link-hover="rgb(163, 137, 113)" data-is-color-popup-counters="rgb(68, 68, 68)" data-is-color-popup-anchor="rgb(173, 0, 43)" data-is-color-popup-anchor-hover="rgb(163, 137, 113)" data-is-color-popup-text="rgb(68, 68, 68)" data-is-color-popup-controls="rgb(173, 0, 43)" data-is-color-popup-mobile-controls="rgb(163, 137, 113)"></div>
+
+<div id="newsletter-container" class="home_newsletter">
+  <div class="container">
+    <span style="font-size: 2em; color: white; padding-top: 20px;">...and there's more in store. We'll keep you updated:</span>
+
+    <div id="home-newsletter" class="newsletter {% if newsletter == 'center' %}center{% endif %}">
+      <p class="message"></p>
+
+      {% form 'customer' %}
+
+      {% if form.posted_successfully? %}
+      <p><em>{{ 'general.newsletter_form.success_text' | t }}</em></p>
+      {% elsif form.errors %}
+      {% for field in form.errors %}
+      <p><em>{{ field }} - {{ form.errors.messages[field] }}</em></p>
+      {% endfor %}
+      {% endif %}
+
+      {% if template contains "password" %}
+      <input type="hidden" name="contact[tags]" value="prospect,password page"/>
+      {% endif %}
+
+      <div class="row">
+        <input type="hidden" name="contact[tags]" value="prospect,newsletter"/>
+
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <input id="btn-first" class="form-control newsletter-half first-name" type="text" name="contact[first_name]" placeholder="{{ 'general.newsletter_form.subscriber_first_name' | t }}" />
+          </div>
+        </div>
+
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <input id="btn-last" class="form-control newsletter-half last-name" type="text" name="contact[last_name]" placeholder="{{ 'general.newsletter_form.subscriber_last_name' | t }}" />
+          </div>
+        </div>
+
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <input id="btn-email" type="email" class="form-control contact_email" name="contact[email]" required placeholder="{{ 'general.newsletter_form.placeholder' | t }}" />
+          </div>
+        </div>
+
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <input id="btn-news" type='submit' class="btn btn-default action_button sign_up" value="{{ 'general.newsletter_form.submit' | t }}" />
+          </div>
+        </div>
+
+      </div>
+      {% endform %}
+
+    </div>
+  </div>
+</div>

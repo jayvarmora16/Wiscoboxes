@@ -1,0 +1,55 @@
+{% include 'sidebar' %}
+<style>
+  h1.collection_title {
+    line-height: 46px !important;
+}
+</style>
+  <h1 class="collection_title" id="individual-title">
+    {{ page.title }}
+  </h1>
+<div class="twelve columns page individual-items" style="padding-top: 20px; padding-bottom: 20px;">
+  <div id="title-container">
+
+  </div>
+  {% include 'page-multi-column', content: page.content %}
+  {% include "social-buttons" with "page" %}
+</div>
+
+{% schema %}
+{
+  "name": "Sidebar",
+  "class": "sidebar-template-section",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "collection_sidebar_linklist",
+      "label": "Menu 1"
+    },
+    {
+      "type": "link_list",
+      "id": "collection_sidebar_linklist2",
+      "label": "Menu 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "filter_by_category",
+      "label": "Show collections"
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_sidebar_products",
+      "label": "Show types"
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_sidebar_vendors",
+      "label": "Show vendors"
+    },
+    {
+      "type": "page",
+      "id": "collection_sidebar_page",
+      "label": "Content page"
+    }
+  ]
+}
+{% endschema %}

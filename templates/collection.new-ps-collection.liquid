@@ -1,0 +1,100 @@
+{% paginate collection.products by collection.products_count %}
+<!--this is used for make product eee1 object-->
+     {% for product2 in collection.products %}
+      
+       {%- assign block_product = product2 -%}
+
+         {% assign pshandle = block_product.handle %}
+		 <div class="main-category-{{mcat}} allcategory ps-{{pshandle}}">
+      
+           {% if ps_products_handles == '' %}
+			{% assign ps_products_handles = pshandle %}
+           {% else %}
+            {% assign ps_products_handles = ps_products_handles | append: ',' | append: pshandle %}
+           {% endif %}
+           
+            {% assign block_default_variant = block_product.selected_or_first_available_variant %}        
+            
+             {% assign featured_image = block_product.selected_or_first_available_variant.featured_image | default: block_product.featured_image %}
+              <div class="imgcolumn">
+                <div class="imgcontent">
+                  <img class="featureimg"  asdsa="sadsa eee" src="{{ featured_image | product_img_url: 'medium' }}" alt="{{featured_image.alt | escape}}">
+                  
+                  <div class="loader-to-box-btn" id="loader-product-form-{{ block_product.id }}">
+                    <img src="{{'loader.gif' | asset_url }}"/>
+                  </div>
+                  
+                  {% assign product_qty = 0 %}
+                  {% for variant in product2.variants %}
+                  {% if variant.inventory_quantity > 0 %}
+                  {% assign product_qty = product_qty | plus: variant.inventory_quantity %}
+                  {% endif %}
+                  {% endfor %}
+                  
+                  
+                  <a href="javascript:void(0);"
+                     data-img="{{ featured_image | product_img_url: 'medium' }}" 
+                     data-variant="{{ block_default_variant.id }}" 
+                     data-price="{{ block_default_variant.price }}" 
+                     data-prod="{{block_product.title | escape}}" 
+                     data-cat="{{mcat}}" 
+                     data-tags="{{block_product.tags | join: ' '}}"
+                     p-id="{{ product2.id }}"
+                     handle="{{product2.handle}}"
+                     weight="{{ product2.variants.first.weight | weight_with_unit }}"
+                     data-form-id="product-form-{{ block_product.id }}" 
+                     class="add-to-box-btn" onclick="direct_add_to_cart(this)"
+                     >Add To Box</a> 
+                
+                  <div class="step-1-quantity">
+                    <a href="javascript:void(0);" onclick="qtyminusInc(this)" class="qtyminus" field="{{ block_product.id }}">-</a>
+                     <input id="direct-quantity-{{ block_product.id }}" type="text" name="quantity" class="quantity" value="1" min="1" max="2" size="2" readonly/>
+                    <a href="javascript:void(0);" onclick="qtyplusInc(this)" class="qtyplus" field="{{ block_product.id }}">+</a>
+                  </div>
+                  
+                  <p data-form-id="product-form-{{ block_product.id }}" class="mess-to-box-btn">added to cart</p>
+                  
+                  {% comment %}
+                    <span  
+                     data-img="{{ featured_image | product_img_url: 'large' }}" 
+                     data-variant="{{ block_default_variant.id }}" 
+                     data-price="{{ block_default_variant.price }}" 
+                     data-prod="{{block_product.title | escape}}" 
+                     data-cat="{{mcat}}" 
+                     p-id="{{ product2.id }}"
+                     handle="{{product2.handle}}"
+                     data-tags="{{block_product.tags | join: ' '}}"
+                     data-desc="{{block_product.description | escape}}" 
+                     data-form-id="product-form-{{ block_product.id }}"   data-fancybox-href="#product-{{ block_product.id }}" class="custom-quick-view quick_shop action_button quick-view-btn" data-gallery="product-{{ block_product.id }}-gallery">
+                        Quick View 
+                    </span>
+                  {% endcomment %}
+                   <span  
+                     id="wineId{{product2.id}}""
+                     data-img="{{ featured_image | product_img_url: 'large' }}" 
+                     data-variant="{{ block_default_variant.id }}" 
+                     data-price="{{ block_default_variant.price }}" 
+                     data-prod="{{block_product.title | escape}}" 
+                     data-cat="{{mcat}}" 
+                     p-id="{{ product2.id }}"
+                     handle="{{product2.handle}}"
+                     data-desc="{{block_product.description | escape}}" 
+                     data-tags="{{block_product.tags | join: ' '}}"
+                     data-form-id="product-form-{{ block_product.id }}"   data-fancybox-href="#product-{{ block_product.id }}" class="custom-quick-view quick-view-btn" data-gallery="product-{{ block_product.id }}-gallery">
+                        Quick View 
+                    </span>
+                  
+                </div>
+                <h4>{{ block_product.title }}</h4>
+                
+                <p><span class="money">{{ block_default_variant.price | money }}</span></p>
+                
+              </div>
+            <!--this is used for quick view -->
+           {% comment %}
+    		{% include "ps-quick-view",product:block_product %}
+           {% endcomment %}
+           </div>
+    	   
+    {% endfor %}
+{% endpaginate %}

@@ -1,0 +1,39 @@
+{{ section.settings.corporate-gifting-content1 }}
+
+{% include 'corporate-gifting-contact-form' %}
+
+{{ section.settings.corporate-gifting-content2 }}
+
+
+
+{% schema %}
+  {
+    "name": "Corporate Gifting Section",
+    "settings": [
+
+	  {
+        "type": "header",
+        "content": "Corporate Gifting content"
+      },
+	  {
+		 "type": "html",
+         "id": "corporate-gifting-content1",
+         "label": "Corporate Gifting Content1",
+         "default": "Corporate Gifting Content1"
+      },
+	  {
+		 "type": "html",
+         "id": "corporate-gifting-content2",
+         "label": "Corporate Gifting Content2",
+         "default": "Corporate Gifting Content2"
+      }
+
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

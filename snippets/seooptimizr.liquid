@@ -1,0 +1,566 @@
+{% comment %}version : 1.0.0.1{% endcomment %}
+<title>
+  {{ page_title }}
+</title>
+{% if template == 'product' and shop.metafields.global.seo_product_settings_enabled == "true" %}
+	{% assign product_image = product.images[0] | img_url: 'grande' %}
+
+	{% if product.metafields.global.optimi_meta_title == null %}
+        <meta name="title" content="{{ product.title }}" >
+        <meta name="description" content="{{ product.description | strip_html | escape }}" >
+        <meta name="keywords" content="{{ product.title }}" >
+        <meta name="twitter:title" content="{{ product.title }}" >
+        <meta name="twitter:description" content="{{ product.description | strip_html | escape }}">
+        <meta name="twitter:image" content="{{ product_image }}">
+        <meta property="og:title" content="{{ product.title }}" >
+        <meta property="og:description" content="{{ product.description | strip_html | escape }}">
+        <meta property="og:image" content="{{ product_image }}" >
+        <meta property="og:image:secure_url" content="{{ product_image }}" >
+	{% else %}
+		{% if product.metafields.global.optimi_meta_title != "null" %}
+			<meta name="title" content="{{ product.metafields.global.optimi_meta_title | escape }}" />
+        {% endif %}
+		{% if product.metafields.global.optimi_meta_description != "null" %}
+			<meta name="description" content="{{ product.metafields.global.optimi_meta_description | escape }}" />
+        {% endif %}
+		{% if product.metafields.global.optimi_meta_keywords != "null" %}
+			<meta name="keywords" content="{{ product.metafields.global.optimi_meta_keywords | escape }}" />
+		{% endif %}
+
+		{% if product.metafields.global.optimi_social_meta_title != "null" %}
+            <meta name="twitter:title" content="{{ product.metafields.global.optimi_social_meta_title | escape }}">
+            <meta property="og:title" content="{{ product.metafields.global.optimi_social_meta_title | escape }}" />
+		{% endif %}
+		{% if product.metafields.global.optimi_social_meta_description != "null" %}
+            <meta name="twitter:description" content="{{ product.metafields.global.optimi_social_meta_description | escape }}">
+            <meta property="og:description" content="{{ product.metafields.global.optimi_social_meta_description | escape }}" />
+		{% endif %}
+		{% if product.metafields.global.optimi_social_meta_image_url != "null" %}
+            <meta property="og:image:secure_url" content="{{ product.metafields.global.optimi_social_meta_image_url | escape }}" >
+            <meta property="og:image" content="{{ product.metafields.global.optimi_social_meta_image_url | escape }}" />
+            <meta name="twitter:image" content="{{ product.metafields.global.optimi_social_meta_image_url | escape }}">
+		{% endif %}
+
+		<!-- advanced meta fields check -->
+        {% if product.metafields.global.optimi_global_noindex != null %}
+            <meta name="robots" content="noindex">
+        {% endif %}
+        {% if product.metafields.global.optimi_global_nofollow != null %}
+            <meta name="robots" content="nofollow">
+        {% endif %}
+        {% if product.metafields.global.optimi_global_noimageindex != null %}
+            <meta name="robots" content="noimageindex">
+        {% endif %}
+        {% if product.metafields.global.optimi_global_noarchive != null %}
+            <meta name="robots" content="noarchive">
+        {% endif %}
+        {% if product.metafields.global.optimi_global_nosnippet != null %}
+            <meta name="robots" content="nosnippet">
+        {% endif %}
+        {% if product.metafields.global.optimi_global_notranslate != null %}
+            <meta name="robots" content="notranslate">
+        {% endif %}
+        {% if product.metafields.global.optimi_global_noodp != null %}
+            <meta name="robots" content="noodp">
+        {% endif %}
+	{% endif %}
+	<meta property="og:price:amount" content="{{ product.selected_or_first_available_variant.price | money_without_currency | remove: "," }}">
+	<meta property="og:type" content="product">
+{% endif %}
+
+
+{% if template == 'page' and shop.metafields.global.seo_page_settings_enabled == "true" %}
+	{% assign page_image = page.images[0] | img_url: 'grande' %}
+
+	{% if page.metafields.global.optimi_meta_title == null %}
+        <meta name="title" content="{{ page.title }}" >
+        <meta name="description" content="{{ page_description | truncate: 140 | escape }}" >
+        <meta name="keywords" content="{{ page.title }}" >
+        <meta name="twitter:title" content="{{ page.title }}" >
+        <meta name="twitter:description" content="{{ page_description | truncate: 140 | escape }}">
+        <meta property="og:title" content="{{ page.title }}" >
+        <meta property="og:description" content="{{ page_description | truncate: 140 | escape }}">
+	{% else %}
+		{% if page.metafields.global.optimi_meta_title != "null" %}
+			<meta name="title" content="{{ page.metafields.global.optimi_meta_title | escape }}" />
+        {% endif %}
+		{% if page.metafields.global.optimi_meta_description != "null" %}
+			<meta name="description" content="{{ page.metafields.global.optimi_meta_description | escape }}" />
+        {% endif %}
+		{% if page.metafields.global.optimi_meta_keywords != "null" %}
+			<meta name="keywords" content="{{ page.metafields.global.optimi_meta_keywords | escape }}" />
+		{% endif %}
+
+		{% if page.metafields.global.optimi_social_meta_title != "null" %}
+            <meta name="twitter:title" content="{{ page.metafields.global.optimi_social_meta_title | escape }}">
+            <meta property="og:title" content="{{ page.metafields.global.optimi_social_meta_title | escape }}" />
+		{% endif %}
+		{% if page.metafields.global.optimi_social_meta_description != "null" %}
+            <meta name="twitter:description" content="{{ page.metafields.global.optimi_social_meta_description | escape }}">
+            <meta property="og:description" content="{{ page.metafields.global.optimi_social_meta_description | escape }}" />
+		{% endif %}
+		{% if page.metafields.global.optimi_social_meta_image_url != "null" %}
+            <meta property="og:image:secure_url" content="{{ page.metafields.global.optimi_social_meta_image_url | escape }}" >
+            <meta property="og:image" content="{{ page.metafields.global.optimi_social_meta_image_url | escape }}" />
+            <meta name="twitter:image" content="{{ page.metafields.global.optimi_social_meta_image_url | escape }}">
+		{% endif %}
+		<!-- advanced meta fields check -->
+        {% if page.metafields.global.optimi_global_noindex != null %}
+            <meta name="robots" content="noindex">
+        {% endif %}
+        {% if page.metafields.global.optimi_global_nofollow != null %}
+            <meta name="robots" content="nofollow">
+        {% endif %}
+        {% if page.metafields.global.optimi_global_noimageindex != null %}
+            <meta name="robots" content="noimageindex">
+        {% endif %}
+        {% if page.metafields.global.optimi_global_noarchive != null %}
+            <meta name="robots" content="noarchive">
+        {% endif %}
+        {% if page.metafields.global.optimi_global_nosnippet != null %}
+            <meta name="robots" content="nosnippet">
+        {% endif %}
+        {% if page.metafields.global.optimi_global_notranslate != null %}
+            <meta name="robots" content="notranslate">
+        {% endif %}
+        {% if page.metafields.global.optimi_global_noodp != null %}
+            <meta name="robots" content="noodp">
+        {% endif %}
+	{% endif %}
+	<meta property="og:type" content="page">
+{% endif %}
+
+
+{% if template == 'blog' and shop.metafields.global.seo_blog_settings_enabled == "true"  %}
+	{% assign blog_image = blog.images[0] | img_url: 'grande' %}
+
+	{% if blog.metafields.global.optimi_meta_title == null %}
+        <meta name="title" content="{{ blog.title }}" >
+        <meta name="keywords" content="{{ blog.title }}" >
+        <meta name="twitter:title" content="{{ blog.title }}" >
+        <meta property="og:title" content="{{ blog.title }}" >
+	{% else %}
+		{% if blog.metafields.global.optimi_meta_title != "null" %}
+			<meta name="title" content="{{ blog.metafields.global.optimi_meta_title | escape }}" />
+        {% endif %}
+		{% if blog.metafields.global.optimi_meta_description != "null" %}
+			<meta name="description" content="{{ blog.metafields.global.optimi_meta_description | escape }}" />
+        {% endif %}
+		{% if blog.metafields.global.optimi_meta_keywords != "null" %}
+			<meta name="keywords" content="{{ blog.metafields.global.optimi_meta_keywords | escape }}" />
+		{% endif %}
+
+		{% if blog.metafields.global.optimi_social_meta_title != "null" %}
+            <meta name="twitter:title" content="{{ blog.metafields.global.optimi_social_meta_title | escape }}">
+            <meta property="og:title" content="{{ blog.metafields.global.optimi_social_meta_title | escape }}" />
+		{% endif %}
+		{% if blog.metafields.global.optimi_social_meta_description != "null" %}
+            <meta name="twitter:description" content="{{ blog.metafields.global.optimi_social_meta_description | escape }}">
+            <meta property="og:description" content="{{ blog.metafields.global.optimi_social_meta_description | escape }}" />
+		{% endif %}
+		{% if blog.metafields.global.optimi_social_meta_image_url != "null" %}
+            <meta property="og:image:secure_url" content="{{ blog.metafields.global.optimi_social_meta_image_url | escape }}" >
+            <meta property="og:image" content="{{ blog.metafields.global.optimi_social_meta_image_url | escape }}" />
+            <meta name="twitter:image" content="{{ blog.metafields.global.optimi_social_meta_image_url | escape }}">
+		{% endif %}
+		<!-- advanced meta fields check -->
+        {% if blog.metafields.global.optimi_global_noindex != null %}
+            <meta name="robots" content="noindex">
+        {% endif %}
+        {% if blog.metafields.global.optimi_global_nofollow != null %}
+            <meta name="robots" content="nofollow">
+        {% endif %}
+        {% if blog.metafields.global.optimi_global_noimageindex != null %}
+            <meta name="robots" content="noimageindex">
+        {% endif %}
+        {% if blog.metafields.global.optimi_global_noarchive != null %}
+            <meta name="robots" content="noarchive">
+        {% endif %}
+        {% if blog.metafields.global.optimi_global_nosnippet != null %}
+            <meta name="robots" content="nosnippet">
+        {% endif %}
+        {% if blog.metafields.global.optimi_global_notranslate != null %}
+            <meta name="robots" content="notranslate">
+        {% endif %}
+        {% if blog.metafields.global.optimi_global_noodp != null %}
+            <meta name="robots" content="noodp">
+        {% endif %}
+	{% endif %}
+	<meta property="og:type" content="website">
+{% endif %}
+
+
+{% if template contains 'article' and shop.metafields.global.seo_blog_settings_enabled == "true"  %}
+	{% if article.metafields.global.optimi_meta_title == null %}
+        <meta name="title" content="{{ article.title }}" >
+        <meta name="description" content="{{ page_description | truncate: 140 | escape }}" >
+        <meta name="keywords" content="{{ article.title }}" >
+        <meta name="twitter:title" content="{{ article.title }}" >
+        <meta name="twitter:description" content="{{ page_description | truncate: 140 | escape }}">
+
+        <meta property="og:title" content="{{ article.title }}" >
+        <meta property="og:description" content="{{ page_description | truncate: 140 | escape }}">
+        {% if article.image %}
+        <meta name="twitter:image" content="http:{{ article | img_url: '1024x1024' }}">
+        <meta property="og:image" content="http:{{ article | img_url: '1024x1024' }}">
+        <meta property="og:image:secure_url" content="https:{{ article | img_url: '1024x1024' }}">
+        {% endif %}
+	{% else %}
+		{% if article.metafields.global.optimi_meta_title != "null" %}
+			<meta name="title" content="{{ article.metafields.global.optimi_meta_title | escape }}" />
+        {% endif %}
+		{% if article.metafields.global.optimi_meta_description != "null" %}
+			<meta name="description" content="{{ article.metafields.global.optimi_meta_description | escape }}" />
+        {% endif %}
+		{% if article.metafields.global.optimi_meta_keywords != "null" %}
+			<meta name="keywords" content="{{ article.metafields.global.optimi_meta_keywords | escape }}" />
+		{% endif %}
+
+		{% if article.metafields.global.optimi_social_meta_title != "null" %}
+            <meta name="twitter:title" content="{{ article.metafields.global.optimi_social_meta_title | escape }}">
+            <meta property="og:title" content="{{ article.metafields.global.optimi_social_meta_title | escape }}" />
+		{% endif %}
+		{% if article.metafields.global.optimi_social_meta_description != "null" %}
+            <meta name="twitter:description" content="{{ article.metafields.global.optimi_social_meta_description | escape }}">
+            <meta property="og:description" content="{{ article.metafields.global.optimi_social_meta_description | escape }}" />
+		{% endif %}
+		{% if article.metafields.global.optimi_social_meta_image_url != "null" %}
+            <meta property="og:image:secure_url" content="{{ article.metafields.global.optimi_social_meta_image_url | escape }}" >
+            <meta property="og:image" content="{{ article.metafields.global.optimi_social_meta_image_url | escape }}" />
+            <meta name="twitter:image" content="{{ article.metafields.global.optimi_social_meta_image_url | escape }}">
+		{% endif %}
+		<!-- advanced meta fields check -->
+        {% if article.metafields.global.optimi_global_noindex != null %}
+            <meta name="robots" content="noindex">
+        {% endif %}
+        {% if article.metafields.global.optimi_global_nofollow != null %}
+            <meta name="robots" content="nofollow">
+        {% endif %}
+        {% if article.metafields.global.optimi_global_noimageindex != null %}
+            <meta name="robots" content="noimageindex">
+        {% endif %}
+        {% if article.metafields.global.optimi_global_noarchive != null %}
+            <meta name="robots" content="noarchive">
+        {% endif %}
+        {% if article.metafields.global.optimi_global_nosnippet != null %}
+            <meta name="robots" content="nosnippet">
+        {% endif %}
+        {% if article.metafields.global.optimi_global_notranslate != null %}
+            <meta name="robots" content="notranslate">
+        {% endif %}
+        {% if article.metafields.global.optimi_global_noodp != null %}
+            <meta name="robots" content="noodp">
+        {% endif %}
+	{% endif %}
+	<meta property="og:type" content="article">
+{% endif %}
+
+{% if template contains 'collection' and shop.metafields.global.seo_collection_enabled == "true"  %}
+	{% if collection.metafields.global.optimi_meta_title == null %}
+        <meta name="title" content="{{ collection.title }}" >
+        <meta name="description" content="{{ collection.description | strip_html | escape }}" >
+        <meta name="keywords" content="{{ collection.title }}" >
+        <meta name="twitter:title" content="{{ collection.title }}" >
+        <meta name="twitter:description" content="{{ collection.description | strip_html | escape }}">
+        <meta property="og:title" content="{{ collection.title }}" >
+        <meta property="og:description" content="{{ collection.description | strip_html | escape }}">
+        {% if collection.image %}
+        <meta name="twitter:image" content="http:{{ collection.image | img_url: 'medium' }}" >
+        <meta property="og:image" content="http:{{ collection.image | img_url: 'medium' }}" >
+        <meta property="og:image:secure_url" content="https:{{ collection.image | img_url: 'medium' }}" >
+        {% endif %}
+	{% else %}
+
+		{% if collection.image %}
+            {% assign collection_image = collection.image | img_url: 'medium' | replace: '//', 'http://' %}
+            {% assign collection_image_sec = collection.image | img_url: 'medium' | replace: '//', 'https://' %}
+        {% endif %}
+		{% if collection.metafields.global.optimi_meta_title != "null" %}
+			<meta name="title" content="{{ collection.metafields.global.optimi_meta_title | escape }}" />
+        {% endif %}
+		{% if collection.metafields.global.optimi_meta_description != "null" %}
+			<meta name="description" content="{{ collection.metafields.global.optimi_meta_description | escape }}" />
+        {% endif %}
+		{% if collection.metafields.global.optimi_meta_keywords != "null" %}
+			<meta name="keywords" content="{{ collection.metafields.global.optimi_meta_keywords | escape }}" />
+		{% endif %}
+
+		{% if collection.metafields.global.optimi_social_meta_title != "null" %}
+            <meta name="twitter:title" content="{{ collection.metafields.global.optimi_social_meta_title | escape }}">
+            <meta property="og:title" content="{{ collection.metafields.global.optimi_social_meta_title | escape }}" />
+		{% endif %}
+		{% if collection.metafields.global.optimi_social_meta_description != "null" %}
+            <meta name="twitter:description" content="{{ collection.metafields.global.optimi_social_meta_description | escape }}">
+            <meta property="og:description" content="{{ collection.metafields.global.optimi_social_meta_description | escape }}" />
+		{% endif %}
+		{% if collection.metafields.global.optimi_social_meta_image_url != "null" %}
+            <meta property="og:image:secure_url" content="{{ collection.metafields.global.optimi_social_meta_image_url | escape }}" >
+            <meta property="og:image" content="{{ collection.metafields.global.optimi_social_meta_image_url | escape }}" />
+            <meta name="twitter:image" content="{{ collection.metafields.global.optimi_social_meta_image_url | escape }}">
+		{% endif %}
+		<!-- advanced meta fields check found on page-->
+        {% if collection.metafields.global.optimi_global_noindex != null %}
+            <meta name="robots" content="noindex">
+        {% endif %}
+        {% if collection.metafields.global.optimi_global_nofollow != null %}
+            <meta name="robots" content="nofollow">
+        {% endif %}
+        {% if collection.metafields.global.optimi_global_noimageindex != null %}
+            <meta name="robots" content="noimageindex">
+        {% endif %}
+        {% if collection.metafields.global.optimi_global_noarchive != null %}
+            <meta name="robots" content="noarchive">
+        {% endif %}
+        {% if collection.metafields.global.optimi_global_nosnippet != null %}
+            <meta name="robots" content="nosnippet">
+        {% endif %}
+        {% if collection.metafields.global.optimi_global_notranslate != null %}
+            <meta name="robots" content="notranslate">
+        {% endif %}
+        {% if collection.metafields.global.optimi_global_noodp != null %}
+            <meta name="robots" content="noodp">
+        {% endif %}
+	{% endif %}
+	<meta property="og:type" content="website">
+{% endif %}
+
+{% if template == 'index' and shop.metafields.global.seo_homepage_settings_enabled == "true" %}
+	{% if shop.metafields.global.optimi_meta_title == null %}
+        <meta name="title" content="{{ page_title }}" />
+        <meta name="Description" content="{{ page_description }}">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="{{ page_title }}">
+        <meta property="og:description" content="{{ page_description }}">
+        <meta name="twitter:title" content="{{ page_title }}">
+        <meta name="twitter:description" content="{{ page_description | truncate: 140 | escape }}">
+	{% else %}
+		{% if shop.metafields.global.optimi_meta_title != "null" %}
+			<meta name="title" content="{{ shop.metafields.global.optimi_meta_title | escape }}" />
+        {% endif %}
+		{% if shop.metafields.global.optimi_meta_description != "null" %}
+			<meta name="description" content="{{ shop.metafields.global.optimi_meta_description | escape }}" />
+        {% endif %}
+		{% if shop.metafields.global.optimi_meta_keywords != "null" %}
+			<meta name="keywords" content="{{ shop.metafields.global.optimi_meta_keywords | escape }}" />
+		{% endif %}
+
+		{% if shop.metafields.global.optimi_social_meta_title != "null" %}
+            <meta name="twitter:title" content="{{ shop.metafields.global.optimi_social_meta_title | escape }}">
+            <meta property="og:title" content="{{ shop.metafields.global.optimi_social_meta_title | escape }}" />
+		{% endif %}
+		{% if shop.metafields.global.optimi_social_meta_description != "null" %}
+            <meta name="twitter:description" content="{{ shop.metafields.global.optimi_social_meta_description | escape }}">
+            <meta property="og:description" content="{{ shop.metafields.global.optimi_social_meta_description | escape }}" />
+		{% endif %}
+		{% if shop.metafields.global.optimi_social_meta_image_url != "null" %}
+            <meta property="og:image:secure_url" content="{{ shop.metafields.global.optimi_social_meta_image_url | escape }}" >
+            <meta property="og:image" content="{{ shop.metafields.global.optimi_social_meta_image_url | escape }}" />
+            <meta name="twitter:image" content="{{ shop.metafields.global.optimi_social_meta_image_url | escape }}">
+		{% endif %}
+		<!-- advanced meta fields check -->
+        {% if shop.metafields.global.optimi_global_noindex != null %}
+        <meta name="robots" content="noindex">
+        {% endif %}
+        {% if shop.metafields.global.optimi_global_nofollow != null %}
+        <meta name="robots" content="nofollow">
+        {% endif %}
+        {% if shop.metafields.global.optimi_global_noimageindex != null %}
+        <meta name="robots" content="noimageindex">
+        {% endif %}
+        {% if shop.metafields.global.optimi_global_noarchive != null %}
+        <meta name="robots" content="noarchive">
+        {% endif %}
+        {% if shop.metafields.global.optimi_global_nosnippet != null %}
+        <meta name="robots" content="nosnippet">
+        {% endif %}
+        {% if shop.metafields.global.optimi_global_notranslate != null %}
+        <meta name="robots" content="notranslate">
+        {% endif %}
+        {% if shop.metafields.global.optimi_global_noodp != null %}
+        <meta name="robots" content="noodp">
+        {% endif %}
+	{% endif %}
+
+{% endif %}
+
+
+<meta property="og:price:currency" content="{{ shop.currency }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:site_name" content="{{ shop.name }}">
+
+<meta name="twitter:site" content="tlcright" data-page-subject="true">
+<meta name="twitter:via" content="tlcright" data-page-subject="true">
+<meta name="twitter:url" content="{{ canonical_url }}" data-page-subject="true">
+<meta name="twitter:creator" content="@tlcright" data-page-subject="true">
+<meta name="twitter:card" content="photo" data-page-subject="true">
+<meta name="twitter:image:width" content="640" data-page-subject="true">
+
+
+{% if shop.metafields.global.optimi_JSON_LD_active == 'true' %}
+  {% if template == 'index' %}
+    <!-- JSON-LD support -->
+    <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "url": "https://{{ shop.domain }}",
+        {% if shop.metafields.global.optimi_JSON_LD_OG_Name != null %}
+        	"name": "{{ shop.metafields.global.optimi_JSON_LD_OG_Name }}",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "{{ shop.metafields.global.optimi_JSON_LD_OG_AddLC }}",
+              "postalCode": "{{ shop.metafields.global.optimi_JSON_LD_OG_AddPC }}",
+              "streetAddress": "{{ shop.metafields.global.optimi_JSON_LD_OG_AddST }}"
+            }
+        {% else %}
+        	"name": "{{ shop.name }}"
+        {% endif %}   
+        {%- unless shop.metafields.SEOMetaManager.knowledgeGraphLogo == blank -%}
+        ,"logo": "https://{{ shop.metafields.SEOMetaManager.knowledgeGraphLogo | remove: "\" }}"
+        {%- endunless -%}
+        {%- unless ZEMRUEOOIP == blank -%}
+        ,"sameAs" : [
+            {{ ZEMRUEOOIP }}
+        ]
+        {%- endunless -%}
+        
+        {% if shop.metafields.global.optimi_JSON_LD_cType != null and shop.metafields.global.optimi_JSON_LD_tel != null %}
+          ,"contactPoint": [{
+             "@type": "ContactPoint",
+             "telephone": "{{ shop.metafields.global.optimi_JSON_LD_tel }}",
+             "contactType": "{{ shop.metafields.global.optimi_JSON_LD_cType }}"
+           }]
+          ,"sameAs": [ 
+          		{% assign comma = false %}
+          		{% if shop.metafields.global.optimi_JSON_LD_facebook != "null" %}
+             		{% if comma == true %}
+                    	,
+                    {% endif %}
+                    {% assign comma = true %}
+                    "{{ shop.metafields.global.optimi_JSON_LD_facebook }}"
+             	{% endif %}
+                {% if shop.metafields.global.optimi_JSON_LD_twitter != "null" %}
+                	{% if comma == true %}
+                    	,
+                    {% endif %}
+                    {% assign comma = true %}
+             		"{{ shop.metafields.global.optimi_JSON_LD_twitter }}"
+             	{% endif %}
+                {% if shop.metafields.global.optimi_JSON_LD_freebase != "null" %}
+                	{% if comma == true %}
+                    	,
+                    {% endif %}
+                    {% assign comma = true %}
+             		"{{ shop.metafields.global.optimi_JSON_LD_freebase }}"
+             	{% endif %}
+                {% if shop.metafields.global.optimi_JSON_LD_pinterest != "null" %}
+                	{% if comma == true %}
+                    	,
+                    {% endif %}
+                    {% assign comma = true %}
+             		"{{ shop.metafields.global.optimi_JSON_LD_pinterest }}"
+             	{% endif %}
+                {% if shop.metafields.global.optimi_JSON_LD_linkedin != "null" %}
+                	{% if comma == true %}
+                    	,
+                    {% endif %}
+                    {% assign comma = true %}
+             		"{{ shop.metafields.global.optimi_JSON_LD_linkedin }}"
+             	{% endif %}
+                {% if shop.metafields.global.optimi_JSON_LD_googleP != "null" %}
+                	{% if comma == true %}
+                    	,
+                    {% endif %}
+                    {% assign comma = true %}
+             		"{{ shop.metafields.global.optimi_JSON_LD_googleP }}"
+             	{% endif %}
+           ]}
+         {% endif %}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "url": "https://{{ shop.domain }}",
+      "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://{{ shop.domain }}/search?q={query}",
+          "query-input": "required name=query"
+      }
+    }
+    </script>
+  {% endif %}
+
+  {% if template == 'product' %}
+    <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Product",
+        "brand": {
+            "@type": "Brand",
+            "name": {{ product.vendor | json }}
+        },
+        "sku": {{ product.selected_or_first_available_variant.sku | json }},
+        "description": {{ product.description | strip_html | json }},
+        "url": {{ canonical_url | json }},
+        "name": {{ product.title | json }},
+        {%- if product.featured_image -%}
+        "image": "https:{{ product.featured_image | product_img_url: 'grande' }}",
+        {%- endif -%}
+        "offers": {
+            "@type": "Offer",
+            "price": "{{ product.selected_or_first_available_variant.price | money_without_currency | remove: "," }}",
+            "priceCurrency": "{{ shop.currency }}",
+            "availability": "{%- if product.selected_or_first_available_variant.available -%}InStock{%- else -%}OutOfStock{%- endif -%}",
+            "itemCondition": "http://schema.org/NewCondition"
+        }
+        {%- if product.metafields.yotpo.reviews_count and product.metafields.yotpo.reviews_count != "0" -%}
+        ,"aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": {{ product.metafields.yotpo.reviews_average }},
+          "ratingCount": {{ product.metafields.yotpo.reviews_count }}
+        }
+        {%- endif -%}
+        {%- if product.metafields.orankl.review_count and product.metafields.orankl.review_count != "0" -%}
+        ,"aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": {{ product.metafields.orankl.rating }},
+          "ratingCount": {{ product.metafields.orankl.review_count }}
+        }
+        {%- endif -%}
+    }
+    </script>
+  {% endif %}
+
+
+  {% if template != 'index' %}
+    <script type="application/ld+json">
+    {
+     "@context": "http://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement": [{
+       "@type": "ListItem",
+       "position": 1,
+       "item": {
+         "@id": "https://{{ shop.domain }}/collections/",
+         "name": "Collections"
+         {%- if product.featured_image -%}
+          ,"image": "https:{{ product.featured_image | product_img_url: 'grande' }}"
+         {%- endif -%}
+       }
+     },{
+       "@type": "ListItem",
+       "position": 1,
+       "item": {
+         "@id": "https://{{ shop.domain }}/products/",
+         "name": "Collections4"
+         {%- if product.featured_image -%}
+          ,"image": "https:{{ product.featured_image | product_img_url: 'grande' }}"
+         {%- endif -%}
+       }
+     }]
+    }
+    </script>
+  {% endif %}
+{% endif %}

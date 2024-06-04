@@ -1,0 +1,457 @@
+{{ 'ps-custom.css' | asset_url | stylesheet_tag }}
+
+{% paginate collections.all.products by shop.products_count %}
+<div class="ps-custom-container"> 
+  <div id="page-load" style="display:none;visibility:hidden;z-index:-1;"></div>
+  <div id="ps-contents">
+    <!--steps start-->
+    <div class="step-container">
+      <ul>
+        <li class="step active">
+          <span class="bubble"></span>
+          <span class="step-number">Step1</span>
+          <span class="step-title">Build Your Own Box</span>
+        </li>
+        <li class="step">
+          <span class="bubble"></span>
+          <span class="step-number">Step2</span>
+          <span class="step-title">Shipping Date/Gift Note</span>
+        </li>
+        <li class="step">
+          <span class="bubble"></span>
+          <span class="step-number">Step3</span>
+          <span class="step-title">Review & checkout</span>
+        </li>
+      </ul>
+    </div>
+    <!--steps end-->
+
+    <!--step1 start-->
+    <div class="step1-container tab">
+
+      {% assign main_category_list = "wine,non-alcoholic-beverages,accessories,apparel,baby-items,beauty,kitchen,snacks,sauces-and-preserves,sweets,dog-products" | split: "," %}
+
+      {% assign main_category = "wine" | split: "," %}
+
+      <div class="ps-header" id="myHeader">
+        <div class="header_filter1">
+          <!--for_filter start-->
+          <div class="for_filter">
+            <label>Choose up to 10 products from the categories</label>
+            <select id="category_filter2">
+              {% for mcat in main_category_list %}
+              <option value="{{mcat}}" {% if mcat == main_category[0]%}selected{% endif %}>{{mcat}}</option>
+              {% endfor %}
+            </select>  
+          </div>
+          <!--for_filter end-->
+        </div>
+        <div class="header_filter2">
+          <div class="action-container">
+            <button class="ps-next" type="button" id="step1-nextBtn2" onclick="step1_nextPrev(1);">ONCE ALL ITEMS HAVE BEEN SELECTED, CLICK HERE AND PROCEED TO CART</button>
+          </div>
+        </div>
+      </div>
+
+      {%- assign ps_default_product = all_products[section.settings.ps_defaut_product] -%}
+
+      <!--this is used for default product display start-->
+      {% assign default_variant = ps_default_product.selected_or_first_available_variant %}
+      <h1 id="main-prod-title" data-price="{{ default_variant.price | money_without_currency }}" class="product_name ps-text-center" itemprop="name">{{ ps_default_product.title }}</h1>
+      <div class="description ps-text-center">
+        {{ ps_default_product.description }}
+      </div>
+
+      {% assign default_featured_image = default_variant.featured_image | default: ps_default_product.featured_image %}
+      <div class="default_feature_image">
+        <img src="{{ default_featured_image | product_img_url: 'medium' }}" alt="{{default_featured_image.alt | escape}}">
+      </div>
+      <div class="default_price">
+        <p class="modal_price ps-text-center" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+          <meta itemprop="seller" content="{{ shop.name | escape }}" />
+          <meta itemprop="availability" content="{% if ps_default_product.available %}in_stock{% else %}out_of_stock{% endif %}" />
+          <meta itemprop="itemCondition" content="New" />
+
+          <span class="sold_out">{% if default_variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+          {% comment %}
+          <span itemprop="price" content="{{ default_variant.price | money_without_currency }}" class="{% if default_variant.compare_at_price > default_variant.price %}sale{% endif %}">
+            <span class="current_price {% if ps_default_product.available == false %}hidden{% endif %}">
+              {% if default_variant.price > 0 %}
+              <span class="money">{{ default_variant.price | money }}</span>
+              {% endif %}
+            </span>
+          </span>
+          <span class="was_price">
+            {% if default_variant.price < default_variant.compare_at_price and default_variant.available %}
+            <span class="money">{{ default_variant.compare_at_price | money }}</span>
+            {% endif %}
+          </span>
+          {% endcomment %}
+        </p>
+        <!--for_filter start-->
+        <div class="for_filter">
+          <label>Choose up to 10 products from the categories</label>
+          <select id="category_filter">
+            {% for mcat in main_category_list %}
+            <option value="{{mcat}}" {% if mcat == main_category[0]%}selected{% endif %}>{{mcat}}</option>
+            {% endfor %}
+          </select>  
+        </div>
+        <!--for_filter end-->
+      </div>
+      <div class="action-container">
+        <button class="ps-next" type="button" id="step1-nextBtn1" onclick="step1_nextPrev(1);">ONCE ALL ITEMS HAVE BEEN SELECTED, CLICK HERE AND PROCEED TO CART</button>
+      </div>
+
+      {% include 'ps-product-form', product:ps_default_product %}
+
+      <!--this is used for default product display end-->
+
+      <!--this is used for other product display start-->    
+      {% if section.blocks.size > 0 %}
+      {%- assign all_block_handles = '' -%}
+
+      {% for block in section.blocks %}
+
+      {%- assign blps_category_chk = block.settings.ps_category -%}
+
+      {% if blps_category_chk == main_category[0] %}
+      {% if all_block_handles == ''%}
+      {%- assign all_block_handles = block.settings.ps_featured_product %}
+      {% else %}
+      {%- assign all_block_handles = all_block_handles | append: ',' | append: block.settings.ps_featured_product -%}
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+
+      {%- assign all_block_handles_arr = all_block_handles | split: ',' -%}
+      <div id="all"></div>
+
+      {% for mcat in main_category_list %}
+
+      {% if mcat == main_category[0] %}
+      <div class="row dotmagic-build-box" data-type="{{mcat}}" id="{{mcat}}">
+        <div class="ps_inner_columns ps-text-center">
+          <h2 class="title" id="new-category-title-{{mcat}}">
+            {{mcat}}
+          </h2>
+        </div>
+
+        <div class="ps_inner_columns clearfix" id="main-category-data-{{mcat}}">
+
+          <!--this is used for make product eeee5 object-->
+
+          {% for block in all_block_handles_arr %}
+
+          {%- assign block_product = all_products[block] -%}
+          {% if block_product.tags contains mcat %}
+          {% assign block_default_variant = block_product.selected_or_first_available_variant %}        
+
+          {% assign featured_image = block_product.selected_or_first_available_variant.featured_image | default: block_product.featured_image %}
+          
+          <div class="imgcolumn">
+            <div class="imgcontent">
+              <img class="featureimg" src="{{ featured_image | product_img_url: 'medium' }}" alt="{{featured_image.alt | escape}}">
+
+              <div class="loader-to-box-btn" id="loader-product-form-{{ block_product.id }}">
+                <img src="{{'loader.gif' | asset_url }}"/>
+              </div>
+
+              <a href="javascript:void(0);" data-price="{{ block_default_variant.price }}" data-prod="{{block_product.title | escape}}" data-cat="{{mcat}}" data-form-id="product-form-{{ block_product.id }}" class="add-to-box-btn" onclick="direct_add_to_cart(this)">Add To Box</a> 
+
+              <div class="step-1-quantity">
+                <a href="javascript:void(0);" class="qtyminus" field="{{ block_product.id }}">-</a>
+                <input id="direct-quantity-{{ block_product.id }}" type="text" name="quantity" class="quantity" value="1" min="1" max="2" size="2" readonly/>
+                <a href="javascript:void(0);" class="qtyplus" field="{{ block_product.id }}">+</a>
+              </div>
+
+              <p data-form-id="product-form-{{ block_product.id }}" class="mess-to-box-btn">ADDED BOX</p>
+
+              <span data-fancybox-href="#product-{{ block_product.id }}" class="custom-quick-view quick_shop action_button quick-view-btn" data-gallery="product-{{ block_product.id }}-gallery">
+                Quick View
+              </span>
+            </div>
+            <h4>{{ block_product.title }}</h4>
+
+            <p><span class="money">{{ block_default_variant.price | money }}</span></p>
+
+          </div>
+          <!--this is used for quick view -->
+          {% include "ps-quick-view",product:block_product %}
+          {% endif %}
+          {% endfor %}
+        </div>
+        <hr>
+      </div>
+      {% else %}
+      <!--[this is used for other category display structure start]-->
+      <div class="row" data-type="{{mcat}}" id="{{mcat}}" style="display:none;">
+        <div class="ps_inner_columns ps-text-center">
+          <h2 class="title" id="new-category-title-{{mcat}}">
+            {{mcat}}
+          </h2>
+        </div>
+
+        <div class="ps_inner_columns clearfix" id="main-category-data-{{mcat}}"></div>
+        <hr>
+      </div>
+      <!--[this is used for other category display structure end]-->
+      {% endif %}
+      {% endfor %}
+
+      {% endif %}
+      <!--this is used for other product display end-->
+
+    </div>
+    <!--step1 end-->
+
+    <!--step2 start-->
+    <div class="step2-container tab">
+      <div class="step2-container">
+        <button class="ps-prev"type="button" id="prevBtn" onclick="nextPrev(-1)">Prev</button>
+        <button class="ps-next" type="button" id="step2-nextBtn" onclick="add_more_items_addtocart();nextPrev(1);" style="display:none;">ONCE ALL ITEMS HAVE BEEN SELECTED, CLICK HERE AND PROCEED TO CART</button>
+      </div>
+
+      <label>Desired shipping date<span class="mandatory">*</span></label>
+      <input name="properties[Desired shipping date]" class="shipping_date" type="date" id="getshippingdate" onchange="$('#ship_date_error').hide();">
+      <p id="ship_date_error">please select shipping date</p>
+      <label>Gift Note</label>
+      <textarea name="properties[Gift Note]" class="gift_note" id="getgiftnote"></textarea>
+
+      <label>Special Instructions</label>
+      <textarea name="properties[Special Instructions]" class="special_instructions" id="getspecialins"></textarea>
+
+      <div class="outer_tax_exempt_box">
+        <input type="checkbox" name="top_tax_exempt_box" onclick="checkbox_no_check()" id="tax_number_checkbox2" value="yes">
+        <label for="tax_number_checkbox2">My Purchase Is Tax Exempt</label>
+
+        <div class="tax_number1">
+          <input type="radio" name="tax_number_rbox" onclick="radio_yes_check()" id="tax_number_rbox1" value="YES"><label for="tax_number_rbox1">YES, my number is on file at WiscoBoxes</label>  
+        </div>
+
+        <div class="tax_number2">
+          <input type="radio" name="tax_number_rbox" onclick="radio_no_check()" id="tax_number_rbox2" value="NO"><label for="tax_number_rbox2">No, I need to share my number</label>
+          <div id="input_tax_div">
+            <label>My tax-exempt number is</label>
+            <input type="text" name="tax_number_box" id="tax_number_box" value="">
+            <label>My company name is</label>
+            <input type="text" name="company_number_box" id="company_number_box" value="">
+          </div>
+        </div>
+      </div>
+      <div id="step2-build-box-loader" class="quick-view-loader"><img src="//cdn.shopify.com/s/files/1/1765/5227/t/10/assets/loader.gif?3788964890387418820"></div>
+      <button id="step2-build-box-btn" type="button" name="add-cart" class="action_button add_to_cart step-2-add-btn" onclick="build_box()">Add to Box</button>
+
+    </div>
+    <!--step2 end-->
+
+    <!--step3 start-->
+    <div class="step3-container tab">
+      <div class="step3-container">
+        <button class="ps-prev"type="button" id="prevBtn" onclick="nextPrev(-1)">Prev</button>
+      </div>
+
+      <!--  CUSTOM CART LAYOUT  start  -->
+      <div id="step3-build-box-loader" class="step3-view-loader"><img src="//cdn.shopify.com/s/files/1/1765/5227/t/10/assets/loader.gif?3788964890387418820"></div>
+      <div class="cart_wraper">
+
+        <!--  table heads  -->
+        <div class="table_captions">
+          <div class="prodd">
+            <p>Product</p>
+          </div>
+          <div class="prodd_name">
+            <p>Product Name</p>
+          </div>
+          <div class="qtty">
+            <p>Quantity</p>
+          </div>
+          <div class="prrice">
+            <p>Price</p>
+          </div>
+        </div>
+        <form id="cart_form">
+          <div id="main-cart-container-section"></div>
+          <br>
+          <h4 class="subtotal">Subtotal: <span class="money" id="our_total_ps" real-total="0"></span></h4>
+          <p>
+            <a class="action_button step-2-add-btn newcontinue-shopping" href="javascript:void(0);" onclick="all_items_addtocart('shop');">Continue Shopping</a>&nbsp;
+            <a class="action_button step-2-add-btn newcontinue-shopping" id="checkout" href="javascript:void(0);" onclick="all_items_addtocart('checkout');">Checkout</a>
+          </p>
+        </form>
+
+      </div>  
+      <!--  CUSTOM CART LAYOUT ends   -->
+
+    </div>
+    <!--step3 end-->
+    {% endpaginate %}
+    <!--[processing box]-->
+    <span id="step3-error-message-hidden" data-fancybox-href="#step3-error-message" class="step3-error-message quick_shop action_button quick-view-btn" data-gallery="step3-error-message">
+      Processing Box
+    </span>
+    <div id="step3-error-message" class="product_section thumbnail_position--right-thumbnails product_slideshow_animation--none"
+         data-thumbnail="right-thumbnails"
+         data-slideshow-animation="none"
+         data-slideshow-speed="6">
+      <div class="container" style="width: inherit;text-align:center;">
+        <img src="//cdn.shopify.com/s/files/1/1765/5227/t/10/assets/loader.gif?3788964890387418820">
+      </div>
+    </div>
+    <!--[processing box]-->
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  var main_list_handle = {{main_category_list | json}};
+  var all_section_data = [];
+
+  {% for block in section.blocks %}
+  {%- assign category_chk = block.settings.ps_category -%}
+  {%- assign hdle = block.settings.ps_featured_product -%}
+  all_section_data.push({'cat':'{{category_chk}}','handle':'{{hdle}}'});
+  {% endfor %}
+
+</script>
+{{ 'ps-build-02.js' | asset_url | script_tag }}
+
+<div id="myModal" class="modal page-modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="page-tilte">
+      <h2>Added to box</h2>
+    </div>
+    <div class="model-products">
+    </div>
+    <div class="model-footer">
+      <p>Total:</p>
+      <p class="money"></p>
+    </div>
+    <div>
+      <a href="javascript:void(0);" class="continue-shopping-page" onclick="cont_btn();">Add More Items to Box</a>
+      <a href="javascript:void(0);" class="continue-shopping-page" onclick="nextbtn();">Finish Building Box</a>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  var btn = document.getElementsByClassName("add-to-box-btn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal
+  btn.onclick = function () {
+    modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  //     window.onclick = function (event) {
+  //         if (event.target == modal) {
+  //             modal.style.display = "none";
+  //         }
+  //     }
+</script>
+
+{% schema %}
+{
+"name": "Page PS Build Own Box",
+"class": "ps-build-section",
+"settings": [
+{
+"type": "product",
+"id": "ps_defaut_product",
+"label": "PS Default Product"
+}
+],
+"blocks": [
+{
+"type": "product",
+"name": "Product",
+"settings": [
+{
+"type": "product",
+"id": "ps_featured_product",
+"label": "PS Product"
+},
+{
+"type": "select",
+"id": "ps_category",
+"label": "Category",
+"options": [
+{
+"value": "wine",
+"label": "Wine"
+},
+{
+"value": "non-alcoholic-beverages",
+"label": "Non-Alcoholic Beverages"
+},
+{
+"value": "accessories",
+"label": "Accessories"
+},
+{
+"value": "apparel",
+"label": "Apparel"
+},
+{
+"value": "baby-items",
+"label": "Baby Items"
+},
+{
+"value": "beauty",
+"label": "Beauty"
+},
+{
+"value": "kitchen",
+"label": "Kitchen"
+},	
+{
+"value": "snacks",
+"label": "Snacks"
+},
+{
+"value": "sauces-and-preserves",
+"label": "Sauces And Preserves"
+},
+{
+"value": "sweets",
+"label": "Sweets"
+},
+{
+"value": "dog-products",
+"label": "Dog Products"
+}
+]
+}
+]
+}
+],
+"presets": [{
+"name": "Page PS Build Products",
+"category": "Product",
+"settings": {
+},
+"blocks": [
+{
+"type": "product"
+},
+{
+"type": "product"
+}
+]
+}]
+}
+{% endschema %}

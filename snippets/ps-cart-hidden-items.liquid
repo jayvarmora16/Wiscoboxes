@@ -1,0 +1,4 @@
+{%- if item.properties._ps_custom_builder == 'yes' and item.properties._ps_hide_item == 'yes' -%}
+  <input type="hidden" name="updates[]" id="updates_{{- item.key -}}" class="cart__product-qty" value="{{- item.quantity -}}" min="0" data-id="{{- item.key -}}">
+  {%- continue -%}
+{%- endif -%}

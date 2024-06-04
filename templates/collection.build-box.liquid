@@ -1,0 +1,33 @@
+  {% layout none %}
+{% for product in collection.products %}
+  <div class="imgcolumn">
+    <div class="imgcontent {% if is_active %}active{% endif %}">
+      <img class="featureimg" src="{{ product.featured_image | product_img_url: 'medium' }}" alt="{{ product.selected_or_first_available_variant.featured_image | escape}}">
+
+      <div class="loader-to-box-btn" id="loader-product-form-{{ product.id }}">
+        <img src="{{'loader.gif' | asset_url }}"/>
+      </div>
+
+      <a href="javascript:void(0);"  data-price="{{ product.selected_or_first_available_variant.price }}" data-prod="{{product.title | escape}}" data-cat="{{current_tag}}" data-form-id="product-form-{{ product.id }}" class="add-to-box-btn" onclick="direct_add_to_cart(this)">Add To Box</a> 
+
+      <div class="step-1-quantity">
+        <a href="javascript:void(0);" class="qtyminus" field="{{ product.id }}">-</a>
+        <input id="direct-quantity-{{ product.id }}" type="text" name="quantity" class="quantity" value="1" min="1" max="2" size="2" readonly/>
+        <a href="javascript:void(0);" class="qtyplus" field="{{ product.id }}">+</a>
+      </div>
+
+      <p data-form-id="product-form-{{ product.id }}" class="mess-to-box-btn">ADDED BOX</p>
+
+      <span data-fancybox-href="#product-{{ product.id }}" class="quick_shop action_button quick-view-btn" data-gallery="product-{{ product.id }}-gallery">
+        Quick View
+      </span>
+    </div>
+    <h4>{{ product.title }}</h4>
+
+    <p><span class="money">{{ product.selected_or_first_available_variant.price | money }}</span></p>
+
+  </div>
+  <!--this is used for quick view -->
+  {% include "ps-quick-view",product %}
+
+  {% endfor %}

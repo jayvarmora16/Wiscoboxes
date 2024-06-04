@@ -1,0 +1,49 @@
+  <div id="product-{{ product.id }}" class="modal product-{{ product.id }} product_section thumbnail_position--right-thumbnails product_slideshow_animation--none"
+       data-thumbnail="right-thumbnails"
+       data-slideshow-animation="none"
+       data-slideshow-speed="6">
+    <div class="container" style="width: inherit">
+
+      <div class="eight columns" style="padding-left: 15px">
+        {% include 'ps-product-images' with 'modal' %}
+      </div>
+
+      <div class="six columns">
+        <h3>{{ product.title }}</h3>
+        
+        {% unless collection_handles contains 'coming-soon' %}
+          <p class="modal_price">
+            <span class="sold_out">{% if product.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+            
+            <span class="current_price {% if product.compare_at_price_max > product.price %}sale{% endif %}">
+              {% if product.available %}
+                {% if product.price > 0 %}
+                  <span class="money">{{ product.price | money }}</span>
+                {% endif %}
+              {% endif %}
+            </span>
+            <span class="was_price">
+              {% if product.price < product.compare_at_price_max %}
+                <span class="money">{{ product.compare_at_price | money }}</span>
+              {% endif %}
+            </span>
+            
+          </p>
+        {% endunless %}
+
+        {% unless collection_handles contains 'coming-soon' %}
+          {% include 'page-ps-product-form' %}
+        {% endunless %}
+
+        <!--this is product description in bottom-->
+          <hr />
+            {{ product.description | split: '<!-- split -->' | first }}
+          {% comment %}
+          <p>
+            <a href="{{ product.url | within: collection }}" class="view_product_info" title="{{ product.title | escape }}">{{ 'collections.general.view_product_details_html' | t }}</a>
+          </p>
+          {% endcomment %}
+        <!--this is product description in bottom-->
+      </div>
+    </div>
+  </div>

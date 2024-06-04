@@ -1,0 +1,102 @@
+<!--  CUSTOM CART LAYOUT  start  -->
+<div id="main-cart-container">
+    <div class="cart_wraper">
+      {% if cart.item_count > 0 %}
+	 <!--  table heads  -->
+      <div class="table_captions">
+        <div class="prodd">
+          <p>Product</p>
+        </div>
+        <div class="prodd_name">
+          <p>Product Name</p>
+        </div>
+        <div class="qtty">
+          <p>Quantity</p>
+        </div>
+        <div class="prrice">
+          <p>Price</p>
+        </div>
+      </div>
+      <form action="/cart" method="post" id="cart_form">
+      	{% for item in cart.items %}
+         {%- if item.properties._ps_custom_builder == 'yes' -%}
+          <!--  row -->
+          <div class="table_captions table_details" id="cart-row-{{forloop.index}}">
+            <div class="prodd">
+              <a href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
+              	<img src="{{ item | img_url: 'medium' }}" alt="{{ item.title | escape }}" />
+              </a>
+            </div>
+            <div class="prodd_name">
+              <p><a href="{{ item.url }}">
+                {{ item.product.title }}
+              </a></p>
+              {% if item.properties %}  
+              	<p>
+                {% for p in item.properties %}
+				{% if p.first.first == '_' %}{% continue %}{% endif %}
+                  {% unless p.last == blank %}
+                    {% if p.last contains '/uploads/' %}
+                      {{ p.first }}: <a class="lightbox" href="{{ p.last }}">{{ 'cart.general.uploaded_file' | t }}</a><br />
+                    {% else %}
+                      {{ p.first }}: {{ p.last }}<br />
+                    {% endif %}
+                  {% endunless %}
+                {% endfor %}
+               </p>
+              {% endif %} 
+            </div>
+            <div class="qtty">
+              <input type="number" data-line-item="{{ forloop.index }}" min="0" onchange="$(this).unbind();update_cart(this);" size="3" maxlength="3" class="quantity" name="updates[]" value="{{ item.quantity }}" />
+            </div>
+            <div class="prrice">
+              <p><span class="money">{{ item.price | money_with_currency }}</span></p>
+              <a onclick="remove_item({{ forloop.index }});" href="javascript:void(0);">{{ 'cart.general.remove' | t }}</a>
+            </div>
+          </div>
+          <!--  row -->            
+         {% endif %}
+      	{% endfor %}
+        <br>
+        <h4 class="subtotal">
+          {{ 'cart.general.subtotal' | t }}
+        </h4>
+            <span class="mw-hidden-fees"></span>
+
+        <p class="subtotal_amount">
+          <strong>
+            <span class="money">{{ cart.total_price | money_with_currency }}</span>
+          </strong>
+        </p>
+        
+        <p>
+          <a class="action_button step-2-add-btn newcontinue-shopping" href="/collections/shop">Continue Shopping</a>&nbsp;
+          <input type="submit" class="action_button step-2-add-btn" id="checkout" name="checkout" value="{{ 'cart.general.checkout' | t }}" />
+        </p>
+      </form>
+      {% else %}
+       <p class="quote">There are no items in your cart. <a href="/collections/shop">Continue Shopping →</a></p>
+      {% endif %}      
+  </div> 
+ </div>
+<!--  CUSTOM CART LAYOUT ends   -->
+{% schema %}
+
+{
+  "name": "Cart page",
+  "class": "cart-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "display_special_instructions",
+      "label": "Show \"note\" text box"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_tos_checkbox",
+      "label": "Show \"agree to terms\" checkbox"
+    }
+  ]
+}
+
+{% endschema %}

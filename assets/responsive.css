@@ -1,0 +1,149 @@
+@media screen and (max-width:750px){
+  #shopify-section-1489437971167 .relative.product_image {
+    max-height: 150px !important;
+    height: 200px;
+  }
+  #shopify-section-1489437971167 .primary {
+    height: 100% !important;
+  }
+  #shopify-section-1489437971167  span.title {
+    font-size: 1em !important;
+  }
+  #shopify-section-1486653773557 .flex-caption {
+    position:relative;
+    top: 0;
+    transform: none;
+  }
+  #shopify-section-1486653773557 #statement .headline {
+    font-size: 22px !important;
+  }
+  #shopify-section-1486653773557 #wb-paragraph {
+    font-size: 16px !important;
+  }
+  #shopify-section-1486653773557 #statement .action_button {
+    font-size: 14px !important;
+    padding: 8px;
+  }
+  #home-newsletter {
+    margin: 0 auto;
+  }
+  #newsletter-container {
+    text-align: center !important;
+  }
+  .mm-search  input[type="text"]::placeholder {
+    color: #fff;
+  }
+  #wiscoboxes-footer >.grid {
+    display: block;
+  }
+  #wiscoboxes-footer .gutter-2 {
+    display: none;
+  }
+  #wiscoboxes-footer .content-2 {
+    border-bottom: 2px solid #ac002b;
+    border-right:none;
+    flex-grow: unset;
+    max-height: 70px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+  }
+  #wiscoboxes-footer div#content-last {
+    padding-left: 30px;
+  }
+  /*   CRETE YOUR WON BOCX PAGE */
+  .ps-custom-container div#myHeader {
+    POSITION: static;
+    display: none !important;
+  }
+  #shopify-section-ps-build-page-section .step-container, .step1-container, .step2-container, .step3-container{
+    margin: 0px 0px !important;
+    width: 92% !important;
+    padding: 10px;
+  }
+  #shopify-section-ps-build-page-section .step1-container .action-container {
+    float: none;
+    width: 100%;
+    position: relative;
+    top: 5px;
+    /* padding-top: 0; */
+  }
+  /* #shopify-section-ps-build-page-section .step1-container  h1.product_name {
+  position: relative;
+  left: -8px;
+} */
+  #shopify-section-ps-build-page-section .description.ps-text-center p {
+    position: relative;
+    /*     left: -9px; */
+    padding: 0px 10px !important;
+  }
+  #shopify-section-ps-build-page-section .step1-container .default_feature_image {
+    float: none;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    /*     left: -9px; */
+  }
+  #shopify-section-ps-build-page-section .step1-container .default_price {
+    float: none;
+    width: 100%;
+  }
+  #shopify-section-ps-build-page-section .step1-container .ps_inner_columns .imgcolumn {
+    padding: 0 0 0 2px;
+    float: none;
+    width: 100%;
+    display: block;
+  }
+  #shopify-section-ps-build-page-section textarea {
+    width: 92%;
+  }
+#shopify-section-ps-build-page-section .cart_wraper {
+    display: block;
+    width: 97.3%;
+    margin: 55px 0;
+    text-align: center;
+}
+  #shopify-section-ps-build-page-section .for_filter {
+    text-align: center;
+    width: 100%;
+  }
+  #shopify-section-ps-build-page-section .for_filter #category_filter {
+    width: 100%;
+  }
+  #shopify-section-ps-build-page-section  .step-container ul {
+    margin: 0 0 0 20px !IMPORTANT;
+
+  }
+  #shopify-section-ps-build-page-section .step1-container .ps_inner_columns .imgcolumn h4 {
+    height: 25px;
+  }
+  .step1-container .ps_inner_columns .imgcolumn p {
+    margin: 0 0 20px 0 !important;
+  }
+  #wiscoboxes-footer {
+    border-top: 2px solid #ac002b !important;
+}
+ #shopify-section-ps-build-page-section .table_captions {
+    display: none;
+}
+ #shopify-section-ps-build-page-section .table_details {
+    display: block !important;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid #dadada;
+    margin: 0 auto;
+}
+   #shopify-section-ps-build-page-section .prodd {
+    width: 100% !important;
+}
+#shopify-section-ps-build-page-section .prodd_name {
+    width: 100% !important;
+}
+  #shopify-section-ps-build-page-section .table_captions div p {
+    margin: 0 0;
+    text-align: left;
+    width: 100%;
+    max-width: 100% !important;
+}
+}

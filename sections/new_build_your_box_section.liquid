@@ -1,0 +1,410 @@
+<style>
+    .stickys {
+      position: fixed;
+      top: 0;
+      width: 100%;
+    }
+    .stickys + .content {
+      padding-top: 102px;
+    }
+  
+  </style>
+  
+  {{ 'ps-custom.css' | asset_url | stylesheet_tag }}
+  
+  <div class="ps-custom-container">
+    <div id="page-load" style="display:none;visibility:hidden;z-index:-1;"></div>
+    <div id="ps-contents">
+      <!--steps start-->
+      <div class="step-container">
+        <ul>
+          <li class="step" onClick="changeStep(1)" style="cursor:pointer">
+            <span class="bubble"></span>
+            <span class="step-number">Step1</span>
+            <span class="step-title">Packaging</span>
+          </li>
+          <li class="step" onClick="changeStep(2)" style="cursor:pointer">
+            <span class="bubble"></span>
+            <span class="step-number">Step2</span>
+            <span class="step-title">Build Your Own Box</span>
+          </li>
+          <li class="step" onClick="changeStep(3)" style="cursor:pointer">
+            <span class="bubble"></span>
+            <span class="step-number">Step3</span>
+            <span class="step-title">Gift Note</span>
+          </li>
+        </ul>
+      </div>
+      <!--steps end-->
+  
+      <div class="ps-header headers"  id="myHeader1" style="display:none !important;">
+        <div class="row main-box">
+          <div class="col-sm-3 text-box">
+            <div class="basket-message" id="basket-message"></div>
+            <div class="box_img_add" id="box_img_add"></div>
+          </div>
+          <div class="col-sm-6 box-product">
+            <div class="items-carousel" id="items-carousel">
+            </div>
+          </div>
+          <div class="col-sm-3 product-button">
+            <div class="btn-black please-add hide">Please add at least two items to your gift</div>
+            <div class="box-button"   >
+              <a data-step="2" style="cursor:pointer" onclick="NextStep()" >
+                <span class="total stp_nxt_btn"  id="stp_nxt_btn">
+                  <strong>Next Step</strong>
+                  <br>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+  <!--    Step1 Start  -->
+      <div class="step1-container tab" style="display:block">
+          <h1 id="main-prod-title" data-price="10.00" class="product_name ps-text-center" itemprop="name">Choose Your Box Size</h1>
+        <div class="description ps-text-center">
+          <p><span style="font-weight: 400;">Welcome to the easiest way to send someone a custom gift, in 3 simple steps. Add to cart and repeat for multiple boxes, or update your quantity in the cart.
+          </span>   
+          </p>
+          
+          
+          <div class="container" style="width:100%">
+            <div class="packageRow">
+              {% assign package_boxes = collections.package %}
+              {% for product in package_boxes.products  %} 
+              <div class="packageCol" onClick="selectPackageBox(this)" data-size={{forloop.index}} id="packagebox{{forloop.index}}" title="{{product.title}}" weight="{{product.weight}}"   data-tags="{{product.tags | join: ' '}}" p-id="{{product.id}}" handle="{{product.handle}}" data-variant="{{product.selected_or_first_available_variant.id }}" data-price="{{product.selected_or_first_available_variant.price}}" data-image="{{product.featured_image | product_img_url: 'medium'}}">
+                {{ product.featured_image | img_url: '480x480' | img_tag }}
+                <p>{{product.title}}</p>
+               </div>
+              {% endfor %}
+            </div>
+          </div>
+          
+          
+        </div>
+      </div>
+  <!--    Step1end  -->
+      
+      
+      
+  <!--    Step2 Start  -->
+      
+      <div class="step2-container tab" style="display:block">
+        <h1 id="main-prod-title" data-price="10.00" class="product_name ps-text-center" itemprop="name">Build Your Own Box</h1>
+        <div class="description ps-text-center">
+          <p><span style="font-weight: 400;"> <span>Love our curated boxes, but want to change up an item or two, add something more or start entirely from scratch? Select the items you want to include from our entire portfolio of thoughtfully curated Wisconsin products, add a gift note and we will package and ship, with love from Wisconsin. Need assistance? </span></span><span style="font-weight: 400;"><a href="/pages/contact" title="contact us">Contact us</a> and we'll curate a box just for you.</span></p>
+          <meta charset="utf-8">
+          <p><span style="font-weight: 400;"><span>Interstate shipping regulations do limit the states to which our boxes that contain wine can be shipped. Please check our&nbsp;</span><a href="https://wiscoboxes.com/pages/terms">terms</a><span>&nbsp;to ensure that we can ship to your desired state.&nbsp;</span></span></p>
+          <meta charset="utf-8">
+   
+          <!-- Custom LB New Design -->
+          <div id="custom-gift-box" style="border: 1px solid #ddd;">
+            <div class=" custom-box-contents">
+              <div class="col-lg-7 col-12 custom-box-images-wrapper">
+                <ul class="box-images" id="box-images">
+                </ul>
+              </div>
+              <div class="col-lg-5 col-12 custom-box-list-wrapper" style="border-right:none;">
+                <h4 class="list-title">Box Contents</h4>
+                <ul class="list-items" id="box-list-items">
+                </ul>
+                <div class="list-subtotal">
+                  <p style="color: #000 !important;font-weight: bold;"> <span class="box_label">Box Subtotal:</span>
+                    <span class="subtotal" id="item_subtotal"></span>
+                  </p>
+                  <button id="complete-box" class="checkout-button btn btn--full ng-binding" ng-click="completeItems()">
+                    Complete Box
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Custom LB New Design -->
+          <br>
+          
+          {% assign ps_collections = section.settings.ps_collections %}
+          <div class="for_filter" style="display: flex;">
+            <div class="choose10" style="width:50%">
+              <label>Choose up to 10 products from the categories</label>
+            </div>
+            <div style="width:50%">
+              <select id="category_filter2">
+                {% for ps_collection in ps_collections %}
+                <option value="{{ ps_collection.handle }}" {% if ps_collection == section.settings.ps_main_collection %}selected{% endif %}>{{ ps_collection.title }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row dotmagic-build-box" data-type="wine" id="wine">
+          <div class="ps_inner_columns clearfix filtered_products"></div>
+          <hr>
+        </div>
+        
+  <!--    Ice for parish product data    -->
+        {% assign iceForPerish = all_products['add-cold-packing-for-perishables'] %}
+        <div id="iceForPerish" 
+             data-img="{{iceForPerish.featured_image | product_img_url: 'medium'}}" 
+             data-variant="{{ iceForPerish.selected_or_first_available_variant.id }}" 
+             data-price="{{ iceForPerish.selected_or_first_available_variant.price }}" 
+             data-prod="{{ iceForPerish.title | escape}}" 
+             data-tags="{{iceForPerish.tags | join: ' '}}"
+             p-id="{{ iceForPerish.id }}"
+             handle="{{iceForPerish.handle}}"
+             weight="{{ iceForPerish.variants.first.weight | weight_with_unit }}"
+             data-form-id="product-form-{{ iceForPerish.id }}" >
+        </div>
+      </div>
+      
+  <!--   Step2 End   -->
+  
+      <div class="step3-container tab" >
+        <div class="row">
+          <div class="col-md-12">
+            <h3>Your message</h3>
+          </div>
+          <div class="col-md-12">
+            <textarea id="box-message" name="message" rows="" cols="" class="form-control card-message" placeholder="Enter your card message here. 350 characters max." maxlength="350" data-gramm="true"  spellcheck="false" data-gramm_editor="true" style="background: rgb(255, 255, 255) none repeat scroll 0% 0%; z-index: auto; position: relative; line-height: 21px; font-size: 13px; transition: none 0s ease 0s;"></textarea> 
+            <label>Desired Shipping Date</label>
+            <input name="properties[Desired shipping date]" id="shipping_date" class="da_485901_231569 sddate" type="date" required>
+            <br>
+            <button type="submit" class="btn btn--full" id="addToCartBtn" onclick="completeCard()">
+              <span class="ng-binding">Add to Cart</span>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
+  <div id="myModal" class="modal_customquiq_view">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="Inner_quick"></div>
+    </div>
+  </div>
+  
+  <input type="hidden" name="boxItemId" id="box_item_id" value="">
+  <input type="hidden" name="itemCount" id="item_count_prod" value="">
+  
+  <script>
+    $(document).ready(function(){
+      $( "#complete-box" ).click(function() {
+        $( ".box-button a" ).click();
+      });
+    });
+  </script>
+  
+  <script type="text/javascript">
+    // var main_list_handle = {{main_category_list | json}};
+    // var all_section_data = [];
+    // {% for block in section.blocks %}
+    // {%- assign category_chk = block.settings.ps_category -%}
+    // {%- assign hdle = block.settings.ps_featured_product -%}
+    // all_section_data.push({'cat':'{{category_chk}}','handle':'{{hdle}}'});
+    // {% endfor %}
+  </script>
+  
+  <script>
+    var shop='{{ shop.permanent_domain }}';
+  //   window.onscroll = function() {
+  //     myFunction()
+  //   };
+    
+  //   var header = document.getElementById("myHeader1");
+  //   var sticky = header.offsetTop;
+  //   function myFunction() {
+  //     if (window.pageYOffset > sticky) {
+  //       header.classList.add("sticky");
+  //     } else {
+  //       header.classList.remove("sticky");
+  //     }
+  //   }
+  
+    function createSlick() {
+      $('.items-carousel').slick({
+        dots: false,
+        infinite: false,
+        speed: 300,
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        arrows: true,
+        nextArrow: '<i class="fa fa-arrow-right nextArrowBtn"></i>',
+        prevArrow: '<i class="fa fa-arrow-left prevArrowBtn"></i>',
+        responsive: [{
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            infinite: true,
+            dots: false
+          }
+        }, {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2
+          }
+        }, {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }]
+      });
+    }
+    
+    if(cpage == "build-your-box"){
+    createSlick();
+    }
+    window.MyLib = {};
+    MyLib.slick = function() {
+      createSlick();
+    }
+    MyLib.unslick = function() {
+      $('.items-carousel').slick('unslick');
+    }
+    
+    function CreateProductListFromTag(filterValue){
+        $("#category_filter,#category_filter2").val(filterValue);
+        if (filterValue!=""){    
+            $.ajax({
+                type: 'GET',
+                //url: 'https://'+shop+'/collections/all?view=ps-collection',
+                url: 'https://wiscoboxes.com/collections/'+filterValue+'?view=new-ps-collection',
+                beforeSend: function(){
+                    $('#page-load').css({"display":"block","visibility":"visible","z-index":"999999"}); 
+                },
+                success: function(data) {
+                    $('#page-load').css({"display":"none","visibility":"hidden","z-index":"-1"}); 
+                    //   var pk1;
+                    //     var my_filterHtml = "";
+                    //   for (pk1 = 0; pk1 < all_section_data.length; pk1++){
+                    //       var newcate = all_section_data[pk1]['cat'];
+                    //       if(newcate == filterValue){
+                    //         var newftval = all_section_data[pk1]['handle'];
+                    //         var filteredData = $(data).find(".ps-"+newftval);
+                    //         if(filteredData.length >0){
+                    //           my_filterHtml+=$(filteredData).html();
+                    //         }
+                    //       }
+                    //   }
+
+                    var my_filterHtml = "";
+                    var productsElement = $(data).find('.content');
+                    if ( productsElement.length ) {
+                        my_filterHtml = $(productsElement).html();
+                    }
+                    if(my_filterHtml !=""){
+                        $(".filtered_products").html(my_filterHtml);
+                        ApplYQuickView();
+                    }else{
+                        $(".filtered_products").html("<p>No products Found for this Category Please Try Another</p>");
+                    }
+                },
+                dataType: "html"
+            });
+        }
+  
+    }
+    CreateProductListFromTag($("#category_filter2").val());
+    
+    $("#category_filter,#category_filter2").change(function() {
+      var filterValue = $(this).val();
+      CreateProductListFromTag(filterValue);
+    });
+    $('.close').on('click',function(){
+      $('#myModal').hide();
+    });
+       
+    function ApplYQuickView(){
+      $('.custom-quick-view').on('click',function(){
+        
+        var htxx='';
+        var img= $(this).attr("data-img");
+        var variant= $(this).attr("data-variant");
+        var price= $(this).attr("data-price");
+        var prod= $(this).attr("data-prod");
+        var cat= $(this).attr("data-cat");
+        var p_id= $(this).attr("p-id");
+        var handle= $(this).attr("handle");
+        var data_form_id= $(this).attr("data-form-id");
+        var data_desc=$(this).attr("data-desc");
+        var data_tags=$(this).attr("data-tags");
+        var desimal_prc=(price/100).toFixed(2);
+        htxx +='<div class="container" style="width: inherit">\
+     <div class="eight columns" style="padding-left: 15px">\
+        <div class="flexslider product_gallery product-1478979027053-gallery product_slider">\
+           <ul class="slides">\
+              <li data-thumb="" data-title="One year aged cheddar  - WiscoBoxes " style="width: 100%; float: left; margin-right: -100%; position: relative; opacity: 1; display: block; z-index: 2;" class="flex-active-slide">\
+                 <a href="" class="fancybox" rel="group" data-fancybox-group="1478979027053" title="One year aged cheddar  - WiscoBoxes ">\
+  <img style="max-height:200px;" src="'+img+'" data-src="'+img+'" data-src-retina="'+img+'" alt="One year aged cheddar  - WiscoBoxes " data-index="0" data-image-id="4998835273837" data-cloudzoom="zoomImage: , tintColor:#ffffff, zoomPosition:inside, zoomOffsetX: 0, touchStartDelay: 250" class="cloudzoom featured_image" draggable="false">\
+                 </a>\
+              </li>\
+           </ul>\
+           <ol class="flex-control-nav flex-control-thumbs"></ol>\
+        </div>\
+     </div>\
+     <div class="six columns">\
+        <h3>'+prod+'</h3>\
+        <p class="modal_price">\
+           <span class="sold_out"></span>\
+           <span class="current_price ">\
+           <span class="money">$'+desimal_prc+'</span>\
+           </span>\
+          <span>'+data_desc+'</span>\
+           <span class="was_price">\
+           </span>';
+          htxx +='<span><button data-img="'+img+'"';
+          htxx += 'data-tags="'+ data_tags + '"';
+          htxx +=' data-variant="'+variant+'" data-price="'+price+'" data-prod="'+prod+'"';
+          htxx +=' data-cat="'+cat+'" p-id="'+p_id+'" handle="'+handle+'"';
+          htxx +=' data-form-id="'+data_form_id+'" class="add-to-box-btn"';
+          htxx +=' onclick="direct_add_to_cart(this)" type="button" name="add"'; 
+          htxx +=' class="action_button add_to_cart" data-label="Add to Cart">Add to box</button>';
+           htxx +='</span>';
+         htxx +='</p>';
+      htxx +='</div>';
+   htxx +='</div>';
+        $('#Inner_quick').html(htxx);
+        $('#myModal').show();
+        
+      });
+    }
+  </script>
+  
+  
+  
+{% schema %}
+{
+    "name": "Page PS New Build Own Box",
+    "class": "ps-build-section",
+    "settings": [
+        {
+            "type": "collection_list",
+            "id": "ps_collections",
+            "label": "Collections"
+        },
+        {
+            "type": "collection",
+            "id": "ps_main_collection",
+            "label": "Main Collection"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Page PS New Build Products",
+            "category": "Product",
+            "settings": {
+            }
+        }
+    ]
+}
+{% endschema %}
+  
+  

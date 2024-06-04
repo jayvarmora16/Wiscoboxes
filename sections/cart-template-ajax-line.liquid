@@ -1,0 +1,29 @@
+<div id="ajax-line-cart">
+  {% if cart.item_count > 0 %}
+    {% for item in cart.items %}   
+    <a class="ajaxcart_link" href="/cart/change?line={{ forloop.index }}&amp;quantity=0" data-line="{{ forloop.index }}" data-variantid="{{ item.variant_id }}"></a>
+    {% endfor %}  
+  {% else %}
+  	<p class="no_items">no_items</p>
+  {% endif %}      
+ </div>
+{% schema %}
+
+{
+  "name": "Cart page",
+  "class": "cart-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "display_special_instructions",
+      "label": "Show \"note\" text box"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_tos_checkbox",
+      "label": "Show \"agree to terms\" checkbox"
+    }
+  ]
+}
+
+{% endschema %}

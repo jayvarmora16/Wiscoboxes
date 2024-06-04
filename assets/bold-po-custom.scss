@@ -1,0 +1,24 @@
+.bold_options {
+  
+  input[type="text"], input[type="number"], input[type="date"], input[type="tel"], input[type="email"], textarea, select {
+    font-family: HelveticaNeue-Light, "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #565a5c;
+    margin-bottom: 0;
+  }
+  
+  .bold_option_dropdown {
+    .bold_option_element {
+      margin-left: 0;
+    }
+  }
+  
+  .bold_option_date {
+    input {
+      border-radius: 4px;
+      border: 1px solid #dce0e0;
+      box-sizing: border-box;
+      width: 100%;
+      padding: 10px 2em 10px 8px;
+    }
+  }
+}

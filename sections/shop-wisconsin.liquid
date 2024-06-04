@@ -1,0 +1,190 @@
+<link href="https://cdn.shopify.com/s/files/1/1765/5227/files/owl.carousel.min.css?6394002600856318344" rel="stylesheet"/>
+<link href="https://cdn.shopify.com/s/files/1/1765/5227/files/owl.theme.default.min.css?3434769549137754632" rel="stylesheet"/>
+
+<script src="https://cdn.shopify.com/s/files/1/1765/5227/files/owl.carousel.min.js?5554709578440086039"></script>
+
+<style>
+#shop-wi-left {
+  float: left;
+}
+  
+  #shop-wi-left h1 {
+    background: transparent;
+    color: #ac002b !important;
+  	font-family: aviano-sans, sans-serif;
+  	font-size: 2em !important;
+    font-style: normal;
+    font-weight: 100;
+    line-height: 1em;
+    text-transform: uppercase;
+  }
+
+  #shop-wi-left ul {
+    color: black;
+    font-size: 1em;
+    font-weight: 600;
+    list-style: none;
+    margin: 0 !important;
+    text-transform: uppercase;
+}  
+  #shop-wi-left li {
+  	letter-spacing: 1.5px;
+  }
+  
+#shop-wi-right {
+  float: right;
+}
+
+.owl-carousel {
+  width: 60% !important;
+}
+
+  .cap {
+  display: block;
+  text-align: center;
+}
+</style>
+<div class="homepage_content clearfix" id="good-things-container">
+  <div class="container">
+    <div class="sixteen columns">
+      <div class="section {{ section.settings.text_alignment }} clearfix">
+        <div class="shop-wi-cont">
+<div id="shop-wi-left">
+  <h1>Shop<br>Wisconsin</h1>
+<ul>
+  <li><a class="black-link" href="/pages/food-drink">Food & Drink</a></li>
+  <li><a class="black-link" href="/pages/decor">Decor</a></li>
+  <li><a class="black-link" href="/pages/clothing-accessories">Clothing & Accessories</a></li>
+</ul>
+</div>
+<!-- Set up your HTML -->
+<div id="shop-wi-right" class="owl-carousel owl-theme">
+  <div class="item"><a href="/pages/truffles-4-piece"><img src="https://cdn.shopify.com/s/files/1/1765/5227/files/s-chocolates.jpg?8862125792798592322"></a><span class="cap">Sjolinds Chocolates</span> </div>
+  <div class="item"><a href="/pages/figs-and-black-tea-preserves"><img src="https://cdn.shopify.com/s/files/1/1765/5227/files/jelly.jpg?8862125792798592322"></a><span class="cap">Quince & Apple Preserves</span></div>
+  <div class="item"><a href="/pages/little-bowl"><img src="https://cdn.shopify.com/s/files/1/1765/5227/files/ceramics.jpg?8862125792798592322"></a><span class="cap">Toast Modern Ceramics</span> </div>
+  <div class="item"><a href="/pages/truffles-4-piece"><img src="https://cdn.shopify.com/s/files/1/1765/5227/files/s-chocolates.jpg?8862125792798592322"></a><span class="cap">Sjolinds Chocolates</span>  </div>
+  <div class="item"><a href="/pages/figs-and-black-tea-preserves"><img src="https://cdn.shopify.com/s/files/1/1765/5227/files/jelly.jpg?8862125792798592322"></a><span class="cap">Quince & Apple Preserves</span> </div>
+  <div class="item"><a href="/pages/little-bowl"><img src="https://cdn.shopify.com/s/files/1/1765/5227/files/ceramics.jpg?8862125792798592322"></a><span class="cap">Toast Modern Ceramics</span></div>
+
+</div>
+<div>
+        {% if section.settings.image %}
+          {{ section.settings.image | img_url: '1180x', scale: 2 | img_tag: section.settings.image.alt, 'lazyload transition-in' }}
+        {% endif %}
+
+        {% if section.settings.title != blank %}
+          <h2 class="title">
+            {{ section.settings.title }}
+          </h2>
+        {% endif %}
+
+        <div class="{{ section.settings.text_size }}">
+          {% if section.settings.content != blank %}
+            {{ section.settings.content }}
+          {% endif %}
+
+          {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+            <a href="{{ section.settings.button_link }}">
+              {{ section.settings.button_label }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <script>
+    $(document).ready(function() {
+        $('.owl-carousel').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            autoplay: false,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 2
+                },
+                1000: {
+                    items: 3
+                }
+            }
+        });
+    });
+</script>
+
+{% schema %}
+  {
+    "name": "Shop Wisconsin",
+    "class": "headline-section featured-content-section",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Talk about your brand"
+      },
+      {
+        "type": "html",
+        "id": "content",
+        "label": "Text",
+        "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+      },
+      {
+        "type": "select",
+        "id": "text_size",
+        "label": "Text size",
+        "options": [
+          {
+            "value": "regular_text",
+            "label": "Regular"
+          },
+          {
+            "value": "featured_text",
+            "label": "Large"
+          }
+        ],
+        "default": "featured_text"
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "options": [
+          {
+            "value": "align_left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          }
+        ],
+        "default": "center"
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Link label"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Link"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Shop Wisconsin",
+        "category": "Text"
+      }
+    ]
+  }
+{% endschema %}

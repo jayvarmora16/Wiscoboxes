@@ -1,0 +1,205 @@
+
+{% assign collection = '' %}
+{% assign products = collections[section.settings.frontpage_collection].products %}
+{% assign products_per_row = section.settings.frontpage_products_per_row %}
+{% assign sidebar = section.settings.collection_sidebar %}
+
+<div class="container">
+  <div class="section clearfix">
+    {% if section.settings.collection_sidebar %}
+      {% include 'sidebar' %}
+      <div class="twelve columns">
+    {% else %}
+      <div class="sixteen columns">
+    {% endif %}
+      {% if section.settings.title != blank %}
+        <h2 class="title">
+          {{ section.settings.title }}
+        </h2>
+        {% if collections[section.settings.frontpage_collection] != blank %}
+          <div class="section clearfix">
+            {{ collections[section.settings.frontpage_collection].description }}
+          </div>
+        {% endif %}
+      {% endif %}
+        
+        
+        {% assign limit = section.settings.frontpage_products_limit | plus: 1 %}
+       
+        {% include 'product-loop', sidebar: sidebar, limit: limit, products_per_row: products_per_row %}
+
+      {% if products.length > 0 %}
+        {% comment %}
+        {% assign limit = section.settings.frontpage_products_limit | plus: 1 %}
+       
+        {% include 'product-loop', sidebar: sidebar, limit: limit, products_per_row: products_per_row %}
+        {% endcomment %}
+      {% endif %}
+        {% comment %}
+        
+        {% assign limit = section.settings.frontpage_products_limit %}
+        <div class="featured-collection--placeholder clearfix">
+          
+          {% for i in (1..limit) %}
+            <div class="
+              {% if section.settings.collection_sidebar %}
+                sidebar-enabled
+                {% if products_per_row == "2" %} six columns
+                {% elsif products_per_row == "3" %} four columns
+                {% elsif products_per_row == "4" %} three columns
+                {% endif %}
+              {% else %}
+                sidebar-disabled
+                {% if products_per_row == "2" %} eight columns
+                {% elsif products_per_row == "3" %} one-third column
+                {% elsif products_per_row == "4" %} four columns
+                {% endif %}
+              {% endif %}
+
+              thumbnail">
+              
+              <a href="#" itemprop="url">
+                <div class="relative product_image">
+                  {% capture num %}{% cycle "1", "2", "3", "4", "5", "6" %}{% endcapture %}
+                  {{ 'collection-' | append: num | placeholder_svg_tag: 'placeholder-svg placeholder-svg--product' }}
+                </div>                          
+                <div class="info">
+                  <span class="title">{{ 'homepage.onboarding.product_title' | t }}</span>
+                    <span class="price">
+                    <span class="money">$49.60</span>
+                  </span>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+        {% endcomment %}
+    </div>
+        
+  {% if collections[section.settings.frontpage_collection] != blank %}      
+  <div class="section clearfix" style="text-align:center;">
+    <a class="action_button" href="/collections/shop">MORE</a>
+  </div>
+  {% endif %}
+  </div>
+  
+</div>
+
+{% schema %}
+
+{
+  "name": "Featured collection",
+  "class": "featured-collection-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured collection"
+    },
+    {
+      "type": "collection",
+      "id": "frontpage_collection",
+      "label": "Collection"
+    },
+    {
+      "type": "select",
+      "id": "frontpage_products_per_row",
+      "label": "Products per row",
+      "default": "3",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "frontpage_products_limit",
+      "label": "Limit products",
+      "default": "12",
+      "options": [
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "9",
+          "label": "9"
+        },
+        {
+          "value": "12",
+          "label": "12"
+        },
+        {
+          "value": "24",
+          "label": "24"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_sidebar",
+      "label": "Enable sidebar"
+    },
+    {
+      "type": "link_list",
+      "id": "collection_sidebar_linklist",
+      "label": "Menu 1"
+    },
+    {
+      "type": "link_list",
+      "id": "collection_sidebar_linklist2",
+      "label": "Menu 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "filter_by_category",
+      "label": "Show collections"
+    },
+    {
+      "type": "checkbox",
+      "id": "filter_by_tag",
+      "label": "Show tags"
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_sidebar_products",
+      "label": "Show types"
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_sidebar_vendors",
+      "label": "Show vendors"
+    },
+    {
+      "type": "page",
+      "id": "collection_sidebar_page",
+      "label": "Content page"
+    }
+  ],
+  "presets": [{
+    "name": "Featured collection",
+    "category": "Collection",
+    "settings": {
+      "frontpage_collection": "",
+      "frontpage_products_per_row": "3"
+    }
+  }]
+}
+
+{% endschema %}

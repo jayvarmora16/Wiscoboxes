@@ -1,0 +1,27 @@
+{% raw %}
+{{#available}}
+<div class="main-category-{{categoryname}} allcategory ps-{{producthandle}}">
+  <div class="imgcolumn">
+    <div class="imgcontent">
+      <img class="featureimg" src="{{featureimg_src}}" alt="Rajaram">
+
+      <a href="javascript:void(0);" data-prod="{{title}}" data-cat="{{categoryname}}" data-form-id="product-form-{{productid}}" class="add-to-box-btn" onclick="direct_add_to_cart(this)">Add To Box</a> 
+
+      <div class="step-1-quantity">
+        <a href="javascript:void(0);" class="qtyminus" field="{{productid}}">-</a>
+        <input id="direct-quantity-{{productid}}" type="text" name="quantity" class="quantity" value="1" min="1" max="2" size="2" readonly="">
+        <a href="javascript:void(0);" class="qtyplus" field="{{productid}}">+</a>
+      </div>
+
+      <p data-form-id="product-form-{{productid}}" class="mess-to-box-btn">added to cart</p>
+
+      <span data-fancybox-href="#product-{{productid}}" class="quick_shop action_button quick-view-btn" data-gallery="product-{{productid}}-gallery">
+        Quick View
+      </span>
+    </div>
+    <h4>{{title}}</h4>
+    <p><span class="money">{{productprice}}</span></p> 
+  </div>
+</div>
+{{/available}}
+{% endraw %}

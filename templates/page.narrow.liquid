@@ -1,0 +1,14 @@
+<div class="ten columns offset-by-three page">
+  
+  <h1 class="collection_title">
+    {{ page.title }}
+  </h1>  
+  
+  {{ page.content }}
+  
+  <br><br>
+  {% if page.handle  == 'corporate-gifting-with-wiscoboxes' %}
+  {% include 'corporate-gifting-contact-form' %}
+  {% endif %}
+  
+</div>
