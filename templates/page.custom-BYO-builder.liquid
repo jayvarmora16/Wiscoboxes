@@ -1,9 +1,572 @@
-<div class="sixteen columns clearfix collection_nav">
-  <h1 class="collection_title">
-    {{ page.title }}
-  </h1>
+{% assign product_list = page.metafields.custom.parent_products.value %}
+
+{% assign bundleProducts = shop.metaobjects.build_your_box_bundle.values %}
+
+
+<script>
+  let bundleProducts=[];
+
+  {% for bundle in bundleProducts %}
+    bundleProducts.push({{ bundle | json }})
+  {% endfor %}
+  bundleProducts = bundleProducts.map((x) => {
+
+  let variantID = x.product.split('/').pop();
+
+  let newProductString = `${variantID}`;
+  return {
+    ...x,
+    product: newProductString
+  };
+});
+
+  console.log(bundleProducts,'bundleProducts')
+</script>
+<script
+  type="application/javascript"
+>
+
+let parentProducts=[]
+ {% for productList in product_list %}
+  parentProducts.push({{ productList | json }})
+  {% endfor %}
+
+  console.log(parentProducts,'parent')
+ let combinedArray = [];
+ let collectionObject={}
+ let combinedObject={}
+{% for productList in product_list %}
+  {% for collection_listw in productList.metafields.custom.byo_collection.value %}
+    // Create a new object for each collection item.
+    collectionObject = {
+      collectionTitle: "{{ collection_listw.title }}",
+      collectionProducts: {{ collection_listw.products | json }},
+      collectionHandle: "{{ collection_listw.handle }}"
+    };
+
+    // Extend the collection object with the product details.
+    combinedObject = {
+      product: {{ productList | json }},
+      ...collectionObject
+    };
+
+    // Add the combined object to the array.
+    combinedArray.push(combinedObject);
+  {% endfor %}
+{% endfor %}
+
+console.log(combinedArray, 'combines');
+
+const urlParams = new URLSearchParams(window.location.search);
+let product_id = urlParams.get('product_id');
+const latest_match1 = product_id.match(/^\d+/);
+if (latest_match1) {
+  product_id = latest_match1[0];
+}
+
+function getCollectionTitleByProductId(productId) {
+
+  const combinedItem = combinedArray.find(item => item.product.id.toString() === productId.toString());
+  return combinedItem ? combinedItem.collectionTitle : null;
+}
+
+function filterCollections(collectionTitle) {
+
+    var collectionGrids = document.querySelectorAll('.main-collection-grid');
+    console.log(collectionTitle,'title')
+
+    collectionGrids.forEach(function (grid) {
+      if (grid.getAttribute('data-collection-title') === collectionTitle.toString() && grid.getAttribute('data-parent-id') === product_id.toString()) {
+        console.log('jjj')
+        grid.style.display = ''; 
+      } else {
+        grid.style.display = 'none'; 
+      }
+    });
+}
+
+
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    let product_id = urlParams.get('product_id');
+    const matches = product_id.match(/^\d+/);
+
+    if (matches) {
+        product_id = matches[0];
+    }
+  
+  setTimeout(()=>{
+    let collection_title = getCollectionTitleByProductId(product_id);
+    let selectElement = document.querySelector('.custom-select');
+
+    if (selectElement) {
+        for(let i = 0; i < selectElement.options.length; i++) {
+            if(selectElement.options[i].value === collection_title) {
+                selectElement.selectedIndex = i;
+    
+                selectElement.dispatchEvent(new Event('change'));
+                break;
+            }
+        }
+     }
+    },1000)
+    
+    function formatPrice(priceInCents) {
+      return `$${(priceInCents / 100).toFixed(2)}`;
+    }
+    let filteredProducts = combinedArray.find(product => product.product.id.toString() === product_id.toString());
+
+    if (filteredProducts && filteredProducts.product && filteredProducts.product.price) {
+          let updatedPrice = formatPrice(filteredProducts.product.price);
+          localStorage.setItem("parent-product-price", filteredProducts.product.price/100);
+          // Update all box titles
+          let boxTitles = document.querySelectorAll(".gs__box-name");
+          boxTitles.forEach(boxTitle => {
+              boxTitle.textContent = filteredProducts.product.title;
+          });
+
+          // Update all box prices
+          let prices = document.querySelectorAll(".gs__box-price");
+          prices.forEach(price => {
+              price.textContent = updatedPrice;
+          });
+
+          // Update all total price elements
+          let totalPriceElements = document.querySelectorAll(".total-price");
+          totalPriceElements.forEach(totalPriceElement => {
+              totalPriceElement.textContent = updatedPrice;
+          });
+      }
+
+
+    
+});
+document.addEventListener("DOMContentLoaded",()=>{
+
+  Object.keys(localStorage).forEach(function(key) {
+        // Check if the key starts with the prefix -product
+        if (key.startsWith('product-')) {
+      
+            // Remove the item from localStorage
+            localStorage.removeItem(key);
+        }
+    });
+})
+</script>
+
+<div class="byo-container">
+  <div class="gs__nav-steps-completed">
+    <h3>0 of 2 Steps Complete</h3>
+    <h1>BUILD YOUR OWN BOX</h1>
+    <p>Select an item</p>
+  </div>
+  <div class="sub-container-byo">
+    <div class="progress-container">
+      <ul class="progressbar">
+        <li id="step-dot-1" class="active">BUILD YOUR OWN BOX</li>
+        <li id="step-dot-2">GIFT NOTES</li>
+      </ul>
+    </div>
+
+    <div id="multiStepForm">
+      <div class="actual-step" id="step-1">
+        {% render 'custom-BYO-first-step' %}
+      </div>
+      <div class="actual-step" id="step-2" style="display:none;">
+        {% render 'custom-byo-second-step' %}
+      </div>
+    </div>
+  </div>
+  <div class="collection-container">
+    {% assign collection_list = page.metafields.custom.collection_list_.value %}
+    {% render 'custom-byo-collection', collections: collection_list %}
+  </div>
+  <div class="gift-notes-container" style="display: none;">
+    <div class="gs__step-info"></div>
+    {% render 'gift-notes' %}
+  </div>
 </div>
 
-<div class="sixteen columns page">
-  {% include 'page-multi-column', content: page.content %}
-</div>
+<style></style>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var nextButton = document.querySelector('.next-button');
+    var prevButton = document.querySelector('.previous-button');
+
+    function getSumOfQuantity(product_rows) {
+      let sum = 0;
+      product_rows.forEach((product) => {
+        let dataTags = product.getAttribute('data-tags');
+
+        if (dataTags.includes('wine')) {
+          let quantityInput = product.querySelector('.row-input');
+
+          if (quantityInput && !isNaN(quantityInput.value)) {
+            sum += parseFloat(quantityInput.value);
+          }
+        }
+      });
+
+      return sum;
+    }
+    function addBorder(product_rows, title) {
+      product_rows.forEach((product) => {
+        let dataTags = product.getAttribute('data-tags');
+
+        if (dataTags.includes('wine')) {
+          let containerDiv = product.querySelector('.row-quantity');
+          if (containerDiv) {
+            containerDiv.style.border = '1px solid red';
+
+            // let containerDiv = product.querySelector('.row-quantity');
+            // if (containerDiv) {
+
+            //   let newParagraph = document.createElement('p');
+            //   newParagraph.textContent = 'You cannot buy more then 1 quantity of wine while in 10 * 10';
+            //   containerDiv.insertBefore(newParagraph, containerDiv.firstChild);
+            // }
+          }
+        }
+      });
+
+      const boxSizes = document.querySelectorAll('.gs__box-sizes');
+
+      boxSizes.forEach((box) => {
+        const newParagraph = document.createElement('p');
+        newParagraph.classList.add('error-message');
+        if (title === '10x10 WiscoBox') {
+          newParagraph.textContent = `You cannot buy more than 1 Wine quantity in ${title}`;
+        }
+
+        if (title === '12x15 WiscoBox') {
+          newParagraph.textContent = `You cannot buy more than 2 Wine quantity in ${title}`;
+        }
+
+        newParagraph.style.color = 'red';
+
+        box.appendChild(newParagraph);
+      });
+    }
+
+    function updateProgressBar(currentStep) {
+      for (let i = 1; i <= 2; i++) {
+        const dotElement = document.getElementById('step-dot-' + i);
+        if (i < currentStep) {
+          dotElement.className = 'active';
+        } else if (i === currentStep) {
+          dotElement.className = 'active'; // Set the current step to active
+          if (i > 1) {
+            // If we are past the first step, the previous connector should be colored
+            const previousDotElement = document.getElementById('step-dot-' + (i - 1));
+            previousDotElement.className += ' completed';
+          }
+        } else {
+          dotElement.className = ''; // Reset if we go back a step
+        }
+      }
+    }
+    nextButton.addEventListener('click', function () {
+      var collectionContainer = document.querySelector('.collection-container');
+      var giftNotesContainer = document.querySelector('.gift-notes-container');
+      let product_rows = document.querySelectorAll('.product-row');
+
+      let wineQuantity = getSumOfQuantity(product_rows);
+      wineQuantity = wineQuantity / 2;
+
+      const urlParamsSecond = new URLSearchParams(window.location.search);
+      let product_id_second = urlParamsSecond.get('product_id');
+      const latest_match_second = product_id_second.match(/^\d+/);
+      if (latest_match_second) {
+        product_id_second = latest_match_second[0];
+      }
+
+      let filteredProducts1 = parentProducts.find((product) => product.id.toString() === product_id_second.toString());
+      if (
+        (wineQuantity > 1 && filteredProducts1.title === '10x10 WiscoBox') ||
+        (wineQuantity > 2 && filteredProducts1.title === '12x15 WiscoBox')
+      ) {
+        addBorder(product_rows, filteredProducts1.title);
+      } else {
+        let currentStep = 1;
+
+        showStep(currentStep + 1, currentStep);
+
+        collectionContainer.style.display = 'none';
+        giftNotesContainer.style.display = 'block';
+      }
+    });
+
+    function showStep(step, currentStep) {
+      document.getElementById('step-' + currentStep).style.display = 'none';
+      document.getElementById('step-' + step).style.display = 'block';
+      currentStep = step;
+      updateProgressBar(currentStep);
+    }
+
+    prevButton.addEventListener('click', function () {
+      var collectionContainer = document.querySelector('.collection-container');
+      var giftNotesContainer = document.querySelector('.gift-notes-container');
+
+      showStep(1, 2);
+      // Show collection container and hide gift notes container
+      collectionContainer.style.display = 'block';
+      giftNotesContainer.style.display = 'none';
+    });
+
+    document.getElementById('multiStepForm').addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent the default form submit action
+      // Here you can handle the final form submission,
+      // for example, send data to the server or display a confirmation message.
+      alert('Form submitted!');
+    });
+  });
+</script>
+<style>
+  .loading {
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 16px solid #bcd3c7;
+    width: 20px;
+    height: 20px;
+    border-top-color: #1abc9c;
+    border-bottom-color: #3498db;
+    border-radius: 50%;
+    animation-name: spin;
+    animation-duration: 2s;
+    animation-delay: 0s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  .loading1 {
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 16px solid #bcd3c7;
+    width: 20px;
+    height: 20px;
+    border-top-color: #1abc9c;
+    border-bottom-color: #3498db;
+    border-radius: 50%;
+    animation-name: spin;
+    animation-duration: 2s;
+    animation-delay: 0s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes appear {
+    100% {
+      opacity: 1;
+    }
+  }
+</style>
+<script>
+  // document.addEventListener('DOMContentLoaded', function () {
+  //   var nextButton = document.querySelector('.next-button');
+  //   var prevButton = document.querySelector('.previous-button');
+  //   var loaders = document.querySelectorAll('.loader');
+  //   var loaders1 = document.querySelectorAll('.loader1');
+
+  //   function handleButtonClick() {
+  //     loaders.forEach(function (loader) {
+  //       loader.classList.add('loading');
+  //       loaders1.forEach(function (loader1) {
+  //       loader1.classList.add('loading1');
+  //     });
+  //     });
+
+  //     setTimeout(function () {
+  //       loaders.forEach(function (loader) {
+  //         loader.classList.remove('loading');
+  //       });
+  //       loaders1.forEach(function (loader1) {
+  //         loader1.classList.remove('loading1');
+  //       });
+
+  //     }, 1000);
+  //   }
+
+  //   nextButton.addEventListener('click', handleButtonClick);
+  //   prevButton.addEventListener('click', handleButtonClick);
+  // });
+</script>
+<script>
+  // let currentStep = 1;
+
+  // function showStep(step) {
+  //   document.getElementById('step-' + currentStep).style.display = 'none';
+  //   document.getElementById('step-' + step).style.display = 'block';
+  //   currentStep = step;
+  //   updateProgressBar();
+  // }
+
+  // function nextStep() {
+  //   showStep(currentStep + 1);
+  // }
+
+  // function prevStep() {
+  //   showStep(currentStep - 1);
+  // }
+
+  // document.getElementById('multiStepForm').addEventListener('submit', function (event) {
+  //   event.preventDefault(); // Prevent the default form submit action
+  //   // Here you can handle the final form submission,
+  //   // for example, send data to the server or display a confirmation message.
+  //   alert('Form submitted!');
+  // });
+
+  // function updateProgressBar() {
+  //   for (let i = 1; i <= 2; i++) {
+  //     const dotElement = document.getElementById('step-dot-' + i);
+  //     if (i < currentStep) {
+  //       dotElement.className = 'active';
+  //     } else if (i === currentStep) {
+  //       dotElement.className = 'active'; // Set the current step to active
+  //       if (i > 1) {
+  //         // If we are past the first step, the previous connector should be colored
+  //         const previousDotElement = document.getElementById('step-dot-' + (i - 1));
+  //         previousDotElement.className += ' completed';
+  //       }
+  //     } else {
+  //       dotElement.className = ''; // Reset if we go back a step
+  //     }
+  //   }
+  // }
+
+  // The rest of your JavaScript code remains unchanged
+</script>
+<style>
+  .byo-container {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+  }
+  .gs__nav-steps-completed {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 2em;
+  }
+  .gs__nav-steps-completed h3 {
+    margin: 0;
+    text-align: center;
+  }
+  .gs__nav-steps-completed p {
+    margin: 0;
+    text-align: center;
+  }
+  body {
+    font-family: brandon-grotesque, sans-serif;
+    background-color: white;
+  }
+
+  .step {
+    margin: 15px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #5fbae9;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #4a9ad3;
+  }
+  .progress-container {
+    width: 100%;
+  }
+  .progressbar {
+    counter-reset: step;
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .progressbar li {
+    position: relative;
+    flex-grow: 1;
+    text-align: center;
+    font-size: 0.8em;
+    font-size: 0.8em;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: color 0.25s ease;
+    white-space: nowrap;
+  }
+
+  .progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 10px;
+    height: 10px;
+    line-height: 35px;
+    border: 2px solid #ddd;
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    background-color: white;
+    color: white;
+  }
+
+  .progressbar li:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    top: 15px;
+    left: -50%;
+    z-index: -1;
+  }
+
+  .progressbar li:first-child:after {
+    content: none;
+  }
+
+  .progressbar li.active:before {
+    border-color: #9b2743;
+    background-color: #9b2743;
+    color: white;
+  }
+
+  .progressbar li.active + li:after {
+    background-color: #5fbae9;
+  }
+
+  /* Rest of your CSS remains unchanged */
+  .actual-step {
+    border: 1px solid #f0f0f0;
+  }
+</style>

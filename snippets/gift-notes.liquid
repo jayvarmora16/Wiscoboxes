@@ -1,0 +1,259 @@
+<div class="container-gift-notes">
+  <div class="text-area-container">
+    <label class="text-area-label" for="">Enter your card message here. 350 characters max.</label>
+    <div class="text-area-sub-container">
+      <textarea
+        class="text_area"
+        placeholder=""
+        name="gift_notes"
+        id="gift_notes"
+        required=""
+        aria-required="true"
+        rows="3"
+        maxlength="350"
+      ></textarea>
+    </div>
+    <span class="helper_text">Maximum characters 350</span>
+  </div>
+  <div class="date_container">
+    <label class="date_label" for="">Desired Shipping Date</label>
+    <div class="date_subcontainer">
+      <input
+        type="date"
+        class="date_input"
+        placeholder=""
+        name="shipping_date"
+        id=""
+        required=""
+        aria-required="true"
+        value=""
+      >
+    </div>
+  </div>
+  <div class="submit-container">
+    <button type="submit" class="submit_giftnotes">Submit</button>
+  </div>
+</div>
+<script>
+  document.querySelector('.submit_giftnotes').addEventListener('click', function () {
+    var giftNotes = document.getElementById('gift_notes').value;
+
+    var shippingDate = document.querySelector('input[name="shipping_date"]').value;
+
+    console.log('Gift Notes:', giftNotes);
+    console.log('Shipping Date:', shippingDate);
+
+    localStorage.setItem('giftNotes', giftNotes);
+localStorage.setItem('shippingDate', shippingDate);
+    // Select all elements with the class 'gs__item-main-content'
+    const mainContentElements = document.querySelectorAll('.gs__item-main-content');
+
+    // The HTML content you want to append to the selected elements
+    const newElementHTML = `
+    <div class="gift-notes-row">
+      <div class="icon-text-container">
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="gs__item-svg" fill="currentColor">
+            <path d="M208 0C322.9 0 416 78.8 416 176C416 273.2 322.9 352 208 352C189.3 352 171.2 349.7 153.9 345.8C123.3 364.8 79.13 384 24.95 384C14.97 384 5.93 378.1 2.018 368.9C-1.896 359.7-.0074 349.1 6.739 341.9C7.26 341.5 29.38 317.4 45.73 285.9C17.18 255.8 0 217.6 0 176C0 78.8 93.13 0 208 0zM164.6 298.1C179.2 302.3 193.8 304 208 304C296.2 304 368 246.6 368 176C368 105.4 296.2 48 208 48C119.8 48 48 105.4 48 176C48 211.2 65.71 237.2 80.57 252.9L104.1 277.8L88.31 308.1C84.74 314.1 80.73 321.9 76.55 328.5C94.26 323.4 111.7 315.5 128.7 304.1L145.4 294.6L164.6 298.1zM441.6 128.2C552 132.4 640 209.5 640 304C640 345.6 622.8 383.8 594.3 413.9C610.6 445.4 632.7 469.5 633.3 469.9C640 477.1 641.9 487.7 637.1 496.9C634.1 506.1 625 512 615 512C560.9 512 516.7 492.8 486.1 473.8C468.8 477.7 450.7 480 432 480C350 480 279.1 439.8 245.2 381.5C262.5 379.2 279.1 375.3 294.9 369.9C322.9 407.1 373.9 432 432 432C446.2 432 460.8 430.3 475.4 426.1L494.6 422.6L511.3 432.1C528.3 443.5 545.7 451.4 563.5 456.5C559.3 449.9 555.3 442.1 551.7 436.1L535.9 405.8L559.4 380.9C574.3 365.3 592 339.2 592 304C592 237.7 528.7 183.1 447.1 176.6L448 176C448 159.5 445.8 143.5 441.6 128.2H441.6z"></path>
+          </svg>
+        </div>
+        <div class="icon-text">
+          <p>GIFT NOTES: COMPLETED</p>
+        </div>
+      </div>
+      <button type="button" class="gift-notes-delete">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+          class="gs__btn-delete-item-svg"
+          fill="currentColor"
+        >
+          <path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"></path>
+        </svg>
+      </button>
+    </div>`;
+
+    // Iterate over each element and append the new HTML content
+    mainContentElements.forEach((element) => {
+      element.insertAdjacentHTML('beforeend', newElementHTML);
+
+      const deleteButtons = document.querySelectorAll('.gift-notes-delete');
+
+      deleteButtons.forEach((deleteButton) => {
+        deleteButton.addEventListener('click', function () {
+          localStorage.removeItem('giftNotes');
+          localStorage.removeItem('shippingDate');
+          const mainContentContainers = document.querySelectorAll('.gs__item-main-content');
+
+          mainContentContainers.forEach((container) => {
+            const giftNotesRows = container.querySelectorAll('.gift-notes-row');
+            giftNotesRows.forEach((row) => {
+              row.remove();
+            });
+          });
+
+          const textArea = document.getElementById('gift_notes');
+          if (textArea) {
+            textArea.value = '';
+            textArea.style.border = '1px solid red';
+          }
+
+          const dateInput = document.querySelector('.date_input');
+          if (dateInput) {
+            dateInput.value = '';
+            dateInput.style.border = '1px solid red';
+          }
+        });
+      });
+    });
+
+    const addToCartButton = document.querySelector('.add-to-cart-button');
+      if (addToCartButton) {
+        addToCartButton.classList.remove("disabled-btn");
+        addToCartButton.disabled=false;
+      }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const textArea = document.getElementById('gift_notes');
+    const helperText = document.querySelector('.helper_text');
+    const maxLength = 350;
+
+    textArea.addEventListener('input', () => {
+      const remaining = maxLength - textArea.value.length;
+      helperText.textContent = `Maximum characters ${remaining}`;
+    });
+  });
+</script>
+
+<style>
+  .disabled-btn{
+    pointer-events: none;
+    background-color: grey;
+  }
+  .gift-notes-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dce0e0;
+  }
+  .icon-text-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+  }
+  .icon {
+    margin-left: 20px;
+    aspect-ratio: 1;
+    background: #f2f2f2;
+    border-radius: 0.5em;
+  }
+  .icon svg {
+    color: gray;
+    max-height: 45px;
+    place-self: center;
+    width: 64%;
+    /* height: 20%; */
+    margin-top: 16px;
+    margin-left: 10px;
+  }
+  .gift-notes-delete {
+    background: #fff;
+    border-radius: var(--gs-border-radius, 0.28571429rem);
+    color: silver;
+    height: 35px;
+    margin-left: 0.5em;
+    padding: 0;
+    transition: all 0.25s ease;
+    width: 35px;
+    box-shadow: none;
+  }
+  .gift-notes-delete svg {
+    height: 24px;
+    width: 24px;
+    aspect-ratio: 1;
+    transition-duration: 0.15s;
+  }
+  .icon-text p {
+    border: 0;
+    padding: 0;
+    text-align: start;
+    font-size: 0.8em;
+    font-weight: 400;
+    margin-left: 10px;
+  }
+  .submit-container {
+    width: 60%;
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+  .submit-container button {
+    border-radius: var(--gs-border-radius, 0);
+    font-size: 1em;
+    margin: 0;
+    padding: 1em;
+    background: #9b2743;
+    min-height: 50px;
+    color: #fff;
+  }
+  .date_input {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid var(--gs-border-color, #ededed);
+    border-radius: var(--gs-border-radius, 0);
+  }
+  .date_label {
+    font-size: 1.3em;
+    padding-bottom: 0.2em;
+    box-sizing: border-box;
+    line-height: normal;
+    display: block;
+    font-weight: 700;
+    margin-bottom: 4px;
+    margin-bottom: 20px;
+    font-family: HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, sans-serif;
+  }
+  .date_container {
+    width: 60%;
+    margin-top: 25px;
+  }
+  .helper_text {
+    color: #767373;
+  }
+  .text_area {
+    font-size: 1em;
+    width: 100%;
+    border: 1px solid var(--gs-border-color, #ededed);
+    border-radius: var(--gs-border-radius, 0);
+    width: 100%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  .text-area-label {
+    font-size: 1.3em;
+    padding-bottom: 0.2em;
+    box-sizing: border-box;
+    line-height: normal;
+    display: block;
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-family: HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, sans-serif;
+  }
+  .text-area-container {
+    width: 60%;
+    margin-top: 50px;
+  }
+  .container-gift-notes {
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border: 1px solid #f0f0f0;
+    border-radius: 0;
+    box-shadow: 2px 7px 15px rgba(0, 0, 0, 0.02);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

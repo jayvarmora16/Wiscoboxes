@@ -1,276 +1,383 @@
 <style>
-  .ui.dividing.header { position: relative; border-top: none; z-index: 0; }
-  .hidecss { display:none !important;  }
-  .tax_number1 input,.tax_number1 label
-  {
-    display:inline-block;
+  .ui.dividing.header {
+    position: relative;
+    border-top: none;
+    z-index: 0;
   }
-  .tax_number2 input,.tax_number2 label,.outer_tax_exempt_box input,.outer_tax_exempt_box label
-  {
-    display:inline-block;
+  .hidecss {
+    display: none !important;
   }
-  .tax_number1,.tax_number2,#input_tax_div{ display:none;}
-  #input_tax_div input{  width:50%;  display:block;}
-  #input_tax_div label{  width:98%;  display:block;}
+  .tax_number1 input,
+  .tax_number1 label {
+    display: inline-block;
+  }
+  .tax_number2 input,
+  .tax_number2 label,
+  .outer_tax_exempt_box input,
+  .outer_tax_exempt_box label {
+    display: inline-block;
+  }
+  .tax_number1,
+  .tax_number2,
+  #input_tax_div {
+    display: none;
+  }
+  #input_tax_div input {
+    width: 50%;
+    display: block;
+  }
+  #input_tax_div label {
+    width: 98%;
+    display: block;
+  }
+  div[data-properties*='Added_to'] {
+    display: none;
+  }
 </style>
 
 <div class="sixteen columns clearfix collection_nav">
   <h1 class="collection_title">{{ 'cart.general.title' | t }}</h1>
-  {% if cart.item_count > 0 %}  
-  <div class="continue_shopping">
-    <a href="{% if cart.items.first.product.collections != blank %}{{ cart.items.first.product.collections.last.url }}{% else %}/collections/shop{% endif %}">{{ 'cart.general.continue_shopping_link_html' | t }}</a>
-  </div>
+  {% if cart.item_count > 0 %}
+    <div class="continue_shopping">
+      <a href="{% if cart.items.first.product.collections != blank %}{{ cart.items.first.product.collections.last.url }}{% else %}/collections/shop{% endif %}">
+        {{- 'cart.general.continue_shopping_link_html' | t -}}
+      </a>
+    </div>
   {% endif %}
 </div>
 
 {% if cart.item_count == 0 %}
-<div class="sixteen columns">
-  <div class="section clearfix">
-    <p class="quote">There are no items in your cart. <a href="/collections/shop">Continue Shopping →</a></p>
-    <br class="clear" />
+  <div class="sixteen columns">
+    <div class="section clearfix">
+      <p class="quote">There are no items in your cart. <a href="/collections/shop">Continue Shopping →</a></p>
+      <br class="clear">
 
-    {% assign collection = '' %}
-    {% assign products = collections[section.settings.frontpage_collection].products %}
-    {% assign products_per_row = section.settings.frontpage_products_per_row %}
-    {% include 'product-loop' %}
-  </div>
-</div>
-{% else %}
-
-<form action="/cart" method="post" id="cart_form">
-
-  <div class="section clearfix">
-
-    <script>
-      var AllObjects={};
-    </script>
-
-    <div class="ten columns cart_items">
-      
-      <h4 class="title">{{ 'cart.general.products' | t }}</h4>
-            
-      {% for item in cart.items %}
-
-      {% comment %}
-      Gist Edits | Include Giftship Item
-      {% endcomment %}
-
-      {%- include 'giftship-cart-item' with item -%}
-      
-      {%- include 'bold-options-hybrid-cart-item' with item -%}
-
-      <div  data-line="{{ forloop.index }}"  {% if product.tags contains 'auto-add' %}class="autoChargeProd"{% endif %}>
-        <div class="five columns alpha">
-          <a href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
-            <img src="{{ 'loader.gif' | asset_url }}" data-src="{{ item | img_url: 'medium' }}" data-src-retina="{{ item | img_url: 'grande' }}" alt="{{ item.title | escape }}" />
-          </a>     
-        </div>
-        
-        <div class="five columns omega aa">
-          <p>
-            <a href="{{ item.url }}">
-              {{ item.product.title }}
-            </a>
-          </p>
-           <p>
-              {{ item.product.gift_notes }}
-          </p>
-
-          {% unless item.variant.title contains "Title" %}
-          <p class="meta">
-            {% for option in item.product.options %}
-            {% if item.variant.options[forloop.index0] !="default" %}
-            <span class="label">{{ option }}:</span> <span>{{ item.variant.options[forloop.index0] }}</span><br />
-            {% endif %}
-            {% endfor %}
-            {% if item.properties.gift_notes != blank %}
-            <span class="label">Gift Notes:</span> <span>{{ item.properties.gift_notes }}</span><br />
-            {% endif %}
-            {% if item.properties.shipping_date != blank %}
-            <span class="label">Shipping Date:</span> <span>{{ item.properties.shipping_date }}</span>
-            {% endif %}
-          </p>
-          {% endunless %}
-
-          
-
-          <span class="Bold-theme-hook-DO-NOT-DELETE bold_cart_item_properties" style="display:none !important;"></span>
-
-          {% comment %}
-          Gist Edits | Giftship Item Properties
-          {% endcomment %}
-          
-          {%- render 'giftship-cart-item-properties', item: item -%}
-
-          {% comment %}
-          Gist Edits | Giftship Item Price
-          {% endcomment %}
-  
-          <p class="price_total">
-            <span class="money">{{ giftship_price | money_with_currency }}</span>
-          </p>    
-            
-          <p id="quantity_{{ forloop.index }}">
-            <label for="updates_{{ item.id }}" class="quantity_label">{{ 'cart.general.quantity' | t }}:</label>
-            <input type="number" min="0" size="3" maxlength="3" class="quantity" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" />
-          </p>
-          <br/>
-          <a
-            href="{{ item.url_to_remove }}"
-            aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}"
-          >
-            Remove
-          </a>
-
-        </div>
-        <br class="clear" />
-        <br class="clear" />
-      </div>
-      {% endfor %}
+      {% assign collection = '' %}
+      {% assign products = collections[section.settings.frontpage_collection].products %}
+      {% assign products_per_row = section.settings.frontpage_products_per_row %}
+      {% include 'product-loop' %}
     </div>
+  </div>
+{% else %}
+  <form action="/cart" method="post" id="cart_form">
+    <div class="section clearfix">
+      <script>
+        var AllObjects = {};
+      </script>
 
-    <div class="five columns offset-by-one">
-           
-      <h4 class="subtotal">
-        {{ 'cart.general.subtotal' | t }}
-      </h4>
+      <div class="ten columns cart_items">
+        <h4 class="title">{{ 'cart.general.products' | t }}</h4>
 
-      {% comment %}
-      Gist Edits | Giftship Sub Total Price
-      {% endcomment %}
-      
-      {% assign giftship_subtotal = 0 %}
-      {% for item in cart.items %}
-      {% include 'giftship-cart-item' with item %}
-      {% assign giftship_subtotal = giftship_line_price | plus: giftship_subtotal %}
-      {% endfor %}
-      
-      <p class="subtotal_amount">
-        
-        <strong>
-          <span class="money">{{ giftship_subtotal | money_with_currency }}</span>
-        </strong>
+        {% for item in cart.items %}
+          {% comment %}
+            Gist Edits | Include Giftship Item
+          {% endcomment %}
 
-        <small class="excluding_tax"><em>{{ 'cart.general.excluding_tax_shipping' | t }}</em></small>
-      </p>
+          {%- include 'giftship-cart-item' with item -%}
 
-      {% if settings.show_multiple_currencies %}
-      <p>
-        <small>
-          {{ 'cart.general.orders_processed_in_currency_html' | t: currency: shop.currency }}
-        </small>
-      </p>
-      {% endif %}
+          {%- include 'bold-options-hybrid-cart-item' with item -%}
 
-      {% if section.settings.display_special_instructions %}
-      <label for="note">{{ 'cart.general.note' | t: shop_name: shop.name }}:</label>
-      <textarea id="note" name="note" rows="2">{{ cart.note }}</textarea>
-      {% endif %}
-      
-      {% if section.settings.display_tos_checkbox %}
-      <p>
-        <input type="checkbox" class="tos_agree" id="cart_agree" required />
-        <label class="tos_label" for="cart_agree">
-          I agree to all terms and conditions including WiscoBoxes alcohol policy. If wine is included in my purchase, I confirm that I am at least 21 years of age and I understand that someone 21 or older will need to sign for and recieve the package.
-        </label>
-      </p>
-      {% endif %}
+          <div
+            data-line="{{ forloop.index }}"
+            {% if item.properties %}
+              data-properties="{{ item.properties | json |  escape }}"
+            {% endif %}
+            {% if product.tags contains 'auto-add' %}
+              class="autoChargeProd"
+            {% endif %}
+          >
+            <div class="five columns alpha">
+              <a href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
+                <img
+                  src="{{ 'loader.gif' | asset_url }}"
+                  data-src="{{ item | img_url: 'medium' }}"
+                  data-src-retina="{{ item | img_url: 'grande' }}"
+                  alt="{{ item.title | escape }}"
+                >
+              </a>
+            </div>
 
-      <div class="outer_tax_exempt_box">
-        <input type="checkbox" name="top_tax_exempt_box" onclick="checkbox_no_check()" id="tax_number_checkbox2" value="yes">
-        <label for="tax_number_checkbox2">My Purchase Is Tax Exempt</label>
-    
-        <div class="tax_number1">
-          <input type="radio" name="attributes[tax_exempt_box]" onclick="radio_yes_check()" id="tax_number_rbox1" value="YES" {% if cart.attributes.tax_exempt_box == 'YES'%}checked{% endif %}>
-          <label for="tax_number_rbox1">YES, my number is on file at WiscoBoxes</label>
-        </div>
-    
-        <div class="tax_number2">  
-          <input type="radio" name="attributes[tax_exempt_box]" onclick="radio_no_check()" id="tax_number_rbox2" value="NO" {% if cart.attributes.tax_exempt_box == 'NO'%}checked{% endif %}>
-          <label for="tax_number_rbox2">No, I need to share my number</label>
-          <div id="input_tax_div" {% if cart.attributes.tax_exempt_box == 'NO'%}style="display:block;"{% endif %}>
-            <label>My tax-exempt number is</label>
-            <input type="text" name="attributes[tax_exempt_number]" id="tax_number_box" value="{{cart.attributes.tax_exempt_number}}">
-            <label>My company name is</label>
-            <input type="text" name="attributes[company_name]" id="company_number_box" value="{{cart.attributes.company_name}}">
+            <div class="five columns omega aa">
+              <p>
+                <a href="{{ item.url }}">
+                  {{ item.product.title }}
+                </a>
+              </p>
+              <p>
+                {{ item.product.gift_notes }}
+              </p>
+
+              {% unless item.variant.title contains 'Title' %}
+                <p class="meta">
+                  {% for option in item.product.options %}
+                    {% if item.variant.options[forloop.index0] != 'default' %}
+                      <span class="label">{{ option }}:</span> <span>{{ item.variant.options[forloop.index0] }}</span
+                      ><br>
+                    {% endif %}
+                  {% endfor %}
+                  {% if item.properties.gift_notes != blank %}
+                    <span class="label">Gift Notes:</span> <span>{{ item.properties.gift_notes }}</span><br>
+                  {% endif %}
+                  {% if item.properties.shipping_date != blank %}
+                    <span class="label">Shipping Date:</span> <span>{{ item.properties.shipping_date }}</span>
+                  {% endif %}
+                </p>
+              {% endunless %}
+
+              <span
+                class="Bold-theme-hook-DO-NOT-DELETE bold_cart_item_properties"
+                style="display:none !important;"
+              ></span>
+
+              {% comment %}
+                Gist Edits | Giftship Item Properties
+              {% endcomment %}
+
+              {% comment %} {%- render 'giftship-cart-item-properties', item: item -%} {% endcomment %}
+              {%- render 'custom-gift-ship-prop', item: item -%}
+
+              {% comment %}
+                Gist Edits | Giftship Item Price
+              {% endcomment %}
+              {% comment %} {% if item.properties._gs_bundle_contents1 %}
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity-updated" name="quantity-updated" value={{ item.quantity }} min="1" max="3" onchange="handleInputChange(event)">
+
+                <a
+                href="{{ item.url_to_remove }}"
+                aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}"
+              >
+                Remove
+              </a>
+              {% else %} {% endcomment %}
+                <p id="quantity_{{ forloop.index }}">
+                  <label for="updates_{{ item.id }}" class="quantity_label">{{ 'cart.general.quantity' | t }}:</label>
+                  <input
+                    type="number"
+                    min="0"
+                    size="3"
+                    maxlength="3"
+                    class="quantity"
+                    name="updates[]"
+                    id="updates_{{ item.id }}"
+                    value="{{ item.quantity }}"
+                  >
+                </p>
+                <br>
+                <a
+                  href="{{ item.url_to_remove }}"
+                  aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}"
+                >
+                  Remove
+                </a>
+              {% comment %} {% endif %} {% endcomment %}
+              <p class="price_total">
+                <span class="money">{{ giftship_price | money_with_currency }}</span>
+              </p>
+            </div>
+            <br class="clear">
+            <br class="clear">
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="five columns offset-by-one">
+        <h4 class="subtotal">
+          {{ 'cart.general.subtotal' | t }}
+        </h4>
+
+        {% comment %}
+          Gist Edits | Giftship Sub Total Price
+        {% endcomment %}
+
+        {% comment %}
+          {% assign giftship_subtotal = 0 %}
+          {% for item in cart.items %}
+          {% include 'giftship-cart-item' with item %}
+          {% assign giftship_subtotal = giftship_line_price | plus: giftship_subtotal %}
+          {% endfor %}
+        {% endcomment %}
+
+        {% assign giftship_subtotal = 0 %}
+        {% for item in cart.items %}
+          {% include 'custom-gift-ship-total' with item %}
+          {% assign giftship_subtotal = giftship_line_price | plus: giftship_subtotal %}
+        {% endfor %}
+
+        <p class="subtotal_amount">
+          <strong>
+            <span class="money">{{ giftship_subtotal | money_with_currency }}</span>
+          </strong>
+
+          <small class="excluding_tax"
+            ><em>{{ 'cart.general.excluding_tax_shipping' | t }}</em></small
+          >
+        </p>
+
+        {% if settings.show_multiple_currencies %}
+          <p>
+            <small>
+              {{ 'cart.general.orders_processed_in_currency_html' | t: currency: shop.currency }}
+            </small>
+          </p>
+        {% endif %}
+
+        {% if section.settings.display_special_instructions %}
+          <label for="note">{{ 'cart.general.note' | t: shop_name: shop.name }}:</label>
+          <textarea id="note" name="note" rows="2">{{ cart.note }}</textarea>
+        {% endif %}
+
+        {% if section.settings.display_tos_checkbox %}
+          <p>
+            <input type="checkbox" class="tos_agree" id="cart_agree" required>
+            <label class="tos_label" for="cart_agree">
+              I agree to all terms and conditions including WiscoBoxes alcohol policy. If wine is included in my
+              purchase, I confirm that I am at least 21 years of age and I understand that someone 21 or older will need
+              to sign for and recieve the package.
+            </label>
+          </p>
+        {% endif %}
+
+        <div class="outer_tax_exempt_box">
+          <input
+            type="checkbox"
+            name="top_tax_exempt_box"
+            onclick="checkbox_no_check()"
+            id="tax_number_checkbox2"
+            value="yes"
+          >
+          <label for="tax_number_checkbox2">My Purchase Is Tax Exempt</label>
+
+          <div class="tax_number1">
+            <input
+              type="radio"
+              name="attributes[tax_exempt_box]"
+              onclick="radio_yes_check()"
+              id="tax_number_rbox1"
+              value="YES"
+              {% if cart.attributes.tax_exempt_box == 'YES' %}
+                checked
+              {% endif %}
+            >
+            <label for="tax_number_rbox1">YES, my number is on file at WiscoBoxes</label>
+          </div>
+
+          <div class="tax_number2">
+            <input
+              type="radio"
+              name="attributes[tax_exempt_box]"
+              onclick="radio_no_check()"
+              id="tax_number_rbox2"
+              value="NO"
+              {% if cart.attributes.tax_exempt_box == 'NO' %}
+                checked
+              {% endif %}
+            >
+            <label for="tax_number_rbox2">No, I need to share my number</label>
+            <div
+              id="input_tax_div"
+              {% if cart.attributes.tax_exempt_box == 'NO' %}
+                style="display:block;"
+              {% endif %}
+            >
+              <label>My tax-exempt number is</label>
+              <input
+                type="text"
+                name="attributes[tax_exempt_number]"
+                id="tax_number_box"
+                value="{{cart.attributes.tax_exempt_number}}"
+              >
+              <label>My company name is</label>
+              <input
+                type="text"
+                name="attributes[company_name]"
+                id="company_number_box"
+                value="{{cart.attributes.company_name}}"
+              >
+            </div>
           </div>
         </div>
+
+        <div class="check-out-button-wrapper">
+          <input type="button" class="action_button" id="show-popup" name="" value="{{ 'cart.general.checkout' | t }}">
+          <input
+            type="submit"
+            class="action_button add_to_cart"
+            id="checkout"
+            name="checkout"
+            value="{{ 'cart.general.checkout' | t }}"
+          >
+        </div>
+
+        <a href="/collections/shop" class="continue-shopping">continue shopping</a>
+
+        {% comment %}
+          Removed by Gist
+          {% if content_for_additional_checkout_buttons and settings.cart_action != 'ajax' %}
+          <div class="additional-checkout-buttons">
+            <!--{{ content_for_additional_checkout_buttons | google_button_options: 'transparent' }} -->
+          </div>
+          {% endif %}
+        {% endcomment %}
       </div>
-      
-
-      <div class="check-out-button-wrapper">
-        
-          <input type="button" class="action_button" id="show-popup" name="" value="{{ 'cart.general.checkout' | t }}" />
-          <input type="submit" class="action_button add_to_cart" id="checkout" name="checkout" value="{{ 'cart.general.checkout' | t }}" />
-        </div>        
-
-      <a href="/collections/shop" class="continue-shopping">continue shopping</a>
-
-      {% comment %} Removed by Gist
-      {% if content_for_additional_checkout_buttons and settings.cart_action != 'ajax' %}
-      <div class="additional-checkout-buttons">
-        <!--{{ content_for_additional_checkout_buttons | google_button_options: 'transparent' }} -->
-      </div>
-      {% endif %}
-      {% endcomment %}
-      
     </div>
-  </div>
-  
-</form>
-  
+  </form>
 {% endif %}
-
-<script>  
+<script>
+  function handleInputChange(event) {
+    console.log('event')
+    event.preventDefault(); 
+  if (event.target.value !== '') { // Check if the input value is not empty
+    console.log("Hello");
+  }
+}
+</script>
+<script>
   function addItemToCart(variant_id, qty) {
     data = {
-      "id": variant_id,
-      "quantity": qty
-    }
+      id: variant_id,
+      quantity: qty,
+    };
     jQuery.ajax({
       type: 'POST',
       url: '/cart/add.js',
       data: data,
       dataType: 'json',
-      success: function() { 
+      success: function () {
         //alert(data);
-        window.location.href = '/cart'; 
-      }
+        window.location.href = '/cart';
+      },
     });
   }
-  
-  jQuery(".gs__line").each(function() {
-    var hideattr = jQuery(this).attr("data-variantid");
-    if( hideattr == 39352806965357){
-      $(this).css("display","none");
-      $('.ms__shadow-box table tr:nth-child(2)').css("display","none");
+
+  jQuery('.gs__line').each(function () {
+    var hideattr = jQuery(this).attr('data-variantid');
+    if (hideattr == 39352806965357) {
+      $(this).css('display', 'none');
+      $('.ms__shadow-box table tr:nth-child(2)').css('display', 'none');
       jQuery('#extrafee').html('Cold Package Fee For Perishables <b>$5</b>');
     }
   });
-  
-</script>  
+</script>
 
 <script type="text/javascript">
-  
   function set_cookie(name, value) {
-    document.cookie = name +'='+ value +'; Path=/;';
+    document.cookie = name + '=' + value + '; Path=/;';
   }
   function delete_cookie(name) {
-    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   }
-  
-  $(document).ready(function(){
-  		removeItemsBoxdata();
-    $('.AddVariant').click(function(){
-      var ItemId =  $(this).data('id');
-      set_cookie(ItemId,JSON.stringify(AllObjects[ItemId]));
-      delete_cookie('addedForVariant'+ItemId);
+
+  $(document).ready(function () {
+    removeItemsBoxdata();
+    $('.AddVariant').click(function () {
+      var ItemId = $(this).data('id');
+      set_cookie(ItemId, JSON.stringify(AllObjects[ItemId]));
+      delete_cookie('addedForVariant' + ItemId);
       window.location.href = $(this).data('href');
     });
   });
-  function removeitem(){
-
-  }
+  function removeitem() {}
 
   //   $(document).on('click', '.ps_remove_item', function () {
   //     var line = $(this).attr('data-remove-line');
@@ -287,36 +394,33 @@
   // 	})
   //   });
 
-  function getline_number(variant_id,checkgroupnumber){
+  function getline_number(variant_id, checkgroupnumber) {
     jQuery.getJSON('/cart.js', function (newcart) {
       var reline;
       var cartitems = newcart.items;
 
-      for(var i = 0; i < cartitems.length; i++)
-      {
+      for (var i = 0; i < cartitems.length; i++) {
         var item = cartitems[i];
         var allproperties = item.properties;
         var newgroupno = allproperties._ps_group_number;
         var ps_vr_ids = item.id;
 
-        if(newgroupno==checkgroupnumber && variant_id==ps_vr_ids)
-        {
-          reline = i+1;
+        if (newgroupno == checkgroupnumber && variant_id == ps_vr_ids) {
+          reline = i + 1;
           return parseInt(reline);
           break;
         }
-      }// loop closed
-    });  
-  }// function closed
+      } // loop closed
+    });
+  } // function closed
 
   $(document).on('click', '.ps_remove_item', function () {
-
-    $(this).text("Processing..");
+    $(this).text('Processing..');
 
     var allps = {};
     allps.queue = [];
 
-    var psquantity=0;
+    var psquantity = 0;
 
     var checkgroupnumber = $(this).attr('data-group');
 
@@ -326,25 +430,21 @@
 
     var main_all_length = myarray.length;
 
-    if(myarray.length)
-    {
-      for(var i = 0; i < myarray.length; i++)
-      {
-        var idd =myarray[i];
-        if(idd!=''){
+    if (myarray.length) {
+      for (var i = 0; i < myarray.length; i++) {
+        var idd = myarray[i];
+        if (idd != '') {
           allps.queue.push({
-            vid: idd
+            vid: idd,
           });
-        }  
-      }//loop closed
-    }// if closed
+        }
+      } //loop closed
+    } // if closed
 
     //this is the function used for remove items
-    allps.moveAlong = function() {
-
+    allps.moveAlong = function () {
       // If we still have requests in the queue, let's process the next one.
-      if (allps.queue.length) 
-      {      
+      if (allps.queue.length) {
         var request = allps.queue.shift();
         var variant_id = request.vid;
         var qty = 0;
@@ -352,64 +452,55 @@
         // var line = getline_number(variant_id,checkgroupnumber);
         var reline;
         jQuery.getJSON('/cart.js', function (newcart) {
-
           var cartitems = newcart.items;
 
-          for(var i = 0; i < cartitems.length; i++)
-          {
+          for (var i = 0; i < cartitems.length; i++) {
             var item = cartitems[i];
             var allproperties = item.properties;
             var newgroupno = allproperties._ps_group_number;
             var ps_vr_ids = item.id;
 
-            if(newgroupno==checkgroupnumber && variant_id==ps_vr_ids)
-            {
-              reline = i+1;
+            if (newgroupno == checkgroupnumber && variant_id == ps_vr_ids) {
+              reline = i + 1;
               reline = parseInt(reline);
               break;
             }
-          }// loop closed
+          } // loop closed
         });
 
         //this is used for waiting
-        setTimeout(function(){ 
-
-          if(reline>0)
-          {
-            var datastring =  'quantity='+qty+'&id='+variant_id+'&line='+reline;
+        setTimeout(function () {
+          if (reline > 0) {
+            var datastring = 'quantity=' + qty + '&id=' + variant_id + '&line=' + reline;
 
             $.ajax({
               type: 'POST',
               url: '/cart/change.js',
               dataType: 'json',
               data: datastring,
-              success: function(res){
+              success: function (res) {
                 allps.moveAlong();
                 psquantity += 1;
-              }
+              },
             });
-          }//if closed
+          } //if closed
         }, 1000);
-        //closed time out      
+        //closed time out
       }
       // If the queue is empty, we add 1 to cart
-      else 
-      {
+      else {
         psquantity += 1;
-        if(main_all_length==psquantity)
-        {  
-          window.location.href="/cart";
+        if (main_all_length == psquantity) {
+          window.location.href = '/cart';
           return false;
-        }// if closed
+        } // if closed
       }
-    };//closed inner function
+    }; //closed inner function
 
     allps.moveAlong();
 
     return false;
-
-
-  });//closed 
+  }); //closed
 
   function radio_no_check() {
     if (document.getElementById('tax_number_rbox2').checked) {
@@ -438,28 +529,24 @@
 </script>
 
 {%- if product.tags contains 'auto-add' -%}
-<style>
-
-</style>
+  <style></style>
 {%- endif -%}
 
 {% schema %}
-
 {
-"name": "Cart page",
-"class": "cart-section",
-"settings": [
-{
-"type": "checkbox",
-"id": "display_special_instructions",
-"label": "Show \"note\" text box"
-},
-{
-"type": "checkbox",
-"id": "display_tos_checkbox",
-"label": "Show \"agree to terms\" checkbox"
+  "name": "Cart page",
+  "class": "cart-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "display_special_instructions",
+      "label": "Show \"note\" text box"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_tos_checkbox",
+      "label": "Show \"agree to terms\" checkbox"
+    }
+  ]
 }
-]
-}
-
 {% endschema %}

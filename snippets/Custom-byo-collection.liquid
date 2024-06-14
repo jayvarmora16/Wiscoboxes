@@ -1,0 +1,862 @@
+{% assign product_list = page.metafields.custom.parent_products.value %}
+
+<script type="application/javascript">
+  document.addEventListener('DOMContentLoaded', function () {
+    // Assuming filteredCollectionTitles is already defined with the correct values...
+    const urlParamsUpdated = new URLSearchParams(window.location.search);
+    let lastest_product = urlParamsUpdated.get('product_id');
+    const latest_match = lastest_product.match(/^\d+/);
+    if (latest_match) {
+      lastest_product = latest_match[0];
+    }
+
+    const filteredCollectionTitles = combinedArray
+      .filter((obj) => obj.product.id.toString() === lastest_product.toString())
+      .map((obj) => obj.collectionTitle);
+
+    populateSelectBox(filteredCollectionTitles);
+
+    function populateSelectBox(collectionTitles) {
+      const selectBox = document.querySelector('.custom-select');
+      selectBox.innerHTML = '';
+
+      collectionTitles.forEach((title) => {
+        selectBox.add(new Option(title, title));
+      });
+    }
+
+    //   const filteredCollectionTitles = combinedArray
+    // .filter((obj) => obj.product.id.toString() === lastest_product.toString());
+
+    //  const arrayOfProducts = filteredCollectionTitles.flatMap(obj => obj.collectionProducts);
+  });
+</script>
+
+<script>
+  console.log(combinedArray, 'yesy');
+</script>
+<input type="hidden" id="latestProductInput" value="">
+<div class="gs__step-info"></div>
+<div class="collection-containe-inner">
+  <div class="filter-container">
+    <div class="collection-filter">
+      <div class="custom-select-wrapper" id="selectBox1">
+        <select class="custom-select" onchange="filterCollections()"></select>
+      </div>
+    </div>
+    <div class="sortby-filter">
+      <div class="custom-select-wrapper" id="selectBox2">
+        <label class="sort-by"> Sort By</label>
+        <select class="custom-select" id="productResultSelect">
+          <option value="Featured" selected>Featured</option>
+          <option value="Best-selling">Best selling</option>
+          <option value="title-ascending">Alphabetically, A-Z</option>
+          <option value="title-descending">Alphabetically, Z-A</option>
+          <option value="price-ascending">Price, low to high</option>
+          <option value="price-descending">Price, high to low</option>
+          <option value="date-newest">Date, old to new</option>
+          <option value="date-oldest">Date, new to old</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="main-collection-grid-container" style="width: 100%;">
+    {% for productList in product_list %}
+      {% for collection in productList.metafields.custom.byo_collection.value %}
+        {% for product in collection.products %}
+          <div
+            class="main-collection-grid"
+            data-collection-title="{{ collection.title }}"
+            data-product-title="{{ product.title | escape }}"
+            data-product-price="{{ product.price }}"
+            data-product-date="{{ product.created_at }}"
+            data-product-id="{{ product.variants[0].id }}"
+            data-parent-id="{{ productList.id }}"
+            data-tags="{{ product.tags }}"
+          >
+            <div
+              class="collection-image"
+              style="background-image: url('{{ product.images | first | img_url: 'large' }}');"
+            ></div>
+            <div class="title">
+              <h3>{{ product.title }}</h3>
+            </div>
+            <div class="price-quantity">
+              <div class="product-price">
+                <span>{{ product.price | money_with_currency }}</span>
+              </div>
+              <div class="product-quantity">
+                <button
+                  type="button"
+                  class="decrement"
+                  data-product-id="{{ product.id }}"
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  class="quantity-input"
+                  value="1"
+                  min="1"
+                  max="10"
+                  data-product-id="{{ product.id }}"
+                >
+                <button
+                  type="button"
+                  class="increment"
+                  data-product-id="{{ product.id }}"
+                >
+                  ＋
+                </button>
+              </div>
+            </div>
+            <div class="addtocart">
+              <button
+                type="button"
+                class="gs__btn gs__btn-primary button"
+                data-product-id="{{ product.id }}"
+              >
+                Add to box
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function (event) {
+    var addToCartButtons = document.querySelectorAll('.addtocart .gs__btn-primary');
+
+    // Function to update product details in local storage
+    function updateLocalStorage(productId, productQuantity) {
+      var productDetails = JSON.parse(localStorage.getItem('product-' + productId));
+      if (productDetails) {
+        productDetails.quantity = productQuantity;
+        localStorage.setItem('product-' + productId, JSON.stringify(productDetails));
+      }
+    }
+    function formatPrice(priceInCents) {
+      return `$${(priceInCents / 100).toFixed(2)}`;
+    }
+    function removeProductFromLocalStorage(productId) {
+      localStorage.removeItem('product-' + productId);
+    }
+    function updateTotalPrice(productPrice, quantity) {
+      let totalPriceElements = document.querySelectorAll('.total-price');
+
+      if (totalPriceElements.length > 0) {
+        totalPriceElements.forEach(function (totalPriceElement) {
+          let currentPrice = parseFloat(totalPriceElement.textContent.replace(/[^\d.-]/g, ''));
+          console.log(currentPrice,'current')
+          if (isNaN(currentPrice)) {
+            currentPrice = 0;
+          }
+
+          let actualProductPrice = productPrice / 100 * quantity;
+          
+          let newTotalPrice = parseFloat(currentPrice) + parseFloat(actualProductPrice);
+          // let updatedNewTtotalPirce = newTotalPrice * parseFloat(quantity);
+          totalPriceElement.textContent = `$${newTotalPrice.toFixed(2)}`; // Format to two decimal places
+        });
+      } else {
+        console.error('No total price elements were found.');
+      }
+    }
+
+    function synchronizeQuantities(productId, newQuantity) {
+      var allProductRows = document.querySelectorAll(`.product-row[data-product-id="${productId}"]`);
+      allProductRows.forEach(function (row) {
+        var quantityInput = row.querySelector('.row-input');
+        if (quantityInput && quantityInput.value !== newQuantity.toString()) {
+          quantityInput.value = newQuantity;
+        }
+      });
+    }
+
+    function getTotal() {
+      let totalSum = 0;
+      for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+
+        if (key.startsWith('product-')) {
+          let productDetails = JSON.parse(localStorage.getItem(key));
+
+          if (productDetails && productDetails.quantity && productDetails.price) {
+            let adjustedPrice = parseInt(productDetails.price) / 100;
+
+            let productTotal = adjustedPrice * productDetails.quantity;
+
+            totalSum += productTotal;
+          }
+        }
+      }
+      return totalSum;
+    }
+
+    function updateTotal() {
+      let totalPriceElements = document.querySelectorAll('.total-price');
+
+      let updatedPrice = getTotal();
+      var priceString = localStorage.getItem('parent-product-price');
+      var priceFloat = parseFloat(priceString);
+      totalPriceElements.forEach(function (element) {
+        element.textContent = `$${priceFloat + updatedPrice}`;
+      });
+    }
+
+    function handlePlusMinusChange(productRow, productId) {
+      productRow.querySelector('.plus').addEventListener('click', function () {
+        const quantityInput = productRow.querySelector('.row-input');
+        const newQuantity = parseInt(quantityInput.value) + 1;
+        quantityInput.value = newQuantity;
+        quantityInput.setAttribute('value', newQuantity);
+        updateLocalStorage(productId, newQuantity);
+        synchronizeQuantities(productId, newQuantity);
+        updateTotal();
+        swtichToNewProduct();
+        let totalQuantity = getTotalQuantities();
+
+        if (totalQuantity === 10) {
+          const plusButtons = document.querySelectorAll('.plus');
+          plusButtons.forEach((button) => {
+            button.disabled = true;
+            button.style.backgroundColor = '#f0f0f0';
+            button.style.pointerEvents = 'none';
+          });
+        }
+
+        let productQuantityDiv = document.querySelectorAll('.row-quantity');
+        productQuantityDiv.forEach((element) => {
+          element.removeAttribute('style');
+        });
+      });
+
+      productRow.querySelector('.minus').addEventListener('click', function () {
+        const quantityInput = productRow.querySelector('.row-input');
+        if (parseInt(quantityInput.value) > 1) {
+          const newQuantity = parseInt(quantityInput.value) - 1;
+          quantityInput.setAttribute('value', newQuantity);
+          updateLocalStorage(productId, newQuantity);
+          synchronizeQuantities(productId, newQuantity);
+          updateTotal();
+          swtichToNewProduct();
+          let totalQuantity = getTotalQuantities();
+          if (totalQuantity < 10) {
+            const plusButtons = document.querySelectorAll('.plus');
+            plusButtons.forEach((button) => {
+              button.disabled = false;
+              button.style.backgroundColor = 'white';
+              button.style.pointerEvents = 'auto';
+            });
+          }
+        }
+        let productQuantityDiv = document.querySelectorAll('.row-quantity');
+        productQuantityDiv.forEach((element) => {
+          element.removeAttribute('style');
+        });
+
+        let errorMessage = document.querySelectorAll('.error-message');
+        errorMessage.forEach((error) => {
+          error.style.display = 'none';
+        });
+      });
+
+      productRow.querySelector('.row-input').addEventListener('change', function () {
+        const newQuantity = parseInt(this.value) < 1 ? 1 : parseInt(this.value);
+        this.value = newQuantity;
+        updateLocalStorage(productId, newQuantity);
+        synchronizeQuantities(productId, newQuantity);
+      });
+    }
+
+    // function removeBundleProduct(productID) {
+    //   const productRows = document.querySelectorAll('.product-row');
+
+    //   productRows.forEach((product) => {
+    //     let dataTags = product.getAttribute('data-tags');
+
+    //     let foundInbunle = bundleProducts.find((productData) => dataTags.includes(productData.parent_product_tag));
+    //     console.log(foundInbunle, 'cjecl');
+    //     if (!foundInbunle) {
+    //       bundleProducts.forEach((product) => {
+    //         const productSelectRow = document.querySelector(`.product-row[data-product-id="${product.product}"]`);
+    //         if (productSelectRow) {
+    //           console.log(productSelectRow, 'product');
+    //           let closeButton = productSelectRow.querySelector('.close-button');
+    //           closeButton.click();
+    //         }
+    //       });
+    //     }
+    //   });
+    // }
+
+    function handleClose(productRow, productId) {
+      var closeButtons = document.querySelectorAll('.close-button');
+      closeButtons.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+          let product_id = button.getAttribute('data-product-id');
+          removeProductFromLocalStorage(product_id);
+          handleRemoveProduct(product_id);
+          console.log(productRow, 'product');
+        
+        });
+      });
+    }
+
+    function handleRemoveProduct(productId) {
+      var productRows = document.querySelectorAll(`.product-row[data-product-id="${productId}"]`);
+      var addToCartButtons = document.querySelectorAll(`.gs__btn.gs__btn-primary[data-product-id="${productId}"]`);
+
+      addToCartButtons.forEach(function (button) {
+        button.textContent = 'Add to Box';
+        button.classList.remove('disabled-button');
+        button.disabled = false;
+      });
+
+      productRows.forEach(function (row) {
+        row.parentNode.removeChild(row);
+        updateTotal();
+      });
+      let productQuantityDiv = document.querySelectorAll('.row-quantity');
+      productQuantityDiv.forEach((element) => {
+        element.removeAttribute('style');
+      });
+
+      let errorMessage = document.querySelectorAll('.error-message');
+      errorMessage.forEach((error) => {
+        if (error) {
+          error.style.display = 'none';
+        }
+      });
+      swtichToNewProduct();
+      // setTimeout(()=>{
+      //   removeBundleProduct(productId);
+      // },1000)
+    }
+
+    function createProductRow(productImage, productTitle, productPrice, productQuantity, productId, tags) {
+      var productRow = document.createElement('div');
+      productRow.setAttribute('class', 'product-row');
+      productRow.setAttribute('data-product-id', productId);
+      productRow.setAttribute('data-tags', tags);
+      var formattedPrice = formatPrice(productPrice);
+      productRow.innerHTML = `
+            <div class="image-title">
+                <div class="row-image" style="background-image: url('${productImage}');"></div>
+                <div class="row-title">
+                    <h3>${productTitle}</h3>
+                    <p>${formattedPrice}</p>
+                </div>
+            </div>
+            <div class="quantity-close">
+                <div class="row-quantity">
+                    <button class="plus">+</button>
+                    <input value="${productQuantity}" class="row-input" max="10">
+                    <button class="minus">-</button>
+                </div>
+                <div class="close-button" data-product-id=${productId}><svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            class="gs__btn-delete-item-svg"
+            fill="currentColor"
+          >
+            <path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"></path>
+          </svg></div>
+            </div>
+        `;
+
+      handlePlusMinusChange(productRow, productId);
+      handleClose(productRow, productId);
+      return productRow;
+    }
+
+    function checkProductInBox(productid) {
+      let isAdded = false;
+      const productRow = document.querySelectorAll('.product-row');
+      productRow.forEach((product) => {
+        let productID = product.getAttribute('data-product-id');
+        if (productID.toString() === productid.toString()) {
+          isAdded = true;
+        }
+      });
+      return isAdded;
+    }
+
+    addToCartButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        var productElement = this.closest('.main-collection-grid');
+        var productImage = productElement.querySelector('.collection-image').style.backgroundImage.slice(5, -2);
+        var productTitle = productElement.getAttribute('data-product-title');
+        var productPrice = productElement.getAttribute('data-product-price');
+        var productId = productElement.getAttribute('data-product-id');
+        var productQuantity = productElement.querySelector('.quantity-input').value;
+
+        var productDetails = {
+          id: productId,
+          image: productImage,
+          title: productTitle,
+          price: productPrice,
+          quantity: productQuantity,
+        };
+        let tags = productElement.getAttribute('data-tags');
+        let filterBundle = bundleProducts.find((product) => tags.includes(product.parent_product_tag));
+        console.log(filterBundle);
+        if (filterBundle) {
+          let productAlreadyAdded = checkProductInBox(filterBundle.product);
+
+          if (!productAlreadyAdded) {
+            let products = document.querySelectorAll(
+              `.main-collection-grid[data-product-id="${filterBundle.product}"]`
+            );
+
+            products.forEach((product) => {
+              let style = window.getComputedStyle(product);
+              if (style.display !== 'none') {
+                let addToCartButton = product.querySelector('.gs__btn');
+                if (addToCartButton) {
+                  addToCartButton.click();
+                  console.log(product, addToCartButton);
+                }
+              }
+            });
+          }
+        }
+
+        button.classList.add('disabled-button');
+        button.textContent = '✔ Added';
+        button.disabled = true;
+        localStorage.setItem('product-' + productId, JSON.stringify(productDetails));
+        let errorMessage = document.querySelector('.error-message');
+        if (errorMessage) {
+          errorMessage.style.display = 'none';
+        }
+
+        var cartContainers = document.querySelectorAll('.gs__item-main-content');
+        cartContainers.forEach(function (cartContainer) {
+          const productRow = createProductRow(
+            productImage,
+            productTitle,
+            productPrice,
+            productQuantity,
+            productId,
+            tags
+          );
+          cartContainer.appendChild(productRow.cloneNode(true)); // Cloning without events
+
+          handlePlusMinusChange(cartContainer.lastChild, productId);
+          handleClose(cartContainer.lastChild, productId);
+        });
+
+        updateTotalPrice(productPrice, productQuantity);
+        swtichToNewProduct();
+      });
+    });
+  });
+
+  function swtichToNewProduct() {
+    const urlParamsUpdated = new URLSearchParams(window.location.search);
+    let lastest_product = urlParamsUpdated.get('product_id');
+    const latest_match = lastest_product.match(/^\d+/);
+    if (latest_match) {
+      lastest_product = latest_match[0];
+    }
+
+    let currentProduct = parentProducts.find((product) => product.id.toString() === lastest_product.toString());
+    if (currentProduct.title === '6x6 WiscoBox') {
+      let quantity = getTotalQuantities();
+
+      if (quantity > 2) {
+        document.querySelectorAll('.gs__box-name').forEach((boxTitle) => {
+          boxTitle.textContent = '10x10 WiscoBox';
+        });
+        document.querySelectorAll('.gs__box-price').forEach((boxPrice) => {
+          boxPrice.textContent = '$12.00';
+        });
+        localStorage.setItem('parent-product-price', 12);
+        document.querySelectorAll('.total-price').forEach((priceSpan) => {
+          let currentPrice = parseFloat(priceSpan.textContent.replace('$', ''));
+          let updatedPrice = currentPrice + 2;
+          priceSpan.textContent = `$${updatedPrice.toFixed(2)}`;
+        });
+        let newProduct = parentProducts.find((product) => product.title === '10x10 WiscoBox');
+        updateQueryParams('product_id', newProduct.id);
+        updateQueryParams('product_box', newProduct.title);
+      }
+    }
+
+    if (currentProduct.title === '10x10 WiscoBox') {
+      let quantity = getTotalQuantities();
+
+      if (quantity > 6) {
+        document.querySelectorAll('.gs__box-name').forEach((boxTitle) => {
+          boxTitle.textContent = '12x15 WiscoBox';
+        });
+        document.querySelectorAll('.gs__box-price').forEach((boxPrice) => {
+          boxPrice.textContent = '$16.00';
+        });
+        localStorage.setItem('parent-product-price', 16);
+        document.querySelectorAll('.total-price').forEach((priceSpan) => {
+          let currentPrice = parseFloat(priceSpan.textContent.replace('$', ''));
+          let updatedPrice = currentPrice + 4;
+          priceSpan.textContent = `$${updatedPrice.toFixed(2)}`;
+        });
+        let newProduct = parentProducts.find((product) => product.title === '12x15 WiscoBox');
+        updateQueryParams('product_id', newProduct.id);
+        updateQueryParams('product_box', newProduct.title);
+      }
+    }
+
+    if (currentProduct.title === '12x15 WiscoBox') {
+      let quantity = getTotalQuantities();
+
+      if (quantity === 10) {
+        const addToCartDivs = document.querySelectorAll('div.addtocart');
+
+        addToCartDivs.forEach((div) => {
+          const button = div.querySelector('button.gs__btn.gs__btn-primary.button');
+
+          if (button) {
+            button.disabled = true;
+            button.classList.add('disabled-button');
+          }
+        });
+
+        const plusButtons = document.querySelectorAll('.plus');
+        plusButtons.forEach((button) => {
+          button.disabled = true;
+          button.style.backgroundColor = '#f0f0f0';
+          button.style.pointerEvents = 'none';
+        });
+      } else {
+        const addToCartDivs = document.querySelectorAll('div.addtocart');
+
+        addToCartDivs.forEach((div) => {
+          const button = div.querySelector('button.gs__btn.gs__btn-primary.button');
+
+          if (button && button.textContent !== '✔ Added') {
+            button.disabled = false;
+            button.classList.remove('disabled-button');
+          }
+        });
+        const plusButtons = document.querySelectorAll('.plus');
+        plusButtons.forEach((button) => {
+          button.disabled = false;
+          button.style.backgroundColor = 'white';
+          button.style.pointerEvents = 'auto';
+        });
+      }
+    }
+  }
+  function updateQueryParams(paramKey, paramValue) {
+    let currentUrl = new URL(window.location.href);
+
+    currentUrl.searchParams.set(paramKey, paramValue);
+
+    window.history.replaceState({}, '', currentUrl);
+  }
+
+  function getTotalQuantities() {
+    let totalQuantity = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+
+      if (key.startsWith('product-')) {
+        let productDetails = JSON.parse(localStorage.getItem(key));
+
+        if (productDetails && productDetails.quantity) {
+          // Add only the quantity to the totalQuantity sum
+          totalQuantity += parseInt(productDetails.quantity);
+        }
+      }
+    }
+    return totalQuantity;
+  }
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('productResultSelect').addEventListener('change', function (event) {
+      var sortValue = event.target.value;
+      console.log(sortValue, 'sort');
+      var container = document.querySelector('.main-collection-grid-container');
+      var itemsArray = Array.prototype.slice.call(container.getElementsByClassName('main-collection-grid'), 0);
+      var selectedCollection = document.querySelector('.custom-select').value;
+
+      var filteredItems = itemsArray.filter(function (item) {
+        return item.getAttribute('data-collection-title') === selectedCollection;
+      });
+
+      filteredItems.sort(function (a, b) {
+        switch (sortValue) {
+          case 'title-ascending':
+            return a.getAttribute('data-product-title').localeCompare(b.getAttribute('data-product-title'));
+
+          case 'title-descending':
+            return b.getAttribute('data-product-title').localeCompare(a.getAttribute('data-product-title'));
+
+          case 'price-ascending':
+            return parseFloat(a.getAttribute('data-product-price')) - parseFloat(b.getAttribute('data-product-price'));
+
+          case 'price-descending':
+            return parseFloat(b.getAttribute('data-product-price')) - parseFloat(a.getAttribute('data-product-price'));
+
+          case 'date-newest':
+            return new Date(b.getAttribute('data-product-date')) - new Date(a.getAttribute('data-product-date'));
+
+          case 'date-oldest':
+            return new Date(a.getAttribute('data-product-date')) - new Date(b.getAttribute('data-product-date'));
+
+          default:
+            return container.appendChild(a);
+        }
+      });
+
+      filteredItems.forEach(function (item) {
+        container.appendChild(item);
+      });
+    });
+  });
+
+  function filterCollections() {
+    const urlParamsUpdated = new URLSearchParams(window.location.search);
+    let lastest_product = urlParamsUpdated.get('product_id');
+    const latest_match = lastest_product.match(/^\d+/);
+    if (latest_match) {
+      lastest_product = latest_match[0];
+    }
+    var selectedCollection = document.querySelector('.custom-select').value;
+
+    var collectionGrids = document.querySelectorAll('.main-collection-grid');
+
+    collectionGrids.forEach(function (grid) {
+      if (
+        grid.getAttribute('data-collection-title') === selectedCollection &&
+        grid.getAttribute('data-parent-id') === lastest_product.toString()
+      ) {
+        grid.style.display = '';
+      } else {
+        grid.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const incrementButtons = document.querySelectorAll('.increment');
+    const decrementButtons = document.querySelectorAll('.decrement');
+
+    incrementButtons.forEach((button) => {
+      button.addEventListener('click', (event) => {
+        const productId = event.target.dataset.productId;
+        const inputs = document.querySelectorAll(`.quantity-input[data-product-id="${productId}"]`);
+        let errorMessage = document.querySelector('.error-message');
+        if (errorMessage) {
+          errorMessage.style.display = 'none';
+        }
+        inputs.forEach((input) => {
+          const currentValue = parseInt(input.value, 10);
+          if (currentValue != 10) {
+            input.value = currentValue + 1;
+          }
+        });
+      });
+    });
+
+    decrementButtons.forEach((button) => {
+      button.addEventListener('click', (event) => {
+        const productId = event.target.dataset.productId;
+        const inputs = document.querySelectorAll(`.quantity-input[data-product-id="${productId}"]`);
+        let errorMessage = document.querySelector('.error-message');
+        if (errorMessage) {
+          errorMessage.style.display = 'none';
+        }
+
+        inputs.forEach((input) => {
+          const currentValue = parseInt(input.value, 10);
+          const minValue = parseInt(input.getAttribute('min'), 10);
+          if (currentValue != 1) {
+            input.value = currentValue - 1;
+          }
+        });
+      });
+    });
+  });
+</script>
+<style>
+  .error-message{
+    font-size:15px;
+  }
+  .disabled-button {
+    background-color: #9d9797 !important;
+    color: white !important;
+    cursor: not-allowed;
+  }
+
+  .sort-by {
+    margin-top: 12px;
+    margin-right: 10px;
+    font-weight: 400;
+  }
+  .product-price span {
+    font-size: 0.9em;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+  }
+  .title h3 {
+    font-size: 0.9em;
+    font-weight: 300;
+    padding: 0;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+  .main-collection-grid-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .addtocart button {
+    display: block;
+    line-height: 2em;
+    text-align: center;
+    width: 100%;
+    background: #9b2743;
+    min-height: 50px;
+    color: #fff;
+    font-size: 0.8em;
+    font-weight: 300;
+    margin-top: 13px;
+    margin-bottom: 13px;
+    padding: 0;
+  }
+  .addtocart {
+    padding: 0.5em 0;
+    font-size: 1.2em;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    box-sizing: border-box;
+    line-height: normal;
+  }
+  .decrement {
+    background: #f0f0f0;
+    border-color: #f0f0f0;
+    opacity: 0.5;
+    color: black;
+    font-weight: 300;
+    border: 1px solid #dce0e0;
+    color: #000;
+    text-align: center;
+    padding: 6px;
+    width: 50px;
+    border-radius: 0px;
+    font-size: 12px;
+    box-shadow: none;
+  }
+  .increment {
+    background: #f0f0f0;
+    border-color: #f0f0f0;
+    background: white;
+    opacity: 0.5;
+    color: black;
+    font-weight: 300;
+    border: 1px solid #dce0e0;
+    color: #000;
+    text-align: center;
+    padding: 6px;
+    width: 50px;
+    border-radius: 0px;
+    font-size: 10px;
+    box-shadow: none;
+  }
+  input.quantity-input {
+    padding: 6px !important;
+    margin: 0;
+    text-align: center;
+    border: 1px solid #dce0e0;
+    border-left: none;
+    border-right: none;
+    border-radius: 0px;
+    width: 50px;
+    font-size: 12px;
+  }
+
+  .product-quantity {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+  }
+  .collection-image {
+    width: 100%;
+    height: 500px;
+  }
+  .price-quantity {
+    display: flex;
+    justify-content: space-between;
+  }
+  .main-collection-grid {
+    width: 31%;
+    display: flex;
+    flex-direction: column;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    height: 500px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .custom-select option {
+    padding: 15px;
+    font-size: 12px;
+    border-bottom: 1px solid #ccc;
+  }
+  .custom-select-wrapper {
+    position: relative;
+    width: 281px;
+    margin-bottom: 20px;
+    display: flex; /* Spacing between select boxes */
+  }
+  .custom-select {
+    width: 200px; /* Or any other width */
+    padding: 5px; /* Padding inside the select box */
+    font-size: 12px; /* Font size for the select box */
+    border: 1px solid #ccc; /* Border for the select box */
+    height: auto; /* Adjust height to fit all option spacing */
+    -webkit-appearance: none; /* Removes default chrome and safari style */
+    -moz-appearance: none; /* Removes default firefox style */
+    appearance: none; /* Removes default style for select box */
+    margin-top: 10px;
+  }
+
+  .filter-container {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+  }
+  .collection-containe-inner {
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border: 1px solid #f0f0f0;
+    border-radius: 0;
+    box-shadow: 2px 7px 15px rgba(0, 0, 0, 0.02);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .gs__step-info {
+    background: #fcfcfc;
+    padding: 1em;
+    margin-top: 50px;
+    border: 1px solid #f0f0f0;
+  }
+</style>
