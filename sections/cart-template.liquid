@@ -33,6 +33,10 @@
   div[data-properties*='Added_to'] {
     display: none;
   }
+  .disabled-remove{
+    pointer-events: none;
+    background: gray;
+  }
 </style>
 
 <div class="sixteen columns clearfix collection_nav">
@@ -139,17 +143,31 @@
               {% comment %}
                 Gist Edits | Giftship Item Price
               {% endcomment %}
-              {% comment %} {% if item.properties._gs_bundle_contents1 %}
+              {% if item.properties._gs_bundle_contents1 %}
                 <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity-updated" name="quantity-updated" value={{ item.quantity }} min="1" max="3" onchange="handleInputChange(event)">
+                <select
+                  id="numbers"
+                  name="numbers"
+                  data-product-id="{{ item.id }}"
+                  data-properties="{{ item.properties |  json |  escape }}"
+                >
+                  {% for i in (1..100) %}
+                    <option
+                      value="{{ i }}"
+                      {% if i == item.quantity %}
+                        selected
+                      {% endif %}
+                    >
+                      {{ i }}
+                    </option>
+                  {% endfor %}
+                </select>
 
-                <a
-                href="{{ item.url_to_remove }}"
-                aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}"
-              >
-                Remove
-              </a>
-              {% else %} {% endcomment %}
+                <button style="margin-bottom:10px;" class="removeButton" data-product-id="{{ item.id }}" data-properties="{{ item.properties | json |  escape }}">
+                  Remove
+                </button>
+
+              {% else %}
                 <p id="quantity_{{ forloop.index }}">
                   <label for="updates_{{ item.id }}" class="quantity_label">{{ 'cart.general.quantity' | t }}:</label>
                   <input
@@ -170,9 +188,9 @@
                 >
                   Remove
                 </a>
-              {% comment %} {% endif %} {% endcomment %}
+              {% endif %}
               <p class="price_total">
-                <span class="money">{{ giftship_price | money_with_currency }}</span>
+                <span class="money">{{ item.price | times: item.quantity | money_with_currency }}</span>
               </p>
             </div>
             <br class="clear">
@@ -324,14 +342,142 @@
   </form>
 {% endif %}
 <script>
-  function handleInputChange(event) {
-    console.log('event')
-    event.preventDefault(); 
-  if (event.target.value !== '') { // Check if the input value is not empty
-    console.log("Hello");
+  // Function to handle click events and log data-product-id
+  function handleEvent(event) {
+    document.getElementById('numbers').disabled = true;
+    const productId = event.target.getAttribute('data-product-id');
+    const dataPropertiesString = event.target.getAttribute('data-properties');
+    const dataProperties = JSON.parse(dataPropertiesString);
+    let gsBundleIds1, gsBundleQuantities1;
+    console.log(event.target.value, 'value');
+    dataProperties.forEach((item) => {
+      if (item[0] === '_gs_bundle_ids1') {
+        gsBundleIds1 = item[1];
+      }
+      if (item[0] === '_gs_bundle_quantities1') {
+        gsBundleQuantities1 = item[1];
+      }
+    });
+     changeItemInCart(productId, event.target.value,gsBundleIds1, gsBundleQuantities1, event.target.value)
+    console.log('Bundle IDs:', gsBundleIds1);
+    console.log('Bundle Quantities:', gsBundleQuantities1);
+
+    
+
   }
+
+  // function updateChildrenQuantities(variantArray, quantityArray, updatedQuantity) {}
+  function handleRemove(event) {
+    event.preventDefault();
+    document.querySelector('.removeButton').classList.add("disabled-remove")
+    const productId = event.target.getAttribute('data-product-id');
+    const dataPropertiesString = event.target.getAttribute('data-properties');
+    const dataProperties = JSON.parse(dataPropertiesString);
+    let gsBundleIds1, gsBundleQuantities1;
+    console.log(event.target.value, 'value');
+    dataProperties.forEach((item) => {
+      if (item[0] === '_gs_bundle_ids1') {
+        gsBundleIds1 = item[1];
+      }
+      if (item[0] === '_gs_bundle_quantities1') {
+        gsBundleQuantities1 = item[1];
+      }
+    });
+    for (let i = 0; i < gsBundleQuantities1.length; i++) {
+      gsBundleQuantities1[i] = "0";
+  }
+     changeItemInCart(productId, 0,gsBundleIds1, gsBundleQuantities1, 0)
+    console.log('Bundle IDs:', gsBundleIds1);
+    console.log('Bundle Quantities:', gsBundleQuantities1);
+  }
+
+  // Add event listener to the select element
+  document.getElementById('numbers').addEventListener('change', handleEvent);
+
+  // Add event listener to the button
+  document.querySelector('.removeButton').addEventListener('click', handleRemove);
+  function changeItemInCart(variant_id, qty,variantArray, quantityArray, updatedQuantity) {
+    data = {
+      id: variant_id,
+      quantity: qty,
+    };
+    jQuery.ajax({
+      type: 'POST',
+      url: '/cart/change.js',
+      data: data,
+      dataType: 'json',
+      success: function () {
+        //alert(data);
+        let resultArray;
+
+        console.log(updatedQuantity,'yaho')
+        if (Number(updatedQuantity) > 1) {
+          quantityArray = quantityArray.map((element) => Number(element) * updatedQuantity);
+        }
+
+        let productsWithQuantities = [];
+
+        for (let i = 0; i < variantArray.length; i++) {
+          let productObject = {
+            product: variantArray[i],
+            quantity: quantityArray[i],
+          };
+          productsWithQuantities.push(productObject);
+        }
+
+        console.log(productsWithQuantities,'testomh')
+        updateCart(productsWithQuantities);
+        console.log(productsWithQuantities);
+      },
+    });
+  }
+
+  async function updateCart(items) {
+    let requestsCompleted = 0;
+
+    function checkIfAllRequestsComplete() {
+        requestsCompleted++;
+        if (requestsCompleted === items.length) {
+          document.getElementById('numbers').disabled = false;
+             window.location.href = '/cart';
+        }
+    }
+
+    for (let i = 0; i < items.length; i++) {
+        await changeItemChildrenInCart(items[i].product.toString(), items[i].quantity.toString());
+        checkIfAllRequestsComplete();
+    }
+}
+
+async function changeItemChildrenInCart(variant_id, qty) {
+    const data = {
+        id: variant_id,
+        quantity: qty,
+    };
+    
+    try {
+        console.log('Requesting:', data);
+
+        const response = await fetch('/cart/change.js', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+        console.log('Success:', responseData);
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
 }
 </script>
+
 <script>
   function addItemToCart(variant_id, qty) {
     data = {

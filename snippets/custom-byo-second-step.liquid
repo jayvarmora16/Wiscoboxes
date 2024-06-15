@@ -113,15 +113,18 @@
       let childProperties = {
         Added_to: currentParentProduct.title,
       };
-
+      const addChildProductPromises = [];
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
 
         if (key.startsWith('product-')) {
           const productObj = JSON.parse(localStorage.getItem(key));
-          await addToCart(productObj.id, productObj.quantity, childProperties);
+          let promise=await addToCart(productObj.id, productObj.quantity, childProperties);
+          addChildProductPromises.push(promise);
         }
       }
+      await Promise.all(addChildProductPromises);
+      window.location.href = '/cart';
     } catch (error) {
       console.error('An error occurred:', error);
     }
@@ -148,7 +151,7 @@
 
       if (response.ok) {
         console.log('Product added to cart:', data);
-        window.location.href = '/cart';
+        
       } else {
         throw new Error(`Error: ${data.message ? data.message : 'Failed to add product to cart'}`);
       }
