@@ -2,7 +2,7 @@
 
 {% assign bundleProducts = shop.metaobjects.build_your_box_bundle.values %}
 
-
+{%  render 'custom-by' %}
 <script>
   let bundleProducts=[];
 
@@ -31,7 +31,6 @@ let parentProducts=[]
   parentProducts.push({{ productList | json }})
   {% endfor %}
 
-  console.log(parentProducts,'parent')
  let combinedArray = [];
  let collectionObject={}
  let combinedObject={}
@@ -153,12 +152,15 @@ document.addEventListener("DOMContentLoaded",()=>{
         }
     });
 })
+
+
 </script>
 
 <div class="byo-container">
   <div class="gs__nav-steps-completed">
-    <h3>0 of 2 Steps Complete</h3>
-    <h1>BUILD YOUR OWN BOX</h1>
+    <h3 class="pretext">0 of 2 Steps Complete</h3>
+    <h1 class="build-title">BUILD YOUR OWN BOX</h1>
+     
     <p>Select an item</p>
   </div>
   <div class="sub-container-byo">
@@ -523,6 +525,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     text-transform: uppercase;
     transition: color 0.25s ease;
     white-space: nowrap;
+    border-top:1px solid #ededed;
   }
 
   .progressbar li:before {
@@ -534,7 +537,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     border: 2px solid #ddd;
     display: block;
     text-align: center;
-    margin: 0 auto 10px auto;
+    margin: -7px auto 10px auto;
     border-radius: 50%;
     background-color: white;
     color: white;
@@ -569,4 +572,5 @@ document.addEventListener("DOMContentLoaded",()=>{
   .actual-step {
     border: 1px solid #f0f0f0;
   }
+
 </style>

@@ -15,7 +15,7 @@
     }
   
   </style>
-  
+ 
   {{ 'ps-custom.css' | asset_url | stylesheet_tag }}
   {% assign product_list = page.metafields.custom.parent_products.value %}
   {% comment %} {{ product_list | json }}  {% endcomment %}

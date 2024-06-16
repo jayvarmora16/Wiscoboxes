@@ -1,0 +1,318 @@
+<style>
+  .byo-container {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+  }
+  .gs__nav-steps-completed {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 2em;
+  }
+  .gs__nav-steps-completed h3 {
+    margin: 0;
+    text-align: center;
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-top: 15px;
+  }
+  .gs__nav-steps-completed p {
+    margin: 0;
+    text-align: center;
+    font-weight: 400;
+  }
+  body {
+    font-family: brandon-grotesque, sans-serif;
+    background-color: white;
+  }
+
+  .step {
+    margin: 15px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #5fbae9;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #4a9ad3;
+  }
+  .progress-container {
+    width: 100%;
+  }
+  .progressbar {
+    counter-reset: step;
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .progressbar li {
+    position: relative;
+    flex-grow: 1;
+    text-align: center;
+    font-size: 0.8em;
+    font-size: 0.8em;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: color 0.25s ease;
+    white-space: nowrap;
+    border-top:1px solid #ededed;
+  }
+
+  .progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 10px;
+    height: 10px;
+    line-height: 35px;
+    border: 2px solid #ddd;
+    display: block;
+    text-align: center;
+    margin: -7px auto 10px auto;
+    border-radius: 50%;
+    background-color: white;
+    color: white;
+  }
+
+  .progressbar li:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    top: 15px;
+    left: -50%;
+    z-index: -1;
+  }
+
+  .progressbar li:first-child:after {
+    content: none;
+  }
+
+  .progressbar li.active:before {
+    border-color: #9b2743;
+    background-color: #9b2743;
+    color: white;
+  }
+
+  .progressbar li.active + li:after {
+    background-color: #5fbae9;
+  }
+
+  /* Rest of your CSS remains unchanged */
+  .actual-step {
+    border: 1px solid #f0f0f0;
+  }
+  .error-message{
+    font-size:15px;
+  }
+  .disabled-button {
+    background-color: #9d9797 !important;
+    color: white !important;
+    cursor: not-allowed;
+  }
+
+  .sort-by {
+    margin-top: 12px;
+    margin-right: 10px;
+    font-weight: 400;
+  }
+  .product-price span {
+    font-size: 0.9em;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+  }
+  .title h3 {
+    font-size: 0.9em;
+    font-weight: 300;
+    padding: 0;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+  .main-collection-grid-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .addtocart button {
+    display: block;
+    line-height: 2em;
+    text-align: center;
+    width: 100%;
+    background: #9b2743;
+    min-height: 50px;
+    color: #fff;
+    font-size: 0.8em;
+    font-weight: 300;
+    margin-top: 13px;
+    margin-bottom: 13px;
+    padding: 0;
+  }
+  .addtocart {
+    padding: 0.5em 0;
+    font-size: 1.2em;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    box-sizing: border-box;
+    line-height: normal;
+  }
+  .decrement {
+    background: #f0f0f0;
+    border-color: #f0f0f0;
+    opacity: 0.5;
+    color: black;
+    font-weight: 300;
+    border: 1px solid #dce0e0;
+    color: #000;
+    text-align: center;
+    padding: 6px;
+    width: 50px;
+    border-radius: 0px;
+    font-size: 12px;
+    box-shadow: none;
+  }
+  .increment {
+    background: #f0f0f0;
+    border-color: #f0f0f0;
+    background: white;
+    opacity: 0.5;
+    color: black;
+    font-weight: 300;
+    border: 1px solid #dce0e0;
+    color: #000;
+    text-align: center;
+    padding: 6px;
+    width: 50px;
+    border-radius: 0px;
+    font-size: 10px;
+    box-shadow: none;
+  }
+  input.quantity-input {
+    padding: 6px !important;
+    margin: 0;
+    text-align: center;
+    border: 1px solid #dce0e0;
+    border-left: none;
+    border-right: none;
+    border-radius: 0px;
+    width: 50px;
+    font-size: 12px;
+  }
+
+  .product-quantity {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+  }
+  .collection-image {
+    width: 100%;
+    height: 500px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .price-quantity {
+    display: flex;
+    justify-content: space-between;
+  }
+  .main-collection-grid {
+    width: 31%;
+    display: flex;
+    flex-direction: column;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    height: 500px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .custom-select option {
+    padding: 15px;
+    font-size: 12px;
+    border-bottom: 1px solid #ccc;
+  }
+  .custom-select-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+    display: flex; /* Spacing between select boxes */
+  }
+  .custom-select {
+    width: 200px; /* Or any other width */
+    padding: 5px; /* Padding inside the select box */
+    font-size: 12px; /* Font size for the select box */
+    border: 1px solid #ccc; /* Border for the select box */
+    height: auto; /* Adjust height to fit all option spacing */
+    -webkit-appearance: none; /* Removes default chrome and safari style */
+    -moz-appearance: none; /* Removes default firefox style */
+    appearance: none; /* Removes default style for select box */
+    margin-top: 10px;
+  }
+
+  .filter-container {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+  }
+  .collection-containe-inner {
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border: 1px solid #f0f0f0;
+    border-radius: 0;
+    box-shadow: 2px 7px 15px rgba(0, 0, 0, 0.02);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .gs__step-info {
+    background: #fcfcfc;
+    padding: 1em;
+    margin-top: 50px;
+    border: 1px solid #f0f0f0;
+  }
+  .build-title{
+    color: #ac002b !important;
+    font-family: aviano-sans, sans-serif !important;
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-bottom: 0px;
+  }
+  .pretext{
+    font-weight: 400;
+  }
+  .subtitle{
+    text-transform: none;
+    font-weight: 400;
+  }
+ 
+</style>
+

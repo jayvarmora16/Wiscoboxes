@@ -9,8 +9,8 @@
     if (latest_match) {
       lastest_product = latest_match[0];
     }
-
-    const filteredCollectionTitles = combinedArray
+   console.log(combinedArray,'combines')
+   const filteredCollectionTitles = combinedArray
       .filter((obj) => obj.product.id.toString() === lastest_product.toString())
       .map((obj) => obj.collectionTitle);
 
@@ -32,9 +32,6 @@
   });
 </script>
 
-<script>
-  console.log(combinedArray, 'yesy');
-</script>
 <input type="hidden" id="latestProductInput" value="">
 <div class="gs__step-info"></div>
 <div class="collection-containe-inner">
@@ -798,6 +795,9 @@
   .collection-image {
     width: 100%;
     height: 500px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
   }
   .price-quantity {
     display: flex;
