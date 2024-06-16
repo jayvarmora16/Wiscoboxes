@@ -2,7 +2,7 @@
 
 {% assign bundleProducts = shop.metaobjects.build_your_box_bundle.values %}
 
-{%  render 'custom-by' %}
+{% render 'custom-by' %}
 <script>
   let bundleProducts=[];
 
@@ -138,6 +138,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
           });
       }
 
+      if (filteredProducts.product.title === "10x10 WiscoBox") {
+        let headerInfo = document.querySelector(".header-info");
+        let newText = document.createElement("div");
+
+        newText.textContent = "Product Options Are Limited By Box Size. To View All Product Options In Each Category, Please Select The 12 X 15 Box";
+        newText.style.textAlign = "center";
+        // Insert the new element before .header-info
+        headerInfo.parentNode.insertBefore(newText, headerInfo);
+    }
+
+
 
     
 });
@@ -152,16 +163,14 @@ document.addEventListener("DOMContentLoaded",()=>{
         }
     });
 })
-
-
 </script>
 
 <div class="byo-container">
   <div class="gs__nav-steps-completed">
     <h3 class="pretext">0 of 2 Steps Complete</h3>
     <h1 class="build-title">BUILD YOUR OWN BOX</h1>
-     
-    <p>Select an item</p>
+
+    <p class="header-info">Select an item</p>
   </div>
   <div class="sub-container-byo">
     <div class="progress-container">
@@ -450,6 +459,13 @@ document.addEventListener("DOMContentLoaded",()=>{
   // The rest of your JavaScript code remains unchanged
 </script>
 <style>
+
+/* @media (max-width: 700px) {
+  .container {
+     width: 100%;
+    }
+} */
+
   .byo-container {
     background-color: white;
     display: flex;
@@ -525,7 +541,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     text-transform: uppercase;
     transition: color 0.25s ease;
     white-space: nowrap;
-    border-top:1px solid #ededed;
+    border-top: 1px solid #ededed;
   }
 
   .progressbar li:before {
@@ -572,5 +588,4 @@ document.addEventListener("DOMContentLoaded",()=>{
   .actual-step {
     border: 1px solid #f0f0f0;
   }
-
 </style>

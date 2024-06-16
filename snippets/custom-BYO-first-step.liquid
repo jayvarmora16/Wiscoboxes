@@ -277,6 +277,23 @@
     justify-content: center;
     width: 100%;
   }
+
+  @media (max-width: 700px) {
+    #gsBuilderItems {
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .gs__item-main-content {
+    display: block;
+    overflow: auto;
+    width: 100% !important;
+  }
+
+}
   .gs__item-main-content {
     display: block;
     overflow: auto;
@@ -300,6 +317,15 @@
     vertical-align: bottom;
     width: 35%;
   }
+  @media (max-width: 700px) {
+    .gs__item-sidebar {
+    border-left: 1px solid #f0f0f0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    vertical-align: bottom;
+    width: 100% !important;
+  }
+}
   .gs__box-summary {
     border-bottom: 1px solid #f0f0f0;
     display: flex;
