@@ -119,20 +119,20 @@
 
       await addToCart(currentParentProduct.variants[0].id, 1, properties);
 
-      let childProperties = {
-        Added_to: currentParentProduct.title,
-      };
-      const addChildProductPromises = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
+      // let childProperties = {
+      //   Added_to: currentParentProduct.title,
+      // };
+      // const addChildProductPromises = [];
+      // for (let i = 0; i < localStorage.length; i++) {
+      //   const key = localStorage.key(i);
 
-        if (key.startsWith('product-')) {
-          const productObj = JSON.parse(localStorage.getItem(key));
-          let promise=await addToCart(productObj.id, productObj.quantity, childProperties);
-          addChildProductPromises.push(promise);
-        }
-      }
-      await Promise.all(addChildProductPromises);
+      //   if (key.startsWith('product-')) {
+      //     const productObj = JSON.parse(localStorage.getItem(key));
+      //     let promise=await addToCart(productObj.id, productObj.quantity, childProperties);
+      //     addChildProductPromises.push(promise);
+      //   }
+      // }
+      // await Promise.all(addChildProductPromises);
       window.location.href = '/cart';
     } catch (error) {
       console.error('An error occurred:', error);
