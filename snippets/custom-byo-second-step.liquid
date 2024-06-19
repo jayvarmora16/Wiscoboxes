@@ -30,8 +30,17 @@
   }
   </style>
 {% endcomment %}
+<style>
+  .gs__item-main-content1{
+    width:100%
+  }
+</style>
 <section id="gsBuilderItems" class="gs__selected-items">
-  <div class="gs__item-main-content"><h2 class="gs__item-main-content-heading">Box Contents</h2></div>
+  <div class="gs__item-main-content1">
+    
+  <h2 class="gs__item-main-content-heading">Gift Notes</h2>
+  {% render 'gift-notes' %}
+  </div>
   <div class="gs__item-sidebar">
     <div class="gs__box-summary">
       <div class="loader"></div>
@@ -88,13 +97,13 @@
     let giftNotes = localStorage.getItem('giftNotes');
     let shippingDate = localStorage.getItem('shippingDate');
     let properties = {
-      "_gs_bundle_discount1": _gs_bundle_discount,
-      "_gs_bundle_contents1": _gs_bundle_contents,
-      "_gs_bundle_ids1": _gs_bundle_ids,
-      "_gs_bundle_prices1": _gs_bundle_prices,
-      "_gs_bundle_quantities1": _gs_bundle_quantities,
-      "gift_notes1": giftNotes,
-      "shipping_date1": shippingDate,
+      "_gs_bundle_discount": _gs_bundle_discount,
+      "_gs_bundle_contents": _gs_bundle_contents,
+      "_gs_bundle_ids": _gs_bundle_ids,
+      "_gs_bundle_prices": _gs_bundle_prices,
+      "_gs_bundle_quantities": _gs_bundle_quantities,
+      "gift_notes": giftNotes,
+      "shipping_date": shippingDate,
     };
 
     try {
