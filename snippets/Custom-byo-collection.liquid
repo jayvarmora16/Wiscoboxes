@@ -111,7 +111,7 @@
               <button
                 type="button"
                 class="gs__btn gs__btn-primary button"
-                data-product-id="{{ product.id }}"
+                data-product-id="{{  product.variants[0].id  }}"
               >
                 Add to box
               </button>
@@ -306,7 +306,7 @@
     function handleRemoveProduct(productId) {
       var productRows = document.querySelectorAll(`.product-row[data-product-id="${productId}"]`);
       var addToCartButtons = document.querySelectorAll(`.gs__btn.gs__btn-primary[data-product-id="${productId}"]`);
-
+     console.log(addToCartButtons,'hello',productId)
       addToCartButtons.forEach(function (button) {
         button.textContent = 'Add to Box';
         button.classList.remove('disabled-button');

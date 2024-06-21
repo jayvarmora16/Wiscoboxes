@@ -31,15 +31,14 @@
   </style>
 {% endcomment %}
 <style>
-  .gs__item-main-content1{
-    width:100%
+  .gs__item-main-content1 {
+    width: 100%;
   }
 </style>
 <section id="gsBuilderItems" class="gs__selected-items">
   <div class="gs__item-main-content1">
-    
-  <h2 class="gs__item-main-content-heading">Gift Notes</h2>
-  {% render 'gift-notes' %}
+    <h2 class="gs__item-main-content-heading">Gift Notes</h2>
+    {% render 'gift-notes' %}
   </div>
   <div class="gs__item-sidebar">
     <div class="gs__box-summary">
@@ -65,7 +64,7 @@
       </div>
       <div class="gs__nav-buttons-container-double">
         <button class="previous-button" type="button">Previous</button>
-        <button class="add-to-cart-button disabled-btn" type="button" disabled>Add to Cart</button>
+        <button class="add-to-cart-button" type="button">Add to Cart</button>
       </div>
     </div>
   </div>
@@ -94,16 +93,21 @@
       }
     }
 
-    let giftNotes = localStorage.getItem('giftNotes');
-    let shippingDate = localStorage.getItem('shippingDate');
+    var giftNotes = document.getElementById('gift_notes').value;
+
+    var shippingDate = document.querySelector('input[name="shipping_date"]').value;
+
+    console.log('Gift Notes:', giftNotes);
+    console.log('Shipping Date:', shippingDate);
+
     let properties = {
-      "_gs_bundle_discount": _gs_bundle_discount,
-      "_gs_bundle_contents": _gs_bundle_contents,
-      "_gs_bundle_ids": _gs_bundle_ids,
-      "_gs_bundle_prices": _gs_bundle_prices,
-      "_gs_bundle_quantities": _gs_bundle_quantities,
-      "gift_notes": giftNotes,
-      "shipping_date": shippingDate,
+      _gs_bundle_discount: _gs_bundle_discount,
+      _gs_bundle_contents: _gs_bundle_contents,
+      _gs_bundle_ids: _gs_bundle_ids,
+      _gs_bundle_prices: _gs_bundle_prices,
+      _gs_bundle_quantities: _gs_bundle_quantities,
+      gift_notes: giftNotes,
+      shipping_date: shippingDate,
     };
 
     try {
@@ -160,7 +164,6 @@
 
       if (response.ok) {
         console.log('Product added to cart:', data);
-        
       } else {
         throw new Error(`Error: ${data.message ? data.message : 'Failed to add product to cart'}`);
       }
@@ -245,20 +248,19 @@
   }
   @media (max-width: 700px) {
     #gsBuilderItems {
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    flex-wrap: wrap;
-  }
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      flex-wrap: wrap;
+    }
 
-  .gs__item-main-content {
-    display: block;
-    overflow: auto;
-    width: 100% !important;
+    .gs__item-main-content {
+      display: block;
+      overflow: auto;
+      width: 100% !important;
+    }
   }
-
-}
   .gs__item-main-content {
     display: block;
     overflow: auto;
@@ -285,15 +287,13 @@
 
   @media (max-width: 700px) {
     .gs__item-sidebar {
-    border-left: 1px solid #f0f0f0;
-    display: grid;
-    grid-template-rows: 1fr auto;
-    vertical-align: bottom;
-    width:100% !important;
+      border-left: 1px solid #f0f0f0;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      vertical-align: bottom;
+      width: 100% !important;
+    }
   }
-
-
-}
   .gs__box-summary {
     border-bottom: 1px solid #f0f0f0;
     display: flex;
