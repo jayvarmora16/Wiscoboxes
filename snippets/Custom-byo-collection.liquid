@@ -9,8 +9,7 @@
     if (latest_match) {
       lastest_product = latest_match[0];
     }
-   console.log(combinedArray,'combines')
-   const filteredCollectionTitles = combinedArray
+    const filteredCollectionTitles = combinedArray
       .filter((obj) => obj.product.id.toString() === lastest_product.toString())
       .map((obj) => obj.collectionTitle);
 
@@ -30,6 +29,33 @@
 
     //  const arrayOfProducts = filteredCollectionTitles.flatMap(obj => obj.collectionProducts);
   });
+
+  function checkAndToggleButton() {
+    // Query the parent div with the class 'gs__item-main-content'
+    const mainContentDiv = document.querySelector('.gs__item-main-content');
+    
+    // Check if there are any children with the class 'product-row'
+    const productRowChildren = mainContentDiv.querySelectorAll('.product-row');
+    
+    // Query the button with the class 'next-button'
+    const nextButton = document.querySelector('.next-button');
+    
+    // If there are no children with the class 'product-row', disable the button
+    if (productRowChildren.length === 0) {
+        nextButton.disabled = true;
+        nextButton.style.pointerEvents = 'none';
+
+    } else {
+        // Otherwise, enable the button
+        nextButton.disabled = false;
+        nextButton.style.pointerEvents = 'auto';
+
+    }
+}
+
+// Call the function to perform the check and toggle the button state
+checkAndToggleButton();
+
 </script>
 
 <input type="hidden" id="latestProductInput" value="">
@@ -69,7 +95,7 @@
             data-product-date="{{ product.created_at }}"
             data-product-id="{{ product.variants[0].id }}"
             data-parent-id="{{ productList.id }}"
-            data-tags="{{ product.tags }}"
+            data-tags="{{ product.tags | json |  escape }}"
           >
             <div
               class="collection-image"
@@ -147,13 +173,12 @@
       if (totalPriceElements.length > 0) {
         totalPriceElements.forEach(function (totalPriceElement) {
           let currentPrice = parseFloat(totalPriceElement.textContent.replace(/[^\d.-]/g, ''));
-          console.log(currentPrice,'current')
           if (isNaN(currentPrice)) {
             currentPrice = 0;
           }
 
-          let actualProductPrice = productPrice / 100 * quantity;
-          
+          let actualProductPrice = (productPrice / 100) * quantity;
+
           let newTotalPrice = parseFloat(currentPrice) + parseFloat(actualProductPrice);
           // let updatedNewTtotalPirce = newTotalPrice * parseFloat(quantity);
           totalPriceElement.textContent = `$${newTotalPrice.toFixed(2)}`; // Format to two decimal places
@@ -297,8 +322,6 @@
           let product_id = button.getAttribute('data-product-id');
           removeProductFromLocalStorage(product_id);
           handleRemoveProduct(product_id);
-          console.log(productRow, 'product');
-        
         });
       });
     }
@@ -306,7 +329,6 @@
     function handleRemoveProduct(productId) {
       var productRows = document.querySelectorAll(`.product-row[data-product-id="${productId}"]`);
       var addToCartButtons = document.querySelectorAll(`.gs__btn.gs__btn-primary[data-product-id="${productId}"]`);
-     console.log(addToCartButtons,'hello',productId)
       addToCartButtons.forEach(function (button) {
         button.textContent = 'Add to Box';
         button.classList.remove('disabled-button');
@@ -329,6 +351,7 @@
         }
       });
       swtichToNewProduct();
+      checkAndToggleButton()
       // setTimeout(()=>{
       //   removeBundleProduct(productId);
       // },1000)
@@ -390,6 +413,9 @@
         var productPrice = productElement.getAttribute('data-product-price');
         var productId = productElement.getAttribute('data-product-id');
         var productQuantity = productElement.querySelector('.quantity-input').value;
+        let tags = productElement.getAttribute('data-tags');
+
+       let tagsArray = JSON.parse(tags);
 
         var productDetails = {
           id: productId,
@@ -397,10 +423,18 @@
           title: productTitle,
           price: productPrice,
           quantity: productQuantity,
+          productTags:tagsArray
         };
-        let tags = productElement.getAttribute('data-tags');
-        let filterBundle = bundleProducts.find((product) => tags.includes(product.parent_product_tag));
-        console.log(filterBundle);
+       
+        localStorage.setItem('product-' + productId, JSON.stringify(productDetails));
+        let filterBundle = bundleProducts.find((product) => {
+          return tagsArray.some((tag) => {
+            return tag.toString() === product.parent_product_tag.toString();
+          });
+        });
+
+        // Filtered products array
+
         if (filterBundle) {
           let productAlreadyAdded = checkProductInBox(filterBundle.product);
 
@@ -415,7 +449,6 @@
                 let addToCartButton = product.querySelector('.gs__btn');
                 if (addToCartButton) {
                   addToCartButton.click();
-                  console.log(product, addToCartButton);
                 }
               }
             });
@@ -425,7 +458,7 @@
         button.classList.add('disabled-button');
         button.textContent = '✔ Added';
         button.disabled = true;
-        localStorage.setItem('product-' + productId, JSON.stringify(productDetails));
+    
         let errorMessage = document.querySelector('.error-message');
         if (errorMessage) {
           errorMessage.style.display = 'none';
@@ -442,16 +475,36 @@
             tags
           );
           cartContainer.appendChild(productRow.cloneNode(true)); // Cloning without events
-
           handlePlusMinusChange(cartContainer.lastChild, productId);
           handleClose(cartContainer.lastChild, productId);
         });
+        checkAndToggleButton();
 
         updateTotalPrice(productPrice, productQuantity);
         swtichToNewProduct();
       });
     });
   });
+
+  function checkWineProduct() {
+    let totalQuantity = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    let key = localStorage.key(i);
+
+    if (key.startsWith('product-')) {
+      let productDetails = JSON.parse(localStorage.getItem(key));
+
+      if (productDetails && productDetails.productTags && Array.isArray(productDetails.productTags)) {
+        if (productDetails.productTags.includes('wine')) {
+          totalQuantity += parseInt(productDetails.quantity);
+          
+        }
+      }
+    }
+  }
+  return totalQuantity
+}
+
 
   function swtichToNewProduct() {
     const urlParamsUpdated = new URLSearchParams(window.location.search);
@@ -484,10 +537,13 @@
       }
     }
 
-    if (currentProduct.title === '10x10 WiscoBox') {
+    let wineQuantity=checkWineProduct()
+
+
+    if (currentProduct.title === '10x10 WiscoBox' ) {
       let quantity = getTotalQuantities();
 
-      if (quantity > 6) {
+      if (quantity > 6 || wineQuantity>2) {
         document.querySelectorAll('.gs__box-name').forEach((boxTitle) => {
           boxTitle.textContent = '12x15 WiscoBox';
         });
@@ -577,7 +633,6 @@
   document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('productResultSelect').addEventListener('change', function (event) {
       var sortValue = event.target.value;
-      console.log(sortValue, 'sort');
       var container = document.querySelector('.main-collection-grid-container');
       var itemsArray = Array.prototype.slice.call(container.getElementsByClassName('main-collection-grid'), 0);
       var selectedCollection = document.querySelector('.custom-select').value;
@@ -684,8 +739,8 @@
   });
 </script>
 <style>
-  .error-message{
-    font-size:15px;
+  .error-message {
+    font-size: 15px;
   }
   .disabled-button {
     background-color: #9d9797 !important;
@@ -814,25 +869,24 @@
     margin-right: 10px;
   }
   @media (max-width: 700px) {
+    .main-collection-grid {
+      width: 40% !important;
+      display: flex;
+      flex-direction: column;
+      background-position: 50%;
+      background-repeat: no-repeat;
+      height: 500px;
+      margin-left: 35px;
+      margin-right: 10px;
+    }
 
-.main-collection-grid {
-  width: 40% !important;
-  display: flex;
-  flex-direction: column;
-  background-position: 50%;
-  background-repeat: no-repeat;
-  height: 500px;
-  margin-left: 35px;
-  margin-right: 10px;
-}
-
-.price-quantity {
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  align-items: flex-start;
-}
-}
+    .price-quantity {
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
   .custom-select option {
     padding: 15px;
     font-size: 12px;
