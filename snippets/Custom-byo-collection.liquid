@@ -513,12 +513,12 @@ checkAndToggleButton();
     if (latest_match) {
       lastest_product = latest_match[0];
     }
-
+    let wineQuantity=checkWineProduct();
     let currentProduct = parentProducts.find((product) => product.id.toString() === lastest_product.toString());
     if (currentProduct.title === '6x6 WiscoBox') {
       let quantity = getTotalQuantities();
 
-      if (quantity > 2) {
+      if (quantity > 2 || wineQuantity >0) {
         document.querySelectorAll('.gs__box-name').forEach((boxTitle) => {
           boxTitle.textContent = '10x10 WiscoBox';
         });
