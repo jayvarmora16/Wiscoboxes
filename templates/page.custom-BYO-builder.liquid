@@ -165,6 +165,36 @@ document.addEventListener("DOMContentLoaded",()=>{
 })
 </script>
 
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+  document.querySelectorAll('.special-dot').forEach(li => {
+    console.log('eh')
+  const anchor = li.querySelector('a'); // Select the <a> tag within this <li>
+  if (anchor) {
+    li.addEventListener('click', () => {
+      console.log('li')
+      window.location.href = anchor.getAttribute('href'); // Redirect to the href of the anchor tag
+    });
+  }
+});
+});
+
+</script>
+
+<style>
+  .special-dot{
+    cursor: pointer;
+  }
+  .special-dot a{
+    color: black;
+  }
+  .progressbar li.special-dot:before {
+    border-color: #9b2743;
+    background-color: #9b2743;
+    color: white;
+}
+</style>
+
 <div class="byo-container">
   <div class="gs__nav-steps-completed">
     <h3 class="pretext">0 of 2 Steps Complete</h3>
@@ -175,6 +205,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   <div class="sub-container-byo">
     <div class="progress-container">
       <ul class="progressbar">
+        <li class="special-dot"><a href="https://wiscoboxes.com/pages/custom-build-your-box">Select Boxes</a></li>
         <li id="step-dot-1" class="active">BUILD YOUR OWN BOX</li>
         <li id="step-dot-2">GIFT NOTES</li>
       </ul>

@@ -33,29 +33,26 @@
   function checkAndToggleButton() {
     // Query the parent div with the class 'gs__item-main-content'
     const mainContentDiv = document.querySelector('.gs__item-main-content');
-    
+
     // Check if there are any children with the class 'product-row'
     const productRowChildren = mainContentDiv.querySelectorAll('.product-row');
-    
+
     // Query the button with the class 'next-button'
     const nextButton = document.querySelector('.next-button');
-    
+
     // If there are no children with the class 'product-row', disable the button
     if (productRowChildren.length === 0) {
-        nextButton.disabled = true;
-        nextButton.style.pointerEvents = 'none';
-
+      nextButton.disabled = true;
+      nextButton.style.pointerEvents = 'none';
     } else {
-        // Otherwise, enable the button
-        nextButton.disabled = false;
-        nextButton.style.pointerEvents = 'auto';
-
+      // Otherwise, enable the button
+      nextButton.disabled = false;
+      nextButton.style.pointerEvents = 'auto';
     }
-}
+  }
 
-// Call the function to perform the check and toggle the button state
-checkAndToggleButton();
-
+  // Call the function to perform the check and toggle the button state
+  checkAndToggleButton();
 </script>
 
 <input type="hidden" id="latestProductInput" value="">
@@ -351,7 +348,7 @@ checkAndToggleButton();
         }
       });
       swtichToNewProduct();
-      checkAndToggleButton()
+      checkAndToggleButton();
       // setTimeout(()=>{
       //   removeBundleProduct(productId);
       // },1000)
@@ -415,7 +412,7 @@ checkAndToggleButton();
         var productQuantity = productElement.querySelector('.quantity-input').value;
         let tags = productElement.getAttribute('data-tags');
 
-       let tagsArray = JSON.parse(tags);
+        let tagsArray = JSON.parse(tags);
 
         var productDetails = {
           id: productId,
@@ -423,10 +420,9 @@ checkAndToggleButton();
           title: productTitle,
           price: productPrice,
           quantity: productQuantity,
-          productTags:tagsArray
+          productTags: tagsArray,
         };
-       
-        localStorage.setItem('product-' + productId, JSON.stringify(productDetails));
+
         let filterBundle = bundleProducts.find((product) => {
           return tagsArray.some((tag) => {
             return tag.toString() === product.parent_product_tag.toString();
@@ -455,56 +451,77 @@ checkAndToggleButton();
           }
         }
 
-        button.classList.add('disabled-button');
-        button.textContent = '✔ Added';
-        button.disabled = true;
-    
         let errorMessage = document.querySelector('.error-message');
         if (errorMessage) {
           errorMessage.style.display = 'none';
         }
+        const urlParamsUpdated = new URLSearchParams(window.location.search);
+        let lastest_product = urlParamsUpdated.get('product_id');
+        const latest_match = lastest_product.match(/^\d+/);
+        if (latest_match) {
+          lastest_product = latest_match[0];
+        }
 
-        var cartContainers = document.querySelectorAll('.gs__item-main-content');
-        cartContainers.forEach(function (cartContainer) {
-          const productRow = createProductRow(
-            productImage,
-            productTitle,
-            productPrice,
-            productQuantity,
-            productId,
-            tags
-          );
-          cartContainer.appendChild(productRow.cloneNode(true)); // Cloning without events
-          handlePlusMinusChange(cartContainer.lastChild, productId);
-          handleClose(cartContainer.lastChild, productId);
+        let currentProduct = parentProducts.find((product) => product.id.toString() === lastest_product.toString());
+        let wineQuantity = checkWineProduct();
+        let toBeaddedWine = tagsArray.some((tag) => {
+          return tag.toString() === 'wine';
         });
-        checkAndToggleButton();
 
-        updateTotalPrice(productPrice, productQuantity);
-        swtichToNewProduct();
+        if (toBeaddedWine) {
+          wineQuantity = parseInt(wineQuantity) + parseInt(productQuantity);
+        }
+
+        if (
+          (currentProduct.title === '12x15 WiscoBox' && wineQuantity > 3 && toBeaddedWine) ||
+          (parseInt(productQuantity) > 3 && toBeaddedWine)
+        ) {
+          alert('You cannot add more then 3 Wine Products');
+        } else {
+          localStorage.setItem('product-' + productId, JSON.stringify(productDetails));
+          button.classList.add('disabled-button');
+          button.textContent = '✔ Added';
+          button.disabled = true;
+          var cartContainers = document.querySelectorAll('.gs__item-main-content');
+          cartContainers.forEach(function (cartContainer) {
+            const productRow = createProductRow(
+              productImage,
+              productTitle,
+              productPrice,
+              productQuantity,
+              productId,
+              tags
+            );
+            cartContainer.appendChild(productRow.cloneNode(true)); // Cloning without events
+            handlePlusMinusChange(cartContainer.lastChild, productId);
+            handleClose(cartContainer.lastChild, productId);
+          });
+          checkAndToggleButton();
+
+          updateTotalPrice(productPrice, productQuantity);
+          swtichToNewProduct();
+        }
       });
     });
   });
 
   function checkWineProduct() {
     let totalQuantity = 0;
-  for (let i = 0; i < localStorage.length; i++) {
-    let key = localStorage.key(i);
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
 
-    if (key.startsWith('product-')) {
-      let productDetails = JSON.parse(localStorage.getItem(key));
+      if (key.startsWith('product-')) {
+        let productDetails = JSON.parse(localStorage.getItem(key));
 
-      if (productDetails && productDetails.productTags && Array.isArray(productDetails.productTags)) {
-        if (productDetails.productTags.includes('wine')) {
-          totalQuantity += parseInt(productDetails.quantity);
-          
+        if (productDetails && productDetails.productTags && Array.isArray(productDetails.productTags)) {
+          if (productDetails.productTags.includes('wine')) {
+            totalQuantity += parseInt(productDetails.quantity);
+          }
         }
       }
     }
+    return totalQuantity;
   }
-  return totalQuantity
-}
-
 
   function swtichToNewProduct() {
     const urlParamsUpdated = new URLSearchParams(window.location.search);
@@ -513,12 +530,12 @@ checkAndToggleButton();
     if (latest_match) {
       lastest_product = latest_match[0];
     }
-    let wineQuantity=checkWineProduct();
+    let wineQuantity = checkWineProduct();
     let currentProduct = parentProducts.find((product) => product.id.toString() === lastest_product.toString());
     if (currentProduct.title === '6x6 WiscoBox') {
       let quantity = getTotalQuantities();
 
-      if (quantity > 2 || wineQuantity >0) {
+      if (quantity > 2 || wineQuantity > 0) {
         document.querySelectorAll('.gs__box-name').forEach((boxTitle) => {
           boxTitle.textContent = '10x10 WiscoBox';
         });
@@ -537,11 +554,10 @@ checkAndToggleButton();
       }
     }
 
-
-    if (currentProduct.title === '10x10 WiscoBox' ) {
+    if (currentProduct.title === '10x10 WiscoBox') {
       let quantity = getTotalQuantities();
 
-      if (quantity > 6 || wineQuantity>2) {
+      if (quantity > 6 || wineQuantity > 2) {
         document.querySelectorAll('.gs__box-name').forEach((boxTitle) => {
           boxTitle.textContent = '12x15 WiscoBox';
         });
@@ -598,6 +614,18 @@ checkAndToggleButton();
           button.style.backgroundColor = 'white';
           button.style.pointerEvents = 'auto';
         });
+
+        //   document.querySelectorAll('.main-collection-grid').forEach(div => {
+        //   const dataTags = JSON.parse(div.getAttribute('data-tags')); // Parsing data-tags attribute
+        //   if (dataTags.includes('wine')) { // Checking if 'wine' is in the array
+        //     const button = div.querySelector('.gs__btn.gs__btn-primary.button'); // Selecting the button inside the div
+        //     if (button) {
+        //       button.disabled = false; // Disabling the button
+        //       button.classList.remove('disabled-button');
+
+        //     }
+        //   }
+        // });
       }
     }
   }
