@@ -471,13 +471,15 @@
         if (toBeaddedWine) {
           wineQuantity = parseInt(wineQuantity) + parseInt(productQuantity);
         }
-
+        let quantity = getTotalQuantities();
         if (
           (currentProduct.title === '12x15 WiscoBox' && wineQuantity > 3 && toBeaddedWine) ||
           (parseInt(productQuantity) > 3 && toBeaddedWine)
         ) {
           alert('You cannot add more then 3 Wine Products');
-        } else {
+        } else if(currentProduct.title === '12x15 WiscoBox' && quantity === 10){
+          alert('You cannot add more then 10 Products in 12x15 WiscoBox');
+        }else {
           localStorage.setItem('product-' + productId, JSON.stringify(productDetails));
           button.classList.add('disabled-button');
           button.textContent = '✔ Added';
@@ -580,16 +582,16 @@
       let quantity = getTotalQuantities();
 
       if (quantity === 10) {
-        const addToCartDivs = document.querySelectorAll('div.addtocart');
+        // const addToCartDivs = document.querySelectorAll('div.addtocart');
 
-        addToCartDivs.forEach((div) => {
-          const button = div.querySelector('button.gs__btn.gs__btn-primary.button');
+        // addToCartDivs.forEach((div) => {
+        //   const button = div.querySelector('button.gs__btn.gs__btn-primary.button');
 
-          if (button) {
-            button.disabled = true;
-            button.classList.add('disabled-button');
-          }
-        });
+        //   if (button) {
+        //     button.disabled = true;
+        //     button.classList.add('disabled-button');
+        //   }
+        // });
 
         const plusButtons = document.querySelectorAll('.plus');
         plusButtons.forEach((button) => {
@@ -600,14 +602,14 @@
       } else {
         const addToCartDivs = document.querySelectorAll('div.addtocart');
 
-        addToCartDivs.forEach((div) => {
-          const button = div.querySelector('button.gs__btn.gs__btn-primary.button');
+        // addToCartDivs.forEach((div) => {
+        //   const button = div.querySelector('button.gs__btn.gs__btn-primary.button');
 
-          if (button && button.textContent !== '✔ Added') {
-            button.disabled = false;
-            button.classList.remove('disabled-button');
-          }
-        });
+        //   if (button && button.textContent !== '✔ Added') {
+        //     button.disabled = false;
+        //     button.classList.remove('disabled-button');
+        //   }
+        // });
         const plusButtons = document.querySelectorAll('.plus');
         plusButtons.forEach((button) => {
           button.disabled = false;
