@@ -31,7 +31,7 @@
             <div class="packageRow"> 
               {% for product in product_list %}
                 <div class="packageCol">
-                  <a href="/pages/custom-build-your-box-builder?product_id={{ product.id }}?product-box={{ product.title }}" onclick="showCustomBox(event)">
+                  <a href="/pages/build-your-box-builder?product_id={{ product.id }}?product-box={{ product.title }}" onclick="showCustomBox(event)">
                     <img src="{{ product.images |  first |  image_url }}" alt="{{ product.title }}">
                     <p>{{ product.title }}</p>
                   </a>
