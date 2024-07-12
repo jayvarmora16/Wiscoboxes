@@ -2210,7 +2210,7 @@
     "cart_action": "redirect_cart",
     "display_special_instructions": true,
     "display_tos_checkbox": true,
-    "show_shipping_calculator": true,
+    "show_shipping_calculator": false,
     "shipping_calculator_default_country": "United States",
     "disqus_enabled": false,
     "disqus_shortname": "",
