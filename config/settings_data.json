@@ -2743,7 +2743,7 @@
         "settings": {
           "title": "",
           "frontpage_collection": "shop",
-          "frontpage_products_per_row": "3",
+          "frontpage_products_per_row": "2",
           "frontpage_products_limit": "6",
           "collection_sidebar": false,
           "collection_sidebar_linklist": "",
