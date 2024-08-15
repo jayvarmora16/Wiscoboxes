@@ -2513,9 +2513,9 @@
         "type": "all-the-good-things",
         "settings": {
           "title": "",
-          "content": "<span id=\"good-right\">              Every item in our beautiful boxes is sourced from Wisconsin's artisan and iconic growers, producers and makers.    \nSend love, from Wisconsin. <\/span>",
+          "content": "<span id=\"good-right\">           Every item in our beautiful boxes is sourced from Wisconsin's artisan and iconic growers, producers and makers. Choose a gift from our curated box options or custom design one for personal or corporate gifting.   \nSend love, from Wisconsin. <\/span>",
           "text_size": "featured_text",
-          "text_alignment": "center",
+          "text_alignment": "align_left",
           "button_label": "",
           "button_link": ""
         }
