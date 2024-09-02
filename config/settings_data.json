@@ -2589,7 +2589,7 @@
         "type": "footer",
         "disabled": true,
         "settings": {
-          "copyright_text": "Copyright 2021 WiscoBoxes, LLC",
+          "copyright_text": "Copyright 2024 WiscoBoxes, LLC",
           "display_designed_by": true,
           "display_payment_methods": true
         }
