@@ -84,7 +84,6 @@
     {% for productList in product_list %}
       {% for collection in productList.metafields.custom.byo_collection.value %}
         {% for product in collection.products %}
-          {{ product | json }}
           <div
             class="main-collection-grid"
             data-collection-title="{{ collection.title }}"
