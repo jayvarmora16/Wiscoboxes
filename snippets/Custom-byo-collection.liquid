@@ -84,6 +84,7 @@
     {% for productList in product_list %}
       {% for collection in productList.metafields.custom.byo_collection.value %}
         {% for product in collection.products %}
+          {% if product.available %}
           <div
             class="main-collection-grid"
             data-collection-title="{{ collection.title }}"
@@ -140,6 +141,7 @@
               </button>
             </div>
           </div>
+          {% endif %}
         {% endfor %}
       {% endfor %}
     {% endfor %}
