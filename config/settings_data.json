@@ -2515,7 +2515,7 @@
           "title": "",
           "content": "<span id=\"good-right\">          Every item in our beautiful boxes is sourced from Wisconsin's artisan and iconic growers, producers and makers. Select a curated box or custom design one for personal or corporate gifting. One box or thousands. Elegant, personal, memorable. Every time. </span>",
           "text_size": "featured_text",
-          "text_alignment": "align_left",
+          "text_alignment": "center",
           "button_label": "",
           "button_link": ""
         }
