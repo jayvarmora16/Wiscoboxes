@@ -1,12 +1,12 @@
 /*
-* ------------------------------------------------------------
-* IMPORTANT: The contents of this file are auto-generated.
-*
-* This file may be updated by the Shopify admin theme editor
-* or related systems. Please exercise caution as any changes
-* made to this file may be overwritten.
-* ------------------------------------------------------------
-*/
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "presets": {
     "Austin": {
@@ -35,8 +35,8 @@
       "main_linklist": "main-menu",
       "menu_top_padding": "5",
       "content_top_padding": "120",
-      "twitter_link": "https:\/\/twitter.com\/shopify",
-      "facebook_link": "https:\/\/www.facebook.com\/shopify",
+      "twitter_link": "https://twitter.com/shopify",
+      "facebook_link": "https://www.facebook.com/shopify",
       "google_link": "",
       "youtube_link": "",
       "vimeo_link": "",
@@ -122,11 +122,11 @@
       "sub_footer_text_color": "#404040",
       "footer_text_color": "#404040",
       "featured_links": true,
-      "feature1_link": "\/",
+      "feature1_link": "/",
       "feature1_text": "420x265",
-      "feature2_link": "\/",
+      "feature2_link": "/",
       "feature2_text": "420x265",
-      "feature3_link": "\/",
+      "feature3_link": "/",
       "feature3_text": "420x265",
       "frontpage_collection": "frontpage",
       "frontpage_linklist": "",
@@ -278,7 +278,7 @@
               "type": "text",
               "settings": {
                 "title": "Title",
-                "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+                "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
                 "social_icons_footer": true
               }
             }
@@ -409,7 +409,7 @@
           "settings": {
             "image": "",
             "title": "Talk about your brand",
-            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
             "text_size": "featured_text",
             "text_alignment": "center",
             "button_label": "",
@@ -454,7 +454,7 @@
               "settings": {
                 "image": "",
                 "title": "Image",
-                "text": "<p>Promotion description appears here.<\/p>",
+                "text": "<p>Promotion description appears here.</p>",
                 "link": "",
                 "button_label": "View all"
               }
@@ -464,7 +464,7 @@
               "settings": {
                 "image": "",
                 "title": "Image",
-                "text": "<p>Promotion description appears here.<\/p>",
+                "text": "<p>Promotion description appears here.</p>",
                 "link": "",
                 "button_label": "View all"
               }
@@ -526,8 +526,8 @@
       "menu_top_padding": "5",
       "content_top_padding": "120",
       "search_option": "products",
-      "twitter_link": "https:\/\/twitter.com\/shopify",
-      "facebook_link": "https:\/\/www.facebook.com\/shopify",
+      "twitter_link": "https://twitter.com/shopify",
+      "facebook_link": "https://www.facebook.com/shopify",
       "google_link": "",
       "youtube_link": "",
       "vimeo_link": "",
@@ -616,11 +616,11 @@
       "testimonial_content_bg_color": "#FFFFFF",
       "testimonial_bg_color": "#76867b",
       "featured_links": true,
-      "feature1_link": "\/",
+      "feature1_link": "/",
       "feature1_text": "420x265",
-      "feature2_link": "\/",
+      "feature2_link": "/",
       "feature2_text": "420x265",
-      "feature3_link": "\/",
+      "feature3_link": "/",
       "feature3_text": "420x265",
       "frontpage_linklist": "",
       "newsletter_popup_page": "frontpage",
@@ -769,7 +769,7 @@
               "type": "text",
               "settings": {
                 "title": "Title",
-                "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+                "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
                 "social_icons_footer": true
               }
             }
@@ -900,7 +900,7 @@
           "settings": {
             "image": "",
             "title": "Talk about your brand",
-            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
             "text_size": "featured_text",
             "text_alignment": "center",
             "button_label": "",
@@ -945,7 +945,7 @@
               "settings": {
                 "image": "",
                 "title": "Image",
-                "text": "<p>Promotion description appears here.<\/p>",
+                "text": "<p>Promotion description appears here.</p>",
                 "link": "",
                 "button_label": "View all"
               }
@@ -955,7 +955,7 @@
               "settings": {
                 "image": "",
                 "title": "Image",
-                "text": "<p>Promotion description appears here.<\/p>",
+                "text": "<p>Promotion description appears here.</p>",
                 "link": "",
                 "button_label": "View all"
               }
@@ -1062,11 +1062,11 @@
       "sub_footer_text_color": "#888888",
       "footer_text_color": "#888888",
       "featured_links": true,
-      "feature1_link": "\/",
+      "feature1_link": "/",
       "feature1_text": "420x265",
-      "feature2_link": "\/",
+      "feature2_link": "/",
       "feature2_text": "420x265",
-      "feature3_link": "\/",
+      "feature3_link": "/",
       "feature3_text": "420x265",
       "frontpage_collection": "frontpage",
       "frontpage_linklist": "",
@@ -1085,7 +1085,7 @@
       "image_1_subtitle": "",
       "image_1_text_color": "#ffffff",
       "image_1_button_text": "",
-      "image_1_link": "\/",
+      "image_1_link": "/",
       "image_2_alt_text": "",
       "image_2_headline": "",
       "image_2_subtitle": "",
@@ -1115,7 +1115,7 @@
       "image_6_subtitle": "",
       "image_6_text_color": "#ffffff",
       "image_6_button_text": "",
-      "image_6_link": "\/",
+      "image_6_link": "/",
       "add_to_cart_text": "Add to Cart",
       "sold_out_text": "Sold Out",
       "related_products_title": "You May Also Like",
@@ -1313,7 +1313,7 @@
               "type": "text",
               "settings": {
                 "title": "Title",
-                "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+                "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
                 "social_icons_footer": true
               }
             }
@@ -1444,7 +1444,7 @@
           "settings": {
             "image": "",
             "title": "Talk about your brand",
-            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
             "text_size": "featured_text",
             "text_alignment": "center",
             "button_label": "",
@@ -1489,7 +1489,7 @@
               "settings": {
                 "image": "",
                 "title": "Image",
-                "text": "<p>Promotion description appears here.<\/p>",
+                "text": "<p>Promotion description appears here.</p>",
                 "link": "",
                 "button_label": "View all"
               }
@@ -1499,7 +1499,7 @@
               "settings": {
                 "image": "",
                 "title": "Image",
-                "text": "<p>Promotion description appears here.<\/p>",
+                "text": "<p>Promotion description appears here.</p>",
                 "link": "",
                 "button_label": "View all"
               }
@@ -1554,8 +1554,8 @@
       "dropdown_column_links": "10",
       "menu_top_padding": "4",
       "content_top_padding": "120",
-      "twitter_link": "https:\/\/twitter.com\/shopify",
-      "facebook_link": "https:\/\/www.facebook.com\/shopify",
+      "twitter_link": "https://twitter.com/shopify",
+      "facebook_link": "https://www.facebook.com/shopify",
       "google_link": "",
       "youtube_link": "",
       "vimeo_link": "",
@@ -1617,11 +1617,11 @@
       "sub_footer_text_color": "#363636",
       "footer_text_color": "#ffffff",
       "featured_links": true,
-      "feature1_link": "\/",
+      "feature1_link": "/",
       "feature1_text": "420x265",
-      "feature2_link": "\/",
+      "feature2_link": "/",
       "feature2_text": "420x265",
-      "feature3_link": "\/",
+      "feature3_link": "/",
       "feature3_text": "420x265",
       "home_page_articles": "2",
       "twitter_username": "shopify",
@@ -1638,7 +1638,7 @@
       "image_1_subtitle": "",
       "image_1_text_color": "#ffffff",
       "image_1_button_text": "",
-      "image_1_link": "\/",
+      "image_1_link": "/",
       "image_2_alt_text": "",
       "image_2_headline": "",
       "image_2_subtitle": "",
@@ -1868,7 +1868,7 @@
               "type": "text",
               "settings": {
                 "title": "Title",
-                "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+                "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
                 "social_icons_footer": true
               }
             }
@@ -1999,7 +1999,7 @@
           "settings": {
             "image": "",
             "title": "Talk about your brand",
-            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
             "text_size": "featured_text",
             "text_alignment": "center",
             "button_label": "",
@@ -2044,7 +2044,7 @@
               "settings": {
                 "image": "",
                 "title": "Image",
-                "text": "<p>Promotion description appears here.<\/p>",
+                "text": "<p>Promotion description appears here.</p>",
                 "link": "",
                 "button_label": "View all"
               }
@@ -2054,7 +2054,7 @@
               "settings": {
                 "image": "",
                 "title": "Image",
-                "text": "<p>Promotion description appears here.<\/p>",
+                "text": "<p>Promotion description appears here.</p>",
                 "link": "",
                 "button_label": "View all"
               }
@@ -2221,7 +2221,7 @@
     "search_option": "everything",
     "newsletter_popup": true,
     "newsletter_popup_title": "IMPORTANT SHIPPING INFORMATION",
-    "newsletter_popup_text": "<p><strong>SHIPPING PERISHABLES<\/strong> -- We require 2-day shipping for all boxes containing perishables (cheese, sausage, chocolate) for delivery addresses that are outside Wisconsin. If your order includes any of these items and will be shipped beyond Wisconsin's borders, please select UPS or FedEx 2-day shipping. We also reserve the right to hold shipments if the temperature is above 80 degrees F or below zero (shipping wine). <strong>ADDITIONALLY, WE DO NOT SHIP BOXES THAT CONTAIN PERISHABLES TO OUT-OF-STATE DESTINATIONS AFTER WEDNESDAY EACH WEEK.<\/strong> Thanks so much. These choices help  to ensure that your lovely gift is delivered in perfect condition.  Questions? 608.437.2202<\/p>",
+    "newsletter_popup_text": "<p><strong>SHIPPING PERISHABLES</strong> -- We require 2-day shipping for all boxes containing perishables (cheese, sausage, chocolate) for delivery addresses that are outside Wisconsin. If your order includes any of these items and will be shipped beyond Wisconsin's borders, please select UPS or FedEx 2-day shipping. We also reserve the right to hold shipments if the temperature is above 80 degrees F or below zero (shipping wine). <strong>ADDITIONALLY, WE DO NOT SHIP BOXES THAT CONTAIN PERISHABLES TO OUT-OF-STATE DESTINATIONS AFTER WEDNESDAY EACH WEEK.</strong> Thanks so much. These choices help  to ensure that your lovely gift is delivered in perfect condition.  Questions? 608.437.2202</p>",
     "newsletter_popup_link": "",
     "newsletter_popup_form": false,
     "newsletter_popup_seconds": "5",
@@ -2229,21 +2229,21 @@
     "newsletter_popup_max_width": "500",
     "display_first_name": false,
     "display_last_name": false,
-    "twitter_link": "https:\/\/twitter.com\/shopify",
-    "facebook_link": "https:\/\/www.facebook.com\/WiscoBoxes\/",
+    "twitter_link": "https://twitter.com/shopify",
+    "facebook_link": "https://www.facebook.com/WiscoBoxes/",
     "google_link": "",
     "youtube_link": "",
     "vimeo_link": "",
-    "pinterest_link": "https:\/\/www.pinterest.com\/wiscoboxes\/",
+    "pinterest_link": "https://www.pinterest.com/wiscoboxes/",
     "tumblr_link": "",
-    "instagram_link": "https:\/\/www.instagram.com\/wiscoboxes\/",
+    "instagram_link": "https://www.instagram.com/wiscoboxes/",
     "snapchat_link": "",
     "houzz_link": "",
     "linkedin_link": "",
     "email_link": "",
-    "favicon": "shopify:\/\/shop_images\/WiscoBoxes_icon_state_small_80d40c0b-dd3c-46aa-b1db-c1f99a537125.png",
+    "favicon": "shopify://shop_images/WiscoBoxes_icon_state_small_80d40c0b-dd3c-46aa-b1db-c1f99a537125.png",
     "checkout_header_image": "",
-    "checkout_logo_image": "shopify:\/\/shop_images\/wiscoboxes-logo_8f469867-2b29-4254-93bd-987ddc66aa8e.png",
+    "checkout_logo_image": "shopify://shop_images/wiscoboxes-logo_8f469867-2b29-4254-93bd-987ddc66aa8e.png",
     "checkout_logo_position": "left",
     "checkout_logo_size": "large",
     "checkout_body_background_image": "",
@@ -2286,11 +2286,11 @@
     "regular_typeface_method": "google_webfonts",
     "regular_websafe_font": "'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     "featured_links": true,
-    "feature1_link": "\/",
+    "feature1_link": "/",
     "feature1_text": "420x265",
-    "feature2_link": "\/",
+    "feature2_link": "/",
     "feature2_text": "420x265",
-    "feature3_link": "\/",
+    "feature3_link": "/",
     "feature3_text": "420x265",
     "frontpage_collection": "frontpage",
     "frontpage_linklist": "",
@@ -2420,7 +2420,7 @@
             "type": "slide",
             "disabled": true,
             "settings": {
-              "image": "shopify:\/\/shop_images\/NEW_4_WiscoBox_web_header_Spring_B_SHARE_A.png",
+              "image": "shopify://shop_images/NEW_4_WiscoBox_web_header_Spring_B_SHARE_A.png",
               "title": "",
               "subtitle": "",
               "text_position": "center",
@@ -2432,7 +2432,7 @@
           "slide_GxHtRY": {
             "type": "slide",
             "settings": {
-              "image": "shopify:\/\/shop_images\/NEW_WiscoBox_web_header_Holiday_2024.png",
+              "image": "shopify://shop_images/NEW_WiscoBox_web_header_Holiday_2024.png",
               "title": "",
               "subtitle": "",
               "text_position": "center",
@@ -2500,20 +2500,20 @@
         "type": "wiscoboxes-statement",
         "settings": {
           "image_stretch": true,
-          "image": "shopify:\/\/shop_images\/home-box1_1200x_89e19776-60ad-4291-b366-a9cc6621e8ed.png",
+          "image": "shopify://shop_images/home-box1_1200x_89e19776-60ad-4291-b366-a9cc6621e8ed.png",
           "title": "CUSTOM DESIGN A BOX FOR PERSONAL OR CORPORATE GIFTING",
           "subtitle": "We've made custom a box easy and fun. Choose from our entire portfolio of thoughtfully selected products to design your gift. Need assistance?  We're here to help. Click below to begin or call 608.437.2202. Send love, from Wisconsin.",
           "text_position": "right",
           "text_align": "left",
           "button_label": "SELECT YOUR ITEMS",
-          "link": "https:\/\/wiscoboxes.com\/pages\/build-your-box"
+          "link": "https://wiscoboxes.com/pages/build-your-box"
         }
       },
       "1486653905339": {
         "type": "all-the-good-things",
         "settings": {
           "title": "",
-          "content": "<span id=\"good-right\">           Every item in our beautiful boxes is sourced from Wisconsin's artisan and iconic growers, producers and makers. Choose a gift from our curated box options or custom design one for personal or corporate gifting. One box or thousands.  \nSend love, from Wisconsin. <\/span>",
+          "content": "<span id=\"good-right\">          Every item in our beautiful boxes is sourced from Wisconsin's artisan and iconic growers, producers and makers. Select a curated box or custom design one for personal or corporate gifting. One box or thousands. Elegant, personal, memorable. Every time. </span>",
           "text_size": "featured_text",
           "text_alignment": "align_left",
           "button_label": "",
@@ -2662,7 +2662,7 @@
           "1488559789054": {
             "type": "featured_text",
             "settings": {
-              "product_detail_headline": "<div class=\"test-cont\">\r\n<div id=\"testimonial-container\"><\/div>\r\n<span id=\"testimonial-quote\">I love the custom WiscoBox option! I sent one to my nephew filled with his favorite things from Wisconsin. He recently moved to D.C. for work and he said it was like being home again.<\/span><br>\r\n<span id=\"testimonial-author\">- JD<\/span>\r\n<\/div>",
+              "product_detail_headline": "<div class=\"test-cont\">\r\n<div id=\"testimonial-container\"></div>\r\n<span id=\"testimonial-quote\">I love the custom WiscoBox option! I sent one to my nephew filled with his favorite things from Wisconsin. He recently moved to D.C. for work and he said it was like being home again.</span><br>\r\n<span id=\"testimonial-author\">- JD</span>\r\n</div>",
               "product_detail_description": ""
             }
           }
@@ -2783,10 +2783,10 @@
           "1522095179182-0": {
             "type": "image",
             "settings": {
-              "image": "shopify:\/\/shop_images\/DSC_0019_1.jpg",
+              "image": "shopify://shop_images/DSC_0019_1.jpg",
               "title": "CORPORATE GIFTS FOR ANY OCCASION",
-              "text": "<p>Welcome new employees or kick-start a stakeholders meeting, conference, gala, workshop  or send custom holiday boxes to clients, employees and friends.<\/p>",
-              "link": "shopify:\/\/pages\/corporate-gifting-with-wiscoboxes",
+              "text": "<p>Welcome new employees or kick-start a stakeholders meeting, conference, gala, workshop  or send custom holiday boxes to clients, employees and friends.</p>",
+              "link": "shopify://pages/corporate-gifting-with-wiscoboxes",
               "button_label": "Corporate Gifting"
             }
           }
@@ -6350,8 +6350,8 @@
       "corporate-gifting-page": {
         "type": "corporate-gifting-page",
         "settings": {
-          "corporate-gifting-content1": "<meta charset=\"utf-8\">\n<h5 class=\"p1\"><em><span class=\"s1\">EASY, ELEGANT AND PERSONAL.\n<p>\n<\/p>\n<p>From welcome gifts for conference attendees, new hires and clients, to customer appreciation, holiday gifts or shareable treats for an entire office, our beautiful boxes convey the message you intend, with love, from Wisconsin.   \n<\/p>\n<p>Want to include corporate swag or collateral? Absolutely. We manage product curation, sourcing, customization, fulfillment and shipping. Orders of all sizes are welcome. Custom branding and design services are also available.<\/p>\n<p> To view the 2024 Fall &amp; Winter gift guide\n<a href=\"https:\/\/indd.adobe.com\/view\/f9399657-6152-4fdd-ab1f-d984bbc580c8\">CLICK HERE.<\/a><\/p>\n<p>\nWe look forward to working with you. <\/p>\n<p><\/p>\n<span style=\"font-weight: 600;\"><a href=\"mailto:hello@wiscoboxes.com\">hello@wiscoboxes.com or 608.437.2202<\/a>. <\/span>\n<span><img src=\"\" alt=\"\"><\/span><p><\/p><\/span><\/em><\/h5>",
-          "corporate-gifting-content2": "<p><img src=\"https:\/\/cdn2.shopify.com\/s\/files\/1\/1765\/5227\/files\/corporate_image_2_8689e428-e972-4a0e-8b86-242f322710f6_1024x1024.jpg?v=1563378769\" alt=\"\"><\/p>\n<h2 class=\"p1\" style=\"text-align: center;\">A few of our valued clients<\/h2>\n<div style=\"text-align: left;\"><img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/1765\/5227\/files\/Screen_Shot_2020-02-07_at_8.57.48_AM_1024x1024.png?v=1581087517\" width=\"1024x1024\" height=\"1024x1024\" style=\"float: none;\"><\/div>"
+          "corporate-gifting-content1": "<meta charset=\"utf-8\">\n<h5 class=\"p1\"><em><span class=\"s1\">EASY, ELEGANT AND PERSONAL.\n<p>\n</p>\n<p>From welcome gifts for conference attendees, new hires and clients, to customer appreciation, holiday gifts or shareable treats for an entire office, our beautiful boxes convey the message you intend, with love, from Wisconsin.   \n</p>\n<p>Want to include corporate swag or collateral? Absolutely. We manage product curation, sourcing, customization, fulfillment and shipping. Orders of all sizes are welcome. Custom branding and design services are also available.</p>\n<p> To view the 2024 Fall &amp; Winter gift guide\n<a href=\"https://indd.adobe.com/view/f9399657-6152-4fdd-ab1f-d984bbc580c8\">CLICK HERE.</a></p>\n<p>\nWe look forward to working with you. </p>\n<p></p>\n<span style=\"font-weight: 600;\"><a href=\"mailto:hello@wiscoboxes.com\">hello@wiscoboxes.com or 608.437.2202</a>. </span>\n<span><img src=\"\" alt=\"\"></span><p></p></span></em></h5>",
+          "corporate-gifting-content2": "<p><img src=\"https://cdn2.shopify.com/s/files/1/1765/5227/files/corporate_image_2_8689e428-e972-4a0e-8b86-242f322710f6_1024x1024.jpg?v=1563378769\" alt=\"\"></p>\n<h2 class=\"p1\" style=\"text-align: center;\">A few of our valued clients</h2>\n<div style=\"text-align: left;\"><img src=\"https://cdn.shopify.com/s/files/1/1765/5227/files/Screen_Shot_2020-02-07_at_8.57.48_AM_1024x1024.png?v=1581087517\" width=\"1024x1024\" height=\"1024x1024\" style=\"float: none;\"></div>"
         }
       },
       "collection-sub-collections-template": {
@@ -6425,7 +6425,7 @@
     ],
     "blocks": {
       "12601257459161342390": {
-        "type": "shopify:\/\/apps\/giftship\/blocks\/giftship\/26bd5756-d344-471d-baf8-ba6267b82da9",
+        "type": "shopify://apps/giftship/blocks/giftship/26bd5756-d344-471d-baf8-ba6267b82da9",
         "disabled": false,
         "settings": {
         }
