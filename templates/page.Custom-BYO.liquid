@@ -33,7 +33,7 @@
                 <div class="packageCol">
                   <a href="/pages/build-your-box-builder?product_id={{ product.id }}?product-box={{ product.title }}" onclick="showCustomBox(event)">
                     <img src="{{ product.images |  first |  image_url }}" alt="{{ product.title }}">
-                    <p>{{ product.title }}</p>
+                    <h4>{{ product.title }}</h4>
                   </a>
                 </div>
               {% endfor %}                
