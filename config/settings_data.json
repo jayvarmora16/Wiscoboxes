@@ -2156,7 +2156,7 @@
     "password-page-background": "",
     "pagework_page_bg_stretched": true,
     "logo_font": "Google_Lato",
-    "logo_weight": "normal",
+    "logo_weight": "bold",
     "logo_font_style": "uppercase",
     "logo_font_size": "28",
     "headline_font": "Google_Lato",
@@ -2221,7 +2221,7 @@
     "search_option": "everything",
     "newsletter_popup": true,
     "newsletter_popup_title": "IMPORTANT SHIPPING INFORMATION",
-    "newsletter_popup_text": "<p><strong>SHIPPING PERISHABLES</strong> -- We require 2-day shipping for all boxes containing perishables (cheese, sausage, chocolate) for delivery addresses that are outside Wisconsin. If your order includes any of these items and will be shipped beyond Wisconsin's borders, please select UPS or FedEx 2-day shipping. We also reserve the right to hold shipments if the temperature is above 80 degrees F or below zero (shipping wine). <strong>ADDITIONALLY, WE DO NOT SHIP BOXES THAT CONTAIN PERISHABLES TO OUT-OF-STATE DESTINATIONS AFTER WEDNESDAY EACH WEEK.</strong> Thanks so much. These choices help  to ensure that your lovely gift is delivered in perfect condition.  Questions? 608.437.2202</p>",
+    "newsletter_popup_text": "<p><strong>SHIPPING PERISHABLES</strong> -- We require 2-day shipping for all boxes containing perishables (cheese, sausage, chocolate) for delivery addresses that are outside Wisconsin. If your order includes any of these items and will be shipped beyond Wisconsin's borders, please select UPS or FedEx 2-day shipping. We also reserve the right to hold shipments if the temperature is above 80 degrees F or below 20 degrees F (shipping wine). <strong>ADDITIONALLY, WE DO NOT SHIP BOXES THAT CONTAIN PERISHABLES TO OUT-OF-STATE DESTINATIONS AFTER WEDNESDAY EACH WEEK.</strong> Thanks so much. These choices help  to ensure that your lovely gift is delivered in perfect condition.  Questions? 608.437.2202</p>",
     "newsletter_popup_link": "",
     "newsletter_popup_form": false,
     "newsletter_popup_seconds": "5",
@@ -2812,8 +2812,7 @@
         "block_order": [
           "10303561-ecae-4723-9ab0-481145e7b32a"
         ],
-        "settings": {
-        }
+        "settings": {}
       },
       "ps-build-page-section": {
         "type": "ps-build-page-section",
@@ -6427,8 +6426,7 @@
       "12601257459161342390": {
         "type": "shopify://apps/giftship/blocks/giftship/26bd5756-d344-471d-baf8-ba6267b82da9",
         "disabled": false,
-        "settings": {
-        }
+        "settings": {}
       }
     }
   }
