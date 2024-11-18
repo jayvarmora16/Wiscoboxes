@@ -64,8 +64,9 @@
         <select class="custom-select" onchange="filterCollections()"></select>
       </div>
     </div>
+    {% comment %}
     <div class="sortby-filter">
-      <div class="custom-select-wrapper" id="selectBox2">
+        <div class="custom-select-wrapper" id="selectBox2">
         <label class="sort-by"> Sort By jay</label>
         <select class="custom-select" id="productResultSelect">
           <option value="Featured" selected>Featured</option>
@@ -79,6 +80,7 @@
         </select>
       </div>
     </div>
+    {% endcomment %}
   </div>
   <div class="main-collection-grid-container" style="width: 100%;">
     {% for productList in product_list %}
