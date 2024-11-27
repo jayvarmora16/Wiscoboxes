@@ -2409,7 +2409,7 @@
           "search_enabled": true,
           "fixed_header": true,
           "behind_menu": false,
-          "announcement_message": "<h2>PLEASE NOTE: 2nd-day air is required for all boxes containing perishables that are shipped outside the Midwest.</h2>",
+          "announcement_message": "<h3>PLEASE NOTE: 2nd-day air is required for all boxes containing perishables that are shipped outside the Midwest.</h3>",
           "announcement_link": ""
         }
       },
