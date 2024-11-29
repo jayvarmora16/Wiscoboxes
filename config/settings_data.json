@@ -2404,12 +2404,12 @@
           "dropdown_column_links": "10",
           "logo_top_padding": "0",
           "menu_top_padding": "0",
-          "content_top_padding": "75",
+          "content_top_padding": "15",
           "social_icons_enabled": false,
           "search_enabled": true,
           "fixed_header": true,
           "behind_menu": false,
-          "announcement_message": "<h1>PLEASE NOTE: 2nd-day air is required for all boxes containing wine and/or perishables that are shipped outside the Midwest.</h1>",
+          "announcement_message": "",
           "announcement_link": ""
         }
       },
