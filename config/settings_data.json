@@ -2409,7 +2409,7 @@
           "search_enabled": true,
           "fixed_header": true,
           "behind_menu": false,
-          "announcement_message": "<p>2-DAY AIR IS REQUIRED for shipping boxes that include perishables or wine to destinations outside the Midwest </p>",
+          "announcement_message": "",
           "announcement_link": ""
         }
       },
