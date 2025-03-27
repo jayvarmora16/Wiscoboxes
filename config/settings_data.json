@@ -6427,6 +6427,11 @@
         "type": "shopify://apps/giftship/blocks/giftship/26bd5756-d344-471d-baf8-ba6267b82da9",
         "disabled": false,
         "settings": {}
+      },
+      "11521338106245790446": {
+        "type": "shopify://apps/ecomrise/blocks/app-embed/acb8bab5-decc-4989-8fb5-41075963cdef",
+        "disabled": false,
+        "settings": {}
       }
     }
   }
