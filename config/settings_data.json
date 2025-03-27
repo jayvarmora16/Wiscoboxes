@@ -6430,7 +6430,7 @@
       },
       "11521338106245790446": {
         "type": "shopify://apps/ecomrise/blocks/app-embed/acb8bab5-decc-4989-8fb5-41075963cdef",
-        "disabled": false,
+        "disabled": true,
         "settings": {}
       }
     }
