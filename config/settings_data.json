@@ -2229,7 +2229,7 @@
     "newsletter_popup_max_width": "500",
     "display_first_name": false,
     "display_last_name": false,
-    "twitter_link": "https://twitter.com/shopify",
+    "twitter_link": "",
     "facebook_link": "https://www.facebook.com/WiscoBoxes/",
     "google_link": "",
     "youtube_link": "",
@@ -6426,11 +6426,6 @@
       "12601257459161342390": {
         "type": "shopify://apps/giftship/blocks/giftship/26bd5756-d344-471d-baf8-ba6267b82da9",
         "disabled": false,
-        "settings": {}
-      },
-      "11521338106245790446": {
-        "type": "shopify://apps/ecomrise/blocks/app-embed/acb8bab5-decc-4989-8fb5-41075963cdef",
-        "disabled": true,
         "settings": {}
       }
     }
